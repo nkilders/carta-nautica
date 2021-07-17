@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'carta-nautica',
+  appId: 'de.nkilders.carta_nautica',
+  appName: 'Carta Nautica',
   webDir: 'www',
   bundledWebRuntime: false
 };
