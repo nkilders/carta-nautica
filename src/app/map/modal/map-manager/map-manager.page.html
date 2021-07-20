@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Map Manager</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-toolbar>
+    <ion-segment value="online">
+      <ion-segment-button value="online" (click)="show('tab-online')">
+        Online
+      </ion-segment-button>
+
+      <ion-segment-button value="offline" (click)="show('tab-offline')">
+        Offline
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <div class="tabs tab-online">
+    Online
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button id="fabAdd" size="small" (click)="fabAddOnline($event)">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
+
+  <div class="tabs tab-offline" hidden>
+    Offline
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button id="fabAdd" size="small" (click)="fabAddOffline($event)">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
+  
+</ion-content>
