@@ -9,4 +9,16 @@
 
 <ion-content [fullscreen]="true">
   <div id="map" style="width: 100%; height: 100%"></div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+
+    <ion-fab-button id="fabLocate" size="small" (click)="fabLocate($event)">
+      <ion-icon name="locate"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-button id="fabTrack" size="small" (click)="fabTrack($event)">
+      <ion-icon name="recording-outline"></ion-icon>
+    </ion-fab-button>
+
+  </ion-fab>
 </ion-content>
