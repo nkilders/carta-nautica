@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 
+import { ModalController } from '@ionic/angular';
+import { MapManagerPage } from './modal/map-manager/map-manager.page';
+
 import { FabToggler } from '../stuff/fab-toggler';
 
 @Component({
@@ -20,7 +23,7 @@ export class MapPage {
   private fabLocateToggler: FabToggler;
   private fabTrackToggler: FabToggler;
 
-  constructor() { }
+  constructor(public modalCtrl: ModalController) { }
 
   ionViewDidEnter() {
     // Create map
@@ -138,5 +141,16 @@ export class MapPage {
     this.fabTrackToggler.toggle();
 
     // TODO: Track logic
+
+    // just for testing purposes, will be removed later
+    this.showModal();
+  }
+
+  async showModal() {
+    let modal = await this.modalCtrl.create({
+      component: MapManagerPage
+    });
+
+    modal.present();
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FileChooser } from '@ionic-native/file-chooser/ngx'
 
 @Component({
   selector: 'app-map-manager',
@@ -26,12 +27,18 @@ export class MapManagerPage implements OnInit {
     }
   }
 
-  fabAddOnline(e) {
-    console.log('fabAddOnline()');
+  fabAddOnline() {
+    // TODO: open dialog
   }
 
-  fabAddOffline(e) {
-    console.log('fabAddOffline()');
+  fabAddOffline() {
+    new FileChooser().open(/* add filter? */).then(
+      uri => {
+        console.log(uri);
+        
+        // TODO: validate & load map
+      }
+    ).catch(console.log);
     
   }
 }
