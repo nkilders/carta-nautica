@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FileChooser } from '@ionic-native/file-chooser/ngx'
 import { AlertController, ToastController } from '@ionic/angular';
 
-import { MapService } from 'src/app/services/map.service';
+import { MapStorageService } from 'src/app/services/storage/map.service';
 import { Map } from 'src/app/stuff/map';
 
 @Component({
-  selector: 'app-map-manager',
-  templateUrl: './map-manager.page.html',
-  styleUrls: ['./map-manager.page.scss'],
+  selector: 'app-layer-sources',
+  templateUrl: './layer-sources.page.html',
+  styleUrls: ['./layer-sources.page.scss'],
 })
-export class MapManagerPage implements OnInit {
+export class LayerSourcesPage implements OnInit {
   private mapsOnline: Map[] = [];
   private mapsOffline: Map[] = [];
 
   constructor(
-    private mapService: MapService,
+    private mapService: MapStorageService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController
   ) { }
@@ -103,7 +103,7 @@ export class MapManagerPage implements OnInit {
   
           let map = new Map('online', e.data.values.name, e.data.values.url);
           
-          this.mapService.addMap(map).then(() => {
+          this.mapService.saveMap(map).then(() => {
             this.loadMaps();
           });
         }

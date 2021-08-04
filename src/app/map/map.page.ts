@@ -1,9 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 
-import { ModalController } from '@ionic/angular';
-import { MapManagerPage } from './modal/map-manager/map-manager.page';
+// Ionic-Native
+import { Insomnia } from '@ionic-native/insomnia/ngx';
+import { Geolocation, Geoposition, PositionError } from '@ionic-native/geolocation/ngx';
 
+// Modals
+import { ModalController } from '@ionic/angular';
+import { LayerSourcesPage } from './modals/layer-sources/layer-sources.page';
+import { MapLayersPage } from './modals/map-layers/map-layers.page';
+import { SettingsPage } from './modals/settings/settings.page';
+import { TracksPage } from './modals/tracks/tracks.page';
+
+// Services
+import { OfflineMapService } from '../services/offline-map.service';
+
+// Other stuff
 import { FabToggler } from '../stuff/fab-toggler';
 
 @Component({
@@ -23,9 +35,17 @@ export class MapPage {
   private fabLocateToggler: FabToggler;
   private fabTrackToggler: FabToggler;
 
-  constructor(public modalCtrl: ModalController) { }
+  constructor(
+    private insomnia: Insomnia,
+    private geolocation: Geolocation,
+    private offlineMapService: OfflineMapService,
+    public modalCtrl: ModalController
+  ) { }
 
   ionViewDidEnter() {
+    // Keep display awake
+    this.insomnia.keepAwake();
+
     // Create map
     this.map = new L.Map('map', {
       zoomControl: false
@@ -56,18 +76,15 @@ export class MapPage {
    * Sets up all geolocation stuff needed
    */
   private geoSetup() {
-    // Check if geolocation is available
-    if(navigator.geolocation) {
-      // Start watching the geoposition
-      navigator.geolocation.watchPosition(
-        pos => this.geoHandle(this, pos),
-        err => console.error(err),
-        {
-          enableHighAccuracy: true,
-          maximumAge: 5000
-        }
-      );
-    }
+    let watch = this.geolocation.watchPosition({
+      enableHighAccuracy: true,
+      maximumAge: 5000
+    });
+    
+    watch.subscribe(
+      pos => this.geoHandle(this, pos),
+      err => console.error(err)
+    );
   }
 
   /**
@@ -76,7 +93,9 @@ export class MapPage {
    * @param t Reference to the MapPage object
    * @param pos New geoposition
    */
-  private geoHandle(t: this, pos: GeolocationPosition) {
+  private geoHandle(t: this, pos: any) {
+    if(pos.coords === undefined) return;
+      
     t.pos = pos;
 
     // Update heading and speed variables for the UI
@@ -148,7 +167,7 @@ export class MapPage {
 
   async showModal() {
     let modal = await this.modalCtrl.create({
-      component: MapManagerPage
+      component: LayerSourcesPage
     });
 
     modal.present();

@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LayerManagerPageRoutingModule } from './layer-manager-routing.module';
+import { LayerSourcesPageRoutingModule } from './layer-sources-routing.module';
 
-import { LayerManagerPage } from './layer-manager.page';
+import { LayerSourcesPage } from './layer-sources.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LayerManagerPageRoutingModule
+    LayerSourcesPageRoutingModule
   ],
-  declarations: [LayerManagerPage]
+  declarations: [LayerSourcesPage]
 })
-export class LayerManagerPageModule {}
+export class LayerSourcesPageModule {}

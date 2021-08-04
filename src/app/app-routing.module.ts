@@ -4,20 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'map',
-    pathMatch: 'full'
-  },
-  {
-    path: 'map',
     loadChildren: () => import('./map/map.module').then(m => m.MapPageModule)
-  },
-  {
-    path: 'tracks',
-    loadChildren: () => import('./tracks/tracks.module').then( m => m.TracksPageModule)
-  },
-  {
-    path: 'settings',
-    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
   }
 ];
 

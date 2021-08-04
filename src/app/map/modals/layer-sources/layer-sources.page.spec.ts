@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MapManagerPage } from './map-manager.page';
+import { LayerSourcesPage as LayerSourcesPage } from './layer-sources.page';
 
-describe('MapManagerPage', () => {
-  let component: MapManagerPage;
-  let fixture: ComponentFixture<MapManagerPage>;
+describe('LayerSourcesPage', () => {
+  let component: LayerSourcesPage;
+  let fixture: ComponentFixture<LayerSourcesPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapManagerPage ],
+      declarations: [ LayerSourcesPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MapManagerPage);
+    fixture = TestBed.createComponent(LayerSourcesPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

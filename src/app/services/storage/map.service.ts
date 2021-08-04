@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Map } from '../stuff/map';
+
+import { Map } from '../../stuff/map';
 
 const MAPS_KEY = 'cn-maps';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MapService {
+export class MapStorageService {
   private storage: Storage;
 
   constructor() {
@@ -15,7 +16,7 @@ export class MapService {
     this.storage.create();
   }
 
-  public addMap(map: Map): Promise<any> {
+  public saveMap(map: Map): Promise<any> {
     return this.storage.get(MAPS_KEY).then((maps: Map[]) => {
       if(maps) {
         maps.push(map);
