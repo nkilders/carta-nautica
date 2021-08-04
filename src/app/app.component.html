@@ -6,12 +6,27 @@
           <ion-list-header>Carta Nautica</ion-list-header>
           <ion-note></ion-note>
 
-          <!-- <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
-              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item lines="none" button (click)="click('map-layers')">
+              <ion-icon slot="start" name="layers-sharp"></ion-icon>
+              <ion-label>Map Layers</ion-label>
             </ion-item>
-          </ion-menu-toggle> -->
+
+            <ion-item  button (click)="click('tracks')">
+              <ion-icon slot="start" name="analytics-sharp"></ion-icon>
+              <ion-label>Tracks</ion-label>
+            </ion-item>
+          
+            <ion-item lines="none" button (click)="click('layer-sources')">
+              <ion-icon slot="start" name="server-sharp"></ion-icon>
+              <ion-label>Layer Sources</ion-label>
+            </ion-item>
+
+            <ion-item lines="none" button (click)="click('settings')">
+              <ion-icon slot="start" name="settings-sharp"></ion-icon>
+              <ion-label>Settings</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
         </ion-list>
       </ion-content>
     </ion-menu>

@@ -5,13 +5,6 @@ import * as L from 'leaflet';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { Geolocation, Geoposition, PositionError } from '@ionic-native/geolocation/ngx';
 
-// Modals
-import { ModalController } from '@ionic/angular';
-import { LayerSourcesPage } from './modals/layer-sources/layer-sources.page';
-import { MapLayersPage } from './modals/map-layers/map-layers.page';
-import { SettingsPage } from './modals/settings/settings.page';
-import { TracksPage } from './modals/tracks/tracks.page';
-
 // Services
 import { OfflineMapService } from '../services/offline-map.service';
 
@@ -38,8 +31,7 @@ export class MapPage {
   constructor(
     private insomnia: Insomnia,
     private geolocation: Geolocation,
-    private offlineMapService: OfflineMapService,
-    public modalCtrl: ModalController
+    private offlineMapService: OfflineMapService
   ) { }
 
   ionViewDidEnter() {
@@ -160,16 +152,5 @@ export class MapPage {
     this.fabTrackToggler.toggle();
 
     // TODO: Track logic
-
-    // just for testing purposes, will be removed later
-    this.showModal();
-  }
-
-  async showModal() {
-    let modal = await this.modalCtrl.create({
-      component: LayerSourcesPage
-    });
-
-    modal.present();
   }
 }
