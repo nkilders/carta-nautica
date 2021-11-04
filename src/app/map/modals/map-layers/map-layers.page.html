@@ -6,19 +6,13 @@
 
 <ion-content>
 
-  <ion-reorder-group disabled="false">
-    <ion-item>
+  <ion-reorder-group disabled="false" (ionItemReorder)="onReorder($event)">
+    <ion-item *ngFor="let m of maps; let i = index">
       <ion-label>
-        Layer 1
+        {{ m.name }} <small>({{ m.type }})</small>
       </ion-label>
       <ion-reorder slot="start"></ion-reorder>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>
-        Layer 2
-      </ion-label>
-      <ion-reorder slot="start"></ion-reorder>
+      <ion-toggle color="primary" slot="end" [attr.checked]="m.enabled" (ionChange)="toggleMapStatus($event, i)"></ion-toggle>
     </ion-item>
   </ion-reorder-group>
   

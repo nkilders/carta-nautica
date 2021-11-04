@@ -5,6 +5,7 @@ export class Map {
     public type: string;
     public name: string;
     public url: string;
+    public position: number;
     public enabled: boolean;
 
     constructor(type: string, name: string, url: string) {
@@ -12,6 +13,7 @@ export class Map {
         this.type = type;
         this.name = name;
         this.url = url;
+        this.position = 99999;
         this.enabled = false;
     }
 }

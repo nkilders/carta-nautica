@@ -10,6 +10,8 @@ import { OfflineMapService } from '../services/offline-map.service';
 
 // Other stuff
 import { FabToggler } from '../stuff/fab-toggler';
+import { Map as MapObj } from '../stuff/map';
+import { MapStorageService } from '../services/storage/map.service';
 
 @Component({
   selector: 'app-map',
@@ -19,6 +21,8 @@ import { FabToggler } from '../stuff/fab-toggler';
 export class MapPage {
   private heading: any = 0;
   private speed: any = 0;
+
+  private layers: Map<string, any>;
 
   private map: L.Map;
 
@@ -31,6 +35,7 @@ export class MapPage {
   constructor(
     private insomnia: Insomnia,
     private geolocation: Geolocation,
+    private mapService: MapStorageService,
     private offlineMapService: OfflineMapService
   ) { }
 
@@ -38,17 +43,44 @@ export class MapPage {
     // Keep display awake
     this.insomnia.keepAwake();
 
+    // Setup map
+    this.mapSetup();
+
+    // Setup FAB-Togglers
+    this.fabSetup();
+
+    // Setup geolocation-stuff
+    this.geoSetup();
+  }
+
+  private mapSetup() {
     // Create map
     this.map = new L.Map('map', {
       zoomControl: false
     }).setView([0.0, 0.0], 0);
 
-    // Add a tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
-
     // Add scale
     L.control.scale().addTo(this.map);
 
+    this.mapService.getMaps().then(maps => {
+      this.layers = new Map();
+
+      maps.sort((m1, m2) => m2.position - m1.position);
+      
+      maps.forEach(map => {
+        let tileLayer = L.tileLayer(map.url);
+        this.layers.set(map.uuid, tileLayer);
+
+        if(map.enabled) {
+          tileLayer.addTo(this.map);
+        }
+      });
+
+      this.mapService.registerUpdateListener(maps => this.onMapUpdate(this, maps));
+    });
+  }
+
+  private fabSetup() {
     // Setup FAB Locate Toggler
     this.fabLocateToggler = new FabToggler('fabLocate', 'dark', 'primary');
     this.map.on('dragstart', () => {
@@ -59,9 +91,6 @@ export class MapPage {
 
     // Setup FAB Track Toggler
     this.fabTrackToggler = new FabToggler('fabTrack', 'dark', 'danger');
-
-    // Setup geolocation-stuff
-    this.geoSetup();
   }
 
   /**
@@ -122,6 +151,22 @@ export class MapPage {
         this.map.flyTo(p, 15, 1);
       }
     }
+  }
+
+  onMapUpdate(that: this, maps: MapObj[]) {
+    that.layers.forEach(val => {
+      val.remove();
+    });
+    that.layers.clear();
+
+    maps.forEach(map => {
+      let tileLayer = L.tileLayer(map.url);
+      that.layers.set(map.uuid, tileLayer);
+
+      if(map.enabled) {
+        tileLayer.addTo(that.map);
+      }
+    });
   }
 
   /**
