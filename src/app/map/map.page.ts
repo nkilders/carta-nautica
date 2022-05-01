@@ -1,17 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import * as L from 'leaflet';
 
 // Ionic-Native
 import { Insomnia } from '@ionic-native/insomnia/ngx';
-import { Geolocation, Geoposition, PositionError } from '@ionic-native/geolocation/ngx';
 
 // Services
-import { OfflineMapService } from '../services/offline-map.service';
+import { GeoPositionService } from '../services/geo-position.service'
+import { MapStorageService } from '../services/storage/map.service';
 
 // Other stuff
 import { FabToggler } from '../stuff/fab-toggler';
 import { Map as MapObj } from '../stuff/map';
-import { MapStorageService } from '../services/storage/map.service';
 
 @Component({
   selector: 'app-map',
@@ -34,9 +33,8 @@ export class MapPage {
 
   constructor(
     private insomnia: Insomnia,
-    private geolocation: Geolocation,
     private mapService: MapStorageService,
-    private offlineMapService: OfflineMapService
+    private geoService: GeoPositionService,
   ) { }
 
   ionViewDidEnter() {
@@ -97,14 +95,9 @@ export class MapPage {
    * Sets up all geolocation stuff needed
    */
   private geoSetup() {
-    let watch = this.geolocation.watchPosition({
-      enableHighAccuracy: true,
-      maximumAge: 5000
-    });
-    
-    watch.subscribe(
+    this.geoService.watchPosition().subscribe(
       pos => this.geoHandle(this, pos),
-      err => console.error(err)
+      err => console.log(err)
     );
   }
 

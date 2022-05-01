@@ -7,6 +7,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 // Providers
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx'
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { WebServer } from '@ionic-native/web-server/ngx';
 import { SQLite } from '@ionic-native/sqlite/ngx';
 
@@ -21,7 +22,7 @@ import { MapLayersPageModule } from './map/modals/map-layers/map-layers.module';
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, LayerSourcesPageModule, MapLayersPageModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Insomnia, Geolocation, WebServer, SQLite
+    Insomnia, Geolocation, WebServer, SQLite, LocalNotifications
   ],
   bootstrap: [AppComponent],
 })
