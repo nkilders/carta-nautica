@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 // Modals
 import { ModalController } from '@ionic/angular';
-import { LayerSourcesPage } from './map/modals/layer-sources/layer-sources.page';
 import { MapLayersPage } from './map/modals/map-layers/map-layers.page';
 import { SettingsPage } from './map/modals/settings/settings.page';
 import { TracksPage } from './map/modals/tracks/tracks.page';
@@ -19,7 +18,6 @@ export class AppComponent {
   async click(name) {
     let comp = (name == 'map-layers' && MapLayersPage)
             || (name == 'tracks' && TracksPage)
-            || (name == 'layer-sources' && LayerSourcesPage)
             || (name == 'settings' && SettingsPage);
 
     let modal = await this.modalCtrl.create({

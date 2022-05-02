@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonReorder, IonReorderGroup } from '@ionic/angular';
+import { ActionSheetController, IonReorderGroup } from '@ionic/angular';
 import { MapStorageService } from 'src/app/services/storage/map.service';
 import { Map } from 'src/app/stuff/map';
 
@@ -14,7 +14,8 @@ export class MapLayersPage implements OnInit {
   private maps: Map[] = [];
   
   constructor(
-    private mapService: MapStorageService
+    private mapService: MapStorageService,
+    private actionSheetCtrl: ActionSheetController,
   ) { }
 
   ngOnInit() {
@@ -35,7 +36,7 @@ export class MapLayersPage implements OnInit {
   }
 
   toggleMapStatus(e, index) {
-    let map = this.maps[index];
+    const map = this.maps[index];
 
     map.enabled = e.detail.checked;
     this.mapService.updateMap(map);
@@ -43,7 +44,7 @@ export class MapLayersPage implements OnInit {
 
   private arrayMove(arr, indexFrom, indexTo) {
     if (indexTo >= arr.length) {
-      var k = indexTo - arr.length + 1;
+      let k = indexTo - arr.length + 1;
 
       while (k--) {
         arr.push(undefined);
@@ -67,4 +68,27 @@ export class MapLayersPage implements OnInit {
     });
   }
 
+  async showMapOptions(m: Map) {
+    const a = await this.actionSheetCtrl.create({
+      header: m.name,
+      buttons: [
+        { text: 'Edit', handler: () => this.editHandler(m) },
+        { text: 'Delete', handler: () => this.deleteHandler(m) },
+      ],
+    });
+
+    await a.present();
+  }
+
+  editHandler(m: Map) {
+    console.log('Edit ' + m.name);
+  }
+
+  deleteHandler(m: Map) {
+    console.log('Delete ' + m.name);
+  }
+
+  create() {
+    console.log('Create');
+  }
 }

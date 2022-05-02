@@ -8,12 +8,26 @@
 
   <ion-reorder-group disabled="false" (ionItemReorder)="onReorder($event)">
     <ion-item *ngFor="let m of maps; let i = index">
+      <ion-reorder slot="start"></ion-reorder>
+      
       <ion-label>
         {{ m.name }} <small>({{ m.type }})</small>
       </ion-label>
-      <ion-reorder slot="start"></ion-reorder>
+      
       <ion-toggle color="primary" slot="end" [attr.checked]="m.enabled" (ionChange)="toggleMapStatus($event, i)"></ion-toggle>
+
+      <ion-buttons slot="end">
+        <ion-button (click)="showMapOptions(m)">
+          <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-item>
   </ion-reorder-group>
-  
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="create()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>
