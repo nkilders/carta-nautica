@@ -108,31 +108,33 @@ export class MapPage {
    * @param pos New geoposition
    */
   private geoHandle(t: this, pos: any) {
-    if(pos.coords === undefined) return;
+    if(!pos.coords) return;
       
     t.pos = pos;
 
     // Update heading and speed variables for the UI
-    this.heading = pos.coords.heading === null ? 0 : Math.floor(pos.coords.heading);
-    this.speed = pos.coords.speed === null ? 0 : pos.coords.speed.toFixed(2);
+    this.heading = !pos.coords.heading ? 0 : Math.floor(pos.coords.heading);
+    this.speed = !pos.coords.speed ? 0 : pos.coords.speed.toFixed(2);
 
-    let p = [pos.coords.latitude, pos.coords.longitude];
+    let p: L.LatLngTuple = [
+      pos.coords.latitude,
+      pos.coords.longitude
+    ];
 
-    if(this.boat === undefined) {
+    if(!this.boat) {
       // Create boat marker and add it to the map
-      this.boat = L.marker(
-        p, {
-          icon: L.icon({
-            iconUrl: '/assets/icon/boat.png',
-
-            iconSize: [64, 64],
-            iconAnchor: [32, 32]
-          })
-        }
-      ).addTo(this.map);
+      this.boat = L.marker(p, {
+        icon: L.icon({
+          iconUrl: '/assets/icon/boat.png',
+          iconSize: [64, 64],
+          iconAnchor: [32, 32]
+        })
+      }).addTo(this.map);
 
       // Fly to current position on the map
-      this.map.flyTo(p, 15, {duration: 3});
+      this.map.flyTo(p, 15, {
+        duration: 3
+      });
     } else {
       // Update boat position
       this.boat.setLatLng(
@@ -141,7 +143,9 @@ export class MapPage {
 
       // If fabLocate is enabled, fly to the current geoposition on the map
       if(this.fabLocateToggler.active) {
-        this.map.flyTo(p, 15, 1);
+        this.map.flyTo(p, 15, {
+          duration: 1
+        });
       }
     }
   }
@@ -176,7 +180,7 @@ export class MapPage {
           this.pos.coords.latitude, 
           this.pos.coords.longitude
         ], 15, {
-          duration:0.5
+          duration: 0.5
         }
       );
     }

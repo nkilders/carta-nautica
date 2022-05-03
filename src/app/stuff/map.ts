@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export class Map {
-    public uuid: string;
+    public readonly uuid: string;
     public type: string;
     public name: string;
     public url: string;

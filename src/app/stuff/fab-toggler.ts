@@ -1,18 +1,18 @@
 export class FabToggler {
-    private _btn: HTMLElement;
-    private _colorOff: string;
-    private _colorOn: string;
+    private btn: HTMLElement;
+    private colorOff: string;
+    private colorOn: string;
 
-    private _state: boolean;
+    private state: boolean;
 
     constructor(btnId: string, colorOff: string, colorOn: string) {
-        this._btn = document.getElementById(btnId);
-        this._colorOff = colorOff;
-        this._colorOn = colorOn;
+        this.btn = document.getElementById(btnId);
+        this.colorOff = colorOff;
+        this.colorOn = colorOn;
 
-        this._state = false;
+        this.state = false;
 
-        this._btn.setAttribute('color', colorOff);
+        this.btn.setAttribute('color', colorOff);
     }
 
     /**
@@ -21,14 +21,14 @@ export class FabToggler {
      * @returns The button's new state
      */
     public toggle(): boolean {
-        this._state = !this._state;
+        this.state = !this.state;
         
-        this._btn.setAttribute('color', this._state ? this._colorOn : this._colorOff);
+        this.btn.setAttribute('color', this.state ? this.colorOn : this.colorOff);
 
-        return this._state;
+        return this.state;
     }
 
     public get active(): boolean {
-        return this._state;
+        return this.state;
     }
 }
