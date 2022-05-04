@@ -19,60 +19,61 @@ export class MapStorageService {
     this.updateListeners = [];
   }
 
-  public saveMap(map: Map): Promise<any> {
-    return this.storage.get(MAPS_KEY).then((maps: Map[]) => {
-      if(maps) {
-        maps.push(map);
-        this.updateListeners.forEach(l => l(maps));
-        return this.storage.set(MAPS_KEY, maps);
-      } else {
-        this.updateListeners.forEach(l => l([map]));
-        return this.storage.set(MAPS_KEY, [map]);
-      }
-    });
+  async saveMap(map: Map) {
+    let maps: Map[] = await this.storage.get(MAPS_KEY);
+    
+    if(!maps) {
+      maps = [ map ];
+    } else {
+      maps.push(map);
+    }
+
+    this.fireUpdateListeners(maps);
+
+    await this.storage.set(MAPS_KEY, maps);
   }
 
-  getMaps(): Promise<Map[]> {
+  async getMaps() {
     return this.storage.get(MAPS_KEY);
   }
 
-  updateMap(map: Map): Promise<any> {
-    return this.storage.get(MAPS_KEY).then((maps: Map[]) => {
-      if(!maps || maps.length == 0) return null;
+  async updateMap(map: Map) {
+    const maps: Map[] = await this.storage.get(MAPS_KEY);
+    if(!maps) return;
 
-      let newArr: Map[] = [];
+    const newArr: Map[] = [];
 
-      for(let m of maps) {
-        if(map.uuid === m.uuid) {
-          newArr.push(map);
-        } else {
-          newArr.push(m);
-        }
-      }
+    for(const m of maps) {
+      newArr.push((m.uuid === map.uuid) ? map : m);
+    }
 
-      this.updateListeners.forEach(l => l(newArr));
-      return this.storage.set(MAPS_KEY, newArr);
-    });
+    this.fireUpdateListeners(newArr);
+
+    await this.storage.set(MAPS_KEY, newArr);
   }
 
-  deleteMap(map: Map): Promise<Map> {
-    return this.storage.get(MAPS_KEY).then((maps: Map[]) => {
-      if(!maps || maps.length == 0) return null;
+  async deleteMap(map: Map) {
+    const maps: Map[] = await this.storage.get(MAPS_KEY);
+    if(!maps || maps.length === 0) return;
 
-      let toKeep: Map[] = [];
+    const toKeep: Map[] = [];
 
-      for(let m of maps) {
-        if(m.uuid != map.uuid) {
-          toKeep.push(m);
-        }
+    for(const m of maps) {
+      if(m.uuid !== map.uuid) {
+        toKeep.push(m);
       }
+    }
 
-      this.updateListeners.forEach(l => l(toKeep));
-      return this.storage.set(MAPS_KEY, toKeep);
-    });
+    this.fireUpdateListeners(toKeep);
+
+    await this.storage.set(MAPS_KEY, toKeep);
   }
 
   registerUpdateListener(listener: Function) {
     this.updateListeners.push(listener);
+  }
+
+  private fireUpdateListeners(maps: Map[]) {
+    this.updateListeners.forEach(l => l(maps));
   }
 }

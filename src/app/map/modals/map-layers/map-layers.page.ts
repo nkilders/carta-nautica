@@ -28,29 +28,26 @@ export class MapLayersPage implements OnInit {
     this.loadMaps();
   }
 
-  onReorder(e: CustomEvent<any>) {
-    // Update position in "maps" array
-    this.arrayMove(this.maps, e.detail.from, e.detail.to);
+  async onReorder(e: CustomEvent) {
+    const from = e.detail.from;
+    const to = e.detail.to;
 
-    // Update position-attributes
-    this.maps.forEach((map, index) => {
-      map.position = index;
-      this.mapSrv.updateMap(map);
-    });
+    this.maps.sort((a, b) => a.position - b.position);
+
+    this.arrayMove(this.maps, from, to);
+
+    let i = 0;
+    for(const m of this.maps) {
+      m.position = i++;
+      await this.mapSrv.updateMap(m);
+    }
 
     e.detail.complete();
   }
 
-  toggleMapStatus(e, index) {
-    const map = this.maps[index];
-
-    map.enabled = e.detail.checked;
-    this.mapSrv.updateMap(map);
-  }
-
-  private arrayMove(arr, indexFrom, indexTo) {
+  private arrayMove(arr: any[], indexFrom: number, indexTo: number) {
     if (indexTo >= arr.length) {
-      let k = indexTo - arr.length + 1;
+      var k = indexTo - arr.length + 1;
 
       while (k--) {
         arr.push(undefined);
@@ -60,6 +57,13 @@ export class MapLayersPage implements OnInit {
     arr.splice(indexTo, 0, arr.splice(indexFrom, 1)[0]);
 
     return arr;
+  }
+
+  toggleMapStatus(e: CustomEvent, index: number) {
+    const map = this.maps[index];
+
+    map.enabled = e.detail.checked;
+    this.mapSrv.updateMap(map);
   }
 
   private loadMaps() {

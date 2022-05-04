@@ -16,52 +16,45 @@ export class TrackStorageService {
     this.storage.create();
   }
 
-  public saveTrack(track: Track): Promise<any> {
-    return this.storage.get(TRACKS_KEY).then((tracks: Track[]) => {
-      if(tracks) {
-        tracks.push(track);
-        return this.storage.set(TRACKS_KEY, tracks);
-      } else {
-        return this.storage.set(TRACKS_KEY, [track]);
-      }
-    });
+
+
+  async saveTrack(track: Track) {
+    const tracks: Track[] = await this.storage.get(TRACKS_KEY);
+
+    tracks.push(track);
+
+    await this.storage.set(TRACKS_KEY, tracks);
   }
 
-  getTracks(): Promise<Track[]> {
+  async getTracks() {
     return this.storage.get(TRACKS_KEY);
   }
 
-  updateTrack(track: Track): Promise<any> {
-    return this.storage.get(TRACKS_KEY).then((tracks: Track[]) => {
-      if(!tracks || tracks.length == 0) return null;
+  async updateTrack(track: Track) {
+    const tracks: Track[] = await this.storage.get(TRACKS_KEY);
+    if(!tracks || tracks.length == 0) return;
 
-      let newArr: Track[] = [];
+    const newArr: Track[] = [];
 
-      for(let t of tracks) {
-        if(track.uuid === t.uuid) {
-          newArr.push(track);
-        } else {
-          newArr.push(t);
-        }
-      }
+    for(const t of tracks) {
+      newArr.push((t.uuid === track.uuid) ? track : t);
+    }
 
-      return this.storage.set(TRACKS_KEY, newArr);
-    });
+    await this.storage.set(TRACKS_KEY, newArr);
   }
 
-  deleteTrack(track: Track): Promise<Track> {
-    return this.storage.get(TRACKS_KEY).then((tracks: Track[]) => {
-      if(!tracks || tracks.length == 0) return null;
+  async deleteTrack(track: Track) {
+    const tracks: Track[] = await this.storage.get(TRACKS_KEY);
+    if(!track || tracks.length == 0) return;
 
-      let toKeep: Track[] = [];
+    const toKeep: Track[] = [];
 
-      for(let t of tracks) {
-        if(t.uuid != track.uuid) {
-          toKeep.push(t);
-        }
+    for(const t of tracks) {
+      if(t.uuid !== track.uuid) {
+        toKeep.push(t);
       }
+    }
 
-      return this.storage.set(TRACKS_KEY, toKeep);
-    });
+    await this.storage.set(TRACKS_KEY, toKeep);
   }
 }

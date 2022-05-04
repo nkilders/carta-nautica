@@ -156,7 +156,7 @@ export class MapPage {
     });
     that.layers.clear();
 
-    maps.forEach(map => {
+    maps.sort((a, b) => b.position - a.position).forEach(map => {
       let tileLayer = L.tileLayer(map.url);
       that.layers.set(map.uuid, tileLayer);
 
