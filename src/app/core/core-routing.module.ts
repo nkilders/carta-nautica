@@ -8,6 +8,10 @@ const routes: Routes = [
     path: '',
     component: CorePage,
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./modals/settings/settings.module').then(m => m.SettingsPageModule),
+  },
 ];
 
 @NgModule({
