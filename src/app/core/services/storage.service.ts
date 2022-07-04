@@ -9,30 +9,36 @@ export class StorageService {
 
   constructor(
     private storageApi: Storage
-  ) {
-    this.init();
-  }
+  ) { }
 
   async set(key: string, value: any) {
-    console.log(this.storage);
+    if(!this.storage) await this.init();
     
-    await this.storage?.set(key, value);
+    await this.storage.set(key, value);
   }
 
   async get(key: string) {
-    return this.storage?.get(key);
+    if(!this.storage) await this.init();
+    
+    return this.storage.get(key);
   }
 
   async has(key: string) {
+    if(!this.storage) await this.init();
+    
     return !!(await this.get(key));
   }
 
   async remove(key: string) {
-    this.storage?.remove(key);
+    if(!this.storage) await this.init();
+    
+    await this.storage.remove(key);
   }
 
   async clear() {
-    await this.storage?.clear();
+    if(!this.storage) await this.init();
+
+    await this.storage.clear();
   }
 
   private async init() {

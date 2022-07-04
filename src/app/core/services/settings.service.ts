@@ -12,36 +12,46 @@ export class SettingsService {
 
   constructor(
     private storage: StorageService
-  ) {
-    // delay is needed because the storage isn't fully initialized when this constructor is called
-    setTimeout(() => this.init(), 1000);
-  }
+  ) { }
 
-  getAllSettings(): Settings {
+  async getAllSettings() {
+    if(!this.settings) await this.init();
+
     return this.settings;
   }
 
-  getSpeedUnit(): SpeedUnit {
+  async getSpeedUnit() {
+    if(!this.settings) await this.init();
+
     return this.settings.speedUnit;
   }
 
-  setSpeedUnit(unit: SpeedUnit) {
+  async setSpeedUnit(unit: SpeedUnit) {
+    if(!this.settings) await this.init();
+    
     this.settings.speedUnit = unit;
-    this.save();
+    await this.save();
   }
 
-  getDistanceUnit(): DistanceUnit {
+  async getDistanceUnit() {
+    if(!this.settings) await this.init();
+
     return this.settings.distanceUnit;
   }
 
-  setDistanceUnit(unit: DistanceUnit) {
+  async setDistanceUnit(unit: DistanceUnit) {
+    if(!this.settings) await this.init();
+
     this.settings.distanceUnit = unit;
-    this.save();
+    await this.save();
   }
   
   private async init() {
-    if(!await this.storage.has(STORAGE_KEY)) {
-      this.storage.set(STORAGE_KEY, this.defaultSettings());
+    this.settings = await this.storage.get(STORAGE_KEY);
+
+    if(!this.settings) {
+      this.settings = this.defaultSettings();
+      await this.save();
     }
   }
 
@@ -52,7 +62,7 @@ export class SettingsService {
     }
   }
 
-  private save() {
-    this.storage.set(STORAGE_KEY, this.settings);
+  private async save() {
+    await this.storage.set(STORAGE_KEY, this.settings);
   }
 }
