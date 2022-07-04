@@ -5,5 +5,20 @@
 </ion-header>
 
 <ion-content>
+  <ion-list>
+    
+    <ion-list-header>Speed Unit</ion-list-header>
+    <ion-select interface="alert" [interfaceOptions]="speedUnitAlertOptions" [(ngModel)]="speedUnit" (ionChange)="speedUnitUpdate()">
+      <ion-select-option value="0">km/h</ion-select-option>
+      <ion-select-option value="1">m/s</ion-select-option>
+      <ion-select-option value="2">knt</ion-select-option>
+    </ion-select>
 
+    <ion-list-header>Distance Unit</ion-list-header>
+    <ion-select interface="alert" [interfaceOptions]="distanceUnitAlertOptions" [(ngModel)]="distanceUnit" (ionChange)="distanceUnitUpdate($event)">
+      <ion-select-option value="0">Kilometers</ion-select-option>
+      <ion-select-option value="1">Meters</ion-select-option>
+      <ion-select-option value="2">Sea Miles</ion-select-option>
+    </ion-select>
+  </ion-list>
 </ion-content>
