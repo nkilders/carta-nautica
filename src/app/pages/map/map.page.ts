@@ -39,8 +39,6 @@ export class MapPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('ngOnInit()');
-    
     this.insomnia.keepAwake();
 
     this.mapSetup();
@@ -49,8 +47,6 @@ export class MapPage implements OnInit {
   }
 
   ionViewWillLeave() {
-    console.log('ionViewWillLeave()');
-    
     this.insomnia.allowSleepAgain();
 
     // Unsubscribe from geolocation service
