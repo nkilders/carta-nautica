@@ -12,10 +12,8 @@ import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import {
-  DragRotateAndZoom,
-  defaults as defaultInteractions,
-} from 'ol/interaction';
+import { DragRotateAndZoom, defaults as defaultInteractions } from 'ol/interaction';
+import { FabToggler } from 'src/app/models/fab-toggler.model';
 
 useGeographic();
 @Component({
@@ -32,6 +30,8 @@ export class MapPage implements OnInit {
   private geoSub: Subscription;
   private position: Coordinates;
 
+  private fabFollowToggler: FabToggler;
+
   constructor(
     private geolocation: GeolocationService,
   ) { }
@@ -39,6 +39,7 @@ export class MapPage implements OnInit {
   ngOnInit() {
     this.mapSetup();
     this.geoSetup();
+    this.fabSetup();
   }
 
   ionViewWillLeave() {
@@ -97,19 +98,15 @@ export class MapPage implements OnInit {
     // Create boat marker and set map view if marker doesn't exist
     if(!this.boat) {
       this.setupBoat(coords);
-
-      this.map.getView().animate({
-        center: [
-          pos.coords.longitude,
-          pos.coords.latitude,
-        ],
-        zoom: 15,
-        duration: 1000,
-      });
+      this.flyTo(coords.longitude, coords.latitude, 15, 1000);
     }
     
     // Update boat marker position and rotation
     this.updateBoat(coords);
+
+    if(this.fabFollowToggler.active) {
+      this.flyTo(coords.longitude, coords.latitude, 15, 1000);
+    }
   }
 
   /**
@@ -157,5 +154,30 @@ export class MapPage implements OnInit {
         rotation: rotation,
       }),
     }));
+  }
+
+  fabSetup() {
+    this.fabFollowToggler = new FabToggler('fabFollow', 'dark', 'primary');
+    this.map.on('pointerdrag', () => {
+      if(this.fabFollowToggler.active) {
+        this.fabFollowToggler.toggle();
+      }
+    });
+  }
+
+  fabFollow() {
+    const active = this.fabFollowToggler.toggle();
+    
+    if(active) {
+      this.flyTo(this.position.longitude, this.position.latitude, 15, 500);
+    }
+  }
+
+  flyTo(long: number, lat: number, zoom: number, duration: number) {
+    this.map.getView().animate({
+      center: [ long, lat ],
+      zoom: zoom,
+      duration: duration,
+    });
   }
 }
