@@ -12,6 +12,10 @@ import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
+import {
+  DragRotateAndZoom,
+  defaults as defaultInteractions,
+} from 'ol/interaction';
 
 useGeographic();
 @Component({
@@ -38,10 +42,12 @@ export class MapPage implements OnInit {
   }
 
   ionViewWillLeave() {
+    // Unsubscribe from geolocation service
     if(this.geoSub) this.geoSub.unsubscribe();
   }
 
   mapSetup() {
+    // Create map
     this.map = new Map({
       layers: [
         new TileLayer({
@@ -50,6 +56,7 @@ export class MapPage implements OnInit {
           }),
         }),
       ],
+      interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
       target: 'map',
       view: new View({
         center: [0, 0],
@@ -57,8 +64,14 @@ export class MapPage implements OnInit {
       }),
     });
 
+    // Update boat rotation after rotating the map
+    // Not the best solution, should be revised at some point
+    this.map.on('moveend', () => this.updateBoat(this.position));
+
     this.map.addControl(new ZoomSlider());
 
+    // Sometimes the map doesn't render until the window gets resized
+    // This seems to improve the problem, but doesn't fix it
     setTimeout(() => this.map.updateSize(), 100);
   }
 
@@ -73,10 +86,12 @@ export class MapPage implements OnInit {
    * Handles the response from the geolocation service
    */
   geoHandle(pos: Geoposition | PositionError) {
+    // Cancel if pos is an error
     if(!this.geolocation.isPosition(pos)) return;
 
     const coords = this.position = pos.coords;
 
+    // Create boat marker and set map view if marker doesn't exist
     if(!this.boat) {
       this.setupBoat(coords);
 
@@ -90,6 +105,7 @@ export class MapPage implements OnInit {
       });
     }
     
+    // Update boat marker position and rotation
     this.updateBoat(coords);
   }
 
@@ -97,18 +113,22 @@ export class MapPage implements OnInit {
    * Creates the boat marker and adds it to the map
    */
   setupBoat(coords: Coordinates) {
+    // Create boat marker
     this.boat = new Feature();
 
+    // Set marker position and rotation
     this.updateBoat(coords);
 
+    // Create layer and add marker to it
     this.boatLayer = new VectorLayer({
       source: new VectorSource({
         features: [
           this.boat,
         ],
-      })
+      }),
     });
 
+    // Add layer to map
     this.map.addLayer(this.boatLayer);
   }
 
@@ -116,17 +136,22 @@ export class MapPage implements OnInit {
    * Updates the boat marker's position and rotation
    */
   updateBoat(coords: Coordinates) {
+    // Set position
     this.boat.setGeometry(new Point([
       coords.longitude,
       coords.latitude,
     ]));
 
+    // Calculate rotation
+    const rotation = (this.map.getView().getRotation() + (coords.heading / 57.29578)) % (2 * Math.PI);
+
+    // Set rotation
     this.boat.setStyle(new Style({
       image: new Icon({
         anchor: [0.5, 0.5],
         src: '/assets/icon/navigation.png',
         scale: 0.04,
-        rotation: coords.heading / 57.29578,
+        rotation: rotation,
       }),
     }));
   }
