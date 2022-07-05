@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
+import { Geolocation } from '@ionic-native/geolocation/ngx'
+
 @NgModule({
   declarations: [
     AppComponent
@@ -20,10 +22,13 @@ import { IonicStorageModule } from '@ionic/storage-angular';
       name: 'carta-nautica'
     }),
   ],
-  providers: [{
-    provide: RouteReuseStrategy,
-    useClass: IonicRouteStrategy
-  }],
+  providers: [
+    {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    },
+    Geolocation,
+  ],
   bootstrap: [
     AppComponent
   ],
