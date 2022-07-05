@@ -6,5 +6,9 @@
     <param name="android-package" value="org.apache.cordova.geolocation.Geolocation"/>
   </feature>
 
+  <feature name="Insomnia">
+    <param name="android-package" value="nl.xservices.plugins.Insomnia"/>
+  </feature>
+
   
 </widget>
