@@ -10,5 +10,9 @@
     <param name="android-package" value="nl.xservices.plugins.Insomnia"/>
   </feature>
 
+  <feature name="Webserver">
+    <param name="android-package" value="org.apache.cordova.plugin.Webserver"/>
+  </feature>
+
   
 </widget>

@@ -15,6 +15,7 @@ import VectorSource from 'ol/source/Vector';
 import { DragRotateAndZoom, defaults as defaultInteractions } from 'ol/interaction';
 import { FabToggler } from 'src/app/models/fab-toggler.model';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
+import { TileBufferService } from 'src/app/services/tile-buffer.service';
 
 useGeographic();
 @Component({
@@ -36,6 +37,7 @@ export class MapPage implements OnInit {
   constructor(
     private insomnia: Insomnia,
     private geolocation: GeolocationService,
+    private tileBuffer: TileBufferService,
   ) { }
 
   ngOnInit() {
