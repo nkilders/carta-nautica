@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Feature, Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import { ZoomSlider } from 'ol/control';
+import { ScaleLine } from 'ol/control';
 import { Subscription } from 'rxjs';
 import { GeolocationService } from 'src/app/services/geolocation.service';
 import { Geoposition, PositionError, Coordinates } from '@ionic-native/geolocation/ngx'
@@ -68,7 +68,10 @@ export class MapPage implements OnInit {
     // Not the best solution, should be revised at some point
     this.map.on('moveend', () => this.updateBoat(this.position));
 
-    this.map.addControl(new ZoomSlider());
+    this.map.addControl(new ScaleLine({
+      bar: false,
+      units: 'metric',
+    }));
 
     // Sometimes the map doesn't render until the window gets resized
     // This seems to improve the problem, but doesn't fix it
