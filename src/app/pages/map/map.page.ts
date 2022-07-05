@@ -14,6 +14,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { DragRotateAndZoom, defaults as defaultInteractions } from 'ol/interaction';
 import { FabToggler } from 'src/app/models/fab-toggler.model';
+import { Insomnia } from '@ionic-native/insomnia/ngx';
 
 useGeographic();
 @Component({
@@ -33,16 +34,25 @@ export class MapPage implements OnInit {
   private fabFollowToggler: FabToggler;
 
   constructor(
+    private insomnia: Insomnia,
     private geolocation: GeolocationService,
   ) { }
 
   ngOnInit() {
+    console.log('ngOnInit()');
+    
+    this.insomnia.keepAwake();
+
     this.mapSetup();
     this.geoSetup();
     this.fabSetup();
   }
 
   ionViewWillLeave() {
+    console.log('ionViewWillLeave()');
+    
+    this.insomnia.allowSleepAgain();
+
     // Unsubscribe from geolocation service
     if(this.geoSub) this.geoSub.unsubscribe();
   }
