@@ -25,7 +25,16 @@ export class MapLayersPage implements OnInit {
   }
 
   onReorder(e: CustomEvent) {
-    // TOOD: implement reorder magic
+    const {from, to}: {from: number, to: number} = e.detail;
+    
+    this.arrayMove(this.maps, from, to);
+
+    this.maps.forEach((m, i) => {
+      if(m.position === i) return;
+
+      m.position = i;
+      this.mapSrv.updateMap(m);
+    })
     
     e.detail.complete();
   }
@@ -80,7 +89,8 @@ export class MapLayersPage implements OnInit {
   }
 
   toggleMapStatus(e: CustomEvent, map: Map) {
-    // TODO: implement
+    map.enabled = e.detail.checked;
+    this.mapSrv.updateMap(map);
   }
 
   async createHandler() {
@@ -106,5 +116,19 @@ export class MapLayersPage implements OnInit {
       map.position = i;
       this.mapSrv.updateMap(map);
     });
+  }
+
+  private arrayMove(arr: any[], indexFrom: number, indexTo: number) {
+    if (indexTo >= arr.length) {
+      var k = indexTo - arr.length + 1;
+
+      while (k--) {
+        arr.push(undefined);
+      }
+    }
+
+    arr.splice(indexTo, 0, arr.splice(indexFrom, 1)[0]);
+
+    return arr;
   }
 }
