@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as EventEmitter from 'events';
-import { Map } from '../models/map.model';
+import { Map, OnlineMap } from '../models/map.model';
 import { StorageService } from './storage.service';
 
 const STORAGE_KEY = 'map-layers';
@@ -75,12 +75,20 @@ export class MapService {
     this.maps = await this.storage.get(STORAGE_KEY);
 
     if(!this.maps) {
-      this.maps = [];
+      this.maps = this.initialMaps();
       await this.save();
     }
   }
 
   private async save() {
     await this.storage.set(STORAGE_KEY, this.maps);
+  }
+
+  private initialMaps(): Map[] {
+    return [
+      new OnlineMap('OpenSeaMap', 'http://tiles.openseamap.org/seamark/${z}/${x}/${y}.png', true),
+      new OnlineMap('OpenStreetMap DE', 'https://a.tile.openstreetmap.de/${z}/${x}/${y}.png', true),
+      new OnlineMap('OpenStreetMap', 'https://tile.openstreetmap.org/${z}/${x}/${y}.png'),
+    ];
   }
 }
