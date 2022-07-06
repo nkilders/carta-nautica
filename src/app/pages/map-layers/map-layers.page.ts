@@ -120,7 +120,7 @@ export class MapLayersPage implements OnInit {
 
   private arrayMove(arr: any[], indexFrom: number, indexTo: number) {
     if (indexTo >= arr.length) {
-      var k = indexTo - arr.length + 1;
+      let k = indexTo - arr.length + 1;
 
       while (k--) {
         arr.push(undefined);
