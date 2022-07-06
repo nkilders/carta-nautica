@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Map Layers</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-reorder-group disabled="false" (ionItemReorder)="onReorder($event)">
+    <ion-item *ngFor="let m of maps">
+      <ion-reorder slot="start"></ion-reorder>
+      
+      <ion-label>
+        {{ m.name }} <small>({{ m.type }})</small>
+      </ion-label>
+      
+      <ion-toggle color="primary" slot="end" [attr.checked]="m.enabled" (ionChange)="toggleMapStatus($event, m)"></ion-toggle>
+
+      <ion-buttons slot="end">
+        <ion-button (click)="showMapOptions(m)">
+          <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-reorder-group>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="createHandler()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
