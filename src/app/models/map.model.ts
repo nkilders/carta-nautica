@@ -6,34 +6,34 @@ export abstract class Map {
     name: string;
     type: string;
     src: string;
-
-    position: number;
     enabled: boolean;
 
-    constructor(name: string, type: string, src: string) {
+    position: number;
+
+    constructor(name: string, type: string, src: string, enabled: boolean = false) {
         this.uuid = uuid();
 
         this.name = name;
         this.type = type;
         this.src = src;
+        this.enabled = enabled;
         
         this.position = 99999;
-        this.enabled = false;
     }
 }
 
 export class OnlineMap extends Map {
 
-    constructor(name: string, url: string) {
-        super(name, 'online', url);
+    constructor(name: string, url: string, enabled: boolean = false) {
+        super(name, 'online', url, enabled);
     }
 
 }
 
 export class OfflineMap extends Map {
 
-    constructor(name: string, path: string) {
-        super(name, 'offline', path);
+    constructor(name: string, path: string, enabled: boolean = false) {
+        super(name, 'offline', path, enabled);
     }
     
 }
