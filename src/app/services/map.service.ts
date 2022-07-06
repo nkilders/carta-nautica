@@ -8,7 +8,7 @@ const STORAGE_KEY = 'map-layers';
 @Injectable({
   providedIn: 'root'
 })
-export class MapLayersService {
+export class MapService {
   private maps: Map[];
   private eventEmitter: EventEmitter;
 
@@ -24,22 +24,25 @@ export class MapLayersService {
     return this.maps;
   }
 
-  async saveMap(map: Map) {
+  async addMap(map: Map) {
     if(!this.maps) await this.init();
 
-    let insert = true;
+    this.maps.push(map);
+
+    this.eventEmitter.emit('create', map.uuid, map);
+
+    await this.save();
+  }
+
+  async updateMap(map: Map) {
+    if(!this.maps) await this.init();
+
     this.maps.forEach((m, i) => {
       if(m.uuid === map.uuid) {
         this.maps[i] = map;
-        this.eventEmitter.emit('update', map.uuid, map);
-        insert = false;
+        this.eventEmitter.emit('update', map.uuid, m, map);
       }
     });
-
-    if(insert) {
-      this.maps.push(map);
-      this.eventEmitter.emit('create', map.uuid, map);
-    }
 
     await this.save();
   }
@@ -61,8 +64,10 @@ export class MapLayersService {
     await this.save();
   }
 
-  
-  on(event: 'create' | 'update' | 'delete', listener: (uuid: string, map: Map) => void) {
+  on(event: 'create' | 'delete', listener: (uuid: string, map: Map) => void): void;
+  on(event: 'update', listener: (uuid: string, oldMap: Map, newMap: Map) => void): void;
+
+  on(event: string, listener: (...args: any) => void) {
     this.eventEmitter.on(event, listener);
   }
   
