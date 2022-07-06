@@ -1,4 +1,4 @@
-import { v5 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 export abstract class Map {
     readonly uuid: string;
