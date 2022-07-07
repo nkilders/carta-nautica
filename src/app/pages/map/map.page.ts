@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Feature, Map as OLMap, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
 import { ScaleLine } from 'ol/control';
 import { Subscription } from 'rxjs';
 import { GeolocationService } from 'src/app/services/geolocation.service';
