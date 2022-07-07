@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Feature, Map, View } from 'ol';
+import { Feature, Map as OLMap, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import { ScaleLine } from 'ol/control';
@@ -15,7 +15,8 @@ import VectorSource from 'ol/source/Vector';
 import { DragRotateAndZoom, defaults as defaultInteractions } from 'ol/interaction';
 import { FabToggler } from 'src/app/models/fab-toggler.model';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
-import { TileBufferService } from 'src/app/services/tile-buffer.service';
+import { MapService } from 'src/app/services/map.service';
+import XYZ from 'ol/source/XYZ';
 
 useGeographic();
 @Component({
@@ -24,10 +25,12 @@ useGeographic();
   styleUrls: ['./map.page.scss'],
 })
 export class MapPage implements OnInit {
-  private map: Map;
+  private map: OLMap;
 
   private boatLayer: VectorLayer<VectorSource<Geometry>>;
   private boat: Feature<Point>;
+
+  private tileLayers: Map<string, TileLayer<XYZ>>;
 
   private geoSub: Subscription;
   private position: Coordinates;
@@ -37,7 +40,7 @@ export class MapPage implements OnInit {
   constructor(
     private insomnia: Insomnia,
     private geolocation: GeolocationService,
-    private tileBuffer: TileBufferService,
+    private mapSrv: MapService,
   ) { }
 
   ngOnInit() {
@@ -57,14 +60,7 @@ export class MapPage implements OnInit {
 
   mapSetup() {
     // Create map
-    this.map = new Map({
-      layers: [
-        new TileLayer({
-          source: new OSM({
-            attributions: '',
-          }),
-        }),
-      ],
+    this.map = new OLMap({
       interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
       target: 'map',
       view: new View({
@@ -85,6 +81,56 @@ export class MapPage implements OnInit {
     // Sometimes the map doesn't render until the window gets resized
     // This seems to improve the problem, but doesn't fix it
     setTimeout(() => this.map.updateSize(), 100);
+
+    this.tileLayersSetup();
+  }
+
+  async tileLayersSetup() {
+    this.tileLayers = new Map();
+
+    const maps = await this.mapSrv.getAllMaps();
+
+    maps.forEach(map => {
+      const layer = new TileLayer({
+        source: new XYZ({
+          url: map.src,
+        }),
+        zIndex: -map.position,
+        visible: map.enabled,
+      });
+
+      this.map.addLayer(layer);
+      this.tileLayers.set(map.uuid, layer);
+    });
+
+    this.mapSrv.on('create', (uuid, map) => {
+      const layer = new TileLayer({
+        source: new XYZ({
+          url: map.src,
+        }),
+        zIndex: -map.position,
+        visible: map.enabled,
+      });
+
+      this.map.addLayer(layer);
+      this.tileLayers.set(uuid, layer);
+    });
+
+    this.mapSrv.on('update', (uuid, oldMap, newMap) => {
+      const layer = this.tileLayers.get(uuid);
+      if(!layer) return;
+
+      layer.setVisible(newMap.enabled);
+      layer.setZIndex(-newMap.position);
+    });
+
+    this.mapSrv.on('delete', (uuid, map) => {
+      const layer = this.tileLayers.get(uuid);
+      if(!layer) return;
+
+      this.map.removeLayer(layer);
+      this.tileLayers.delete(uuid);
+    });
   }
 
   async geoSetup() {
@@ -134,6 +180,7 @@ export class MapPage implements OnInit {
           this.boat,
         ],
       }),
+      zIndex: 1,
     });
 
     // Add layer to map
