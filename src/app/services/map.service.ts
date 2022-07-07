@@ -86,9 +86,9 @@ export class MapService {
 
   private initialMaps(): Map[] {
     return [
-      new OnlineMap('OpenSeaMap', 'http://tiles.openseamap.org/seamark/${z}/${x}/${y}.png', true),
-      new OnlineMap('OpenStreetMap DE', 'https://a.tile.openstreetmap.de/${z}/${x}/${y}.png', true),
-      new OnlineMap('OpenStreetMap', 'https://tile.openstreetmap.org/${z}/${x}/${y}.png'),
+      new OnlineMap('OpenSeaMap', 'http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', true),
+      new OnlineMap('OpenStreetMap DE', 'https://a.tile.openstreetmap.de/{z}/{x}/{y}.png', true),
+      new OnlineMap('OpenStreetMap', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
     ];
   }
 }
