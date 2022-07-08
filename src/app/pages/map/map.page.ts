@@ -115,12 +115,12 @@ export class MapPage implements OnInit {
       this.tileLayers.set(uuid, layer);
     });
 
-    this.mapSrv.on('update', (uuid, oldMap, newMap) => {
+    this.mapSrv.on('update', (uuid, map) => {
       const layer = this.tileLayers.get(uuid);
       if(!layer) return;
 
-      layer.setVisible(newMap.enabled);
-      layer.setZIndex(-newMap.position);
+      layer.setVisible(map.enabled);
+      layer.setZIndex(-map.position);
     });
 
     this.mapSrv.on('delete', (uuid, map) => {

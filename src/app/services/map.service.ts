@@ -33,6 +33,8 @@ export class MapService {
   async addMap(map: Map) {
     if(!this.maps) await this.init();
 
+    map.position = this.maps.length;
+
     this.maps.push(map);
 
     this.eventEmitter.emit('create', map.uuid, map);
@@ -44,10 +46,30 @@ export class MapService {
     if(!this.maps) await this.init();
 
     this.maps.forEach((m, i) => {
-      if(m.uuid === map.uuid) {
-        this.maps[i] = map;
-        this.eventEmitter.emit('update', map.uuid, m, map);
-      }
+      if(m.uuid !== map.uuid) return;
+      
+      this.maps[i] = map;
+
+      this.eventEmitter.emit('update', map.uuid, map);
+    });
+
+    await this.save();
+  }
+
+  async updateMapPosition(map: Map, newPosition: number) {
+    if(!this.maps) await this.init();
+
+    this.maps.sort((a, b) => a.position - b.position);
+
+    this.arrayMove(this.maps, map.position, newPosition);
+    
+    this.maps.forEach((m, i) => {
+      if(m.position === i) return;
+
+      m.position = i;
+      this.maps[i] = m;
+      
+      this.eventEmitter.emit('update', m.uuid, m);
     });
 
     await this.save();
@@ -67,11 +89,23 @@ export class MapService {
 
     this.maps = toKeep;
 
+    this.updatePositions();
+
     await this.save();
   }
 
-  on(event: 'create' | 'delete', listener: (uuid: string, map: Map) => void): void;
-  on(event: 'update', listener: (uuid: string, oldMap: Map, newMap: Map) => void): void;
+  private updatePositions() {
+    this.maps.sort((a, b) => a.position - b.position);
+
+    this.maps.forEach((m, i) => {
+      if(m.position === i) return;
+      
+      m.position = i;
+      this.eventEmitter.emit('update', m.uuid, m);
+    });
+  }
+
+  on(event: 'create' | 'update' | 'delete', listener: (uuid: string, map: Map) => void): void;
 
   on(event: string, listener: (...args: any) => void) {
     this.eventEmitter.on(event, listener);
@@ -96,5 +130,19 @@ export class MapService {
       new OnlineMap('OpenStreetMap DE', 'https://a.tile.openstreetmap.de/{z}/{x}/{y}.png', true),
       new OnlineMap('OpenStreetMap', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
     ];
+  }
+
+  private arrayMove(arr: any[], indexFrom: number, indexTo: number) {
+    if (indexTo >= arr.length) {
+      let k = indexTo - arr.length + 1;
+
+      while (k--) {
+        arr.push(undefined);
+      }
+    }
+
+    arr.splice(indexTo, 0, arr.splice(indexFrom, 1)[0]);
+
+    return arr;
   }
 }

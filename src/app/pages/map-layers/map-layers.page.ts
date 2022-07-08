@@ -24,17 +24,12 @@ export class MapLayersPage implements OnInit {
     this.loadMaps();
   }
 
-  onReorder(e: CustomEvent) {
+  async onReorder(e: CustomEvent) {
     const {from, to}: {from: number, to: number} = e.detail;
-    
-    this.arrayMove(this.maps, from, to);
 
-    this.maps.forEach((m, i) => {
-      if(m.position === i) return;
+    await this.mapSrv.updateMapPosition(this.maps[from], to);
 
-      m.position = i;
-      this.mapSrv.updateMap(m);
-    })
+    await this.loadMaps();
     
     e.detail.complete();
   }
@@ -106,29 +101,8 @@ export class MapLayersPage implements OnInit {
   private async loadMaps() {
     const maps = await this.mapSrv.getAllMaps();
 
-    this.maps = maps.sort((m1, m2) => m1.position - m2.position);
-    
-    // Update map positions
-    // TODO: move to Map Service
-    this.maps.forEach((map, i) => {
-      if(map.position === i) return;
-      
-      map.position = i;
-      this.mapSrv.updateMap(map);
-    });
-  }
+    maps.sort((a, b) => a.position - b.position);
 
-  private arrayMove(arr: any[], indexFrom: number, indexTo: number) {
-    if (indexTo >= arr.length) {
-      let k = indexTo - arr.length + 1;
-
-      while (k--) {
-        arr.push(undefined);
-      }
-    }
-
-    arr.splice(indexTo, 0, arr.splice(indexFrom, 1)[0]);
-
-    return arr;
+    this.maps = maps;
   }
 }
