@@ -7,8 +7,20 @@ const routes: Routes = [
     loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
   },
   {
+    path: 'map-layers',
+    loadChildren: () => import('./pages/map-layers/map-layers.module').then(m => m.MapLayersPageModule),
+  },
+  {
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule),
+  },
+  {
+    path: 'map-create',
+    loadChildren: () => import('./pages/map-create/map-create.module').then( m => m.MapCreatePageModule),
+  },
+  {
+    path: 'map-edit',
+    loadChildren: () => import('./pages/map-edit/map-edit.module').then( m => m.MapEditPageModule),
   },
 ];
 
