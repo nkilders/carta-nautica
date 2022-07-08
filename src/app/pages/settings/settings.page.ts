@@ -9,6 +9,7 @@ import { SettingsService } from '../../services/settings.service';
 export class SettingsPage implements OnInit {
   speedUnit: string = '-1';
   distanceUnit: string = '-1';
+  mapPreloading: boolean = false;
 
   speedUnitAlertOptions = {
     header: 'Speed Unit',
@@ -24,7 +25,8 @@ export class SettingsPage implements OnInit {
 
   async ngOnInit() {
     this.speedUnit = (await this.settings.getSpeedUnit()).toString();
-    this.distanceUnit = (await this.settings.getDistanceUnit()).toString(); 
+    this.distanceUnit = (await this.settings.getDistanceUnit()).toString();
+    this.mapPreloading = await this.settings.getMapPreloading();
   }
 
   speedUnitUpdate() {
@@ -33,5 +35,9 @@ export class SettingsPage implements OnInit {
 
   distanceUnitUpdate() {
     this.settings.setDistanceUnit(Number.parseInt(this.distanceUnit));
+  }
+
+  mapPreloadingUpdate() {
+    this.settings.setMapPreloading(this.mapPreloading);
   }
 }

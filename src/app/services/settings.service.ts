@@ -53,9 +53,25 @@ export class SettingsService {
 
     await this.save();
   }
+
+  async getMapPreloading() {
+    if(!this.settings) await this.init();
+    
+    return this.settings.mapPreloading;
+  }
+
+  async setMapPreloading(preloading: boolean) {
+    if(!this.settings) await this.init();
+
+    this.settings.mapPreloading = preloading;
+    this.eventEmitter.emit('mapPreloading', preloading);
+
+    await this.save();
+  }
   
   on(event: 'speedUnit', listener: (newValue: SpeedUnit) => void): void;
   on(event: 'distanceUnit', listener: (newValue: DistanceUnit) => void): void;
+  on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
 
   on(event: string, listener: (...args: any) => void) {
     this.eventEmitter.on(event, listener);
@@ -73,7 +89,8 @@ export class SettingsService {
   private defaultSettings(): Settings {
     return {
       distanceUnit: DistanceUnit.KILOMETERS,
-      speedUnit: SpeedUnit.KILOMETERS_PER_HOUR
+      speedUnit: SpeedUnit.KILOMETERS_PER_HOUR,
+      mapPreloading: true,
     }
   }
 

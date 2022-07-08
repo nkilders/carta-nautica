@@ -1,6 +1,7 @@
 export interface Settings {
     speedUnit: SpeedUnit;
     distanceUnit: DistanceUnit;
+    mapPreloading: boolean;
 }
 
 export enum SpeedUnit {

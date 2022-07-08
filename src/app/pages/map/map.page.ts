@@ -16,6 +16,7 @@ import { FabToggler } from 'src/app/models/fab-toggler.model';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { MapService } from 'src/app/services/map.service';
 import XYZ from 'ol/source/XYZ';
+import { SettingsService } from 'src/app/services/settings.service';
 
 useGeographic();
 @Component({
@@ -40,6 +41,7 @@ export class MapPage implements OnInit {
     private insomnia: Insomnia,
     private geolocation: GeolocationService,
     private mapSrv: MapService,
+    private settingsSrv: SettingsService,
   ) { }
 
   ngOnInit() {
@@ -82,12 +84,14 @@ export class MapPage implements OnInit {
     setTimeout(() => this.map.updateSize(), 100);
 
     this.tileLayersSetup();
+    this.settingsListenerSetup();
   }
 
   async tileLayersSetup() {
     this.tileLayers = new Map();
 
     const maps = await this.mapSrv.getAllMaps();
+    const preload = await this.settingsSrv.getMapPreloading();
 
     maps.forEach(map => {
       const layer = new TileLayer({
@@ -96,19 +100,23 @@ export class MapPage implements OnInit {
         }),
         zIndex: -map.position,
         visible: map.enabled,
+        preload: preload ? Infinity : 0,
       });
 
       this.map.addLayer(layer);
       this.tileLayers.set(map.uuid, layer);
     });
 
-    this.mapSrv.on('create', (uuid, map) => {
+    this.mapSrv.on('create', async (uuid, map) => {
+      const preload = await this.settingsSrv.getMapPreloading();
+
       const layer = new TileLayer({
         source: new XYZ({
           url: map.src,
         }),
         zIndex: -map.position,
         visible: map.enabled,
+        preload: preload ? Infinity : 0,
       });
 
       this.map.addLayer(layer);
@@ -129,6 +137,14 @@ export class MapPage implements OnInit {
 
       this.map.removeLayer(layer);
       this.tileLayers.delete(uuid);
+    });
+  }
+
+  async settingsListenerSetup() {
+    this.settingsSrv.on('mapPreloading', state => {
+      for(const layer of this.tileLayers.values()) {
+        layer.setPreload(state ? Infinity : 0);
+      }
     });
   }
 
