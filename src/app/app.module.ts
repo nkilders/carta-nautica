@@ -10,7 +10,6 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
-import { WebServer } from '@awesome-cordova-plugins/web-server/ngx';
 
 @NgModule({
   declarations: [
@@ -31,7 +30,6 @@ import { WebServer } from '@awesome-cordova-plugins/web-server/ngx';
     },
     Geolocation,
     Insomnia,
-    WebServer,
   ],
   bootstrap: [
     AppComponent,
