@@ -24,6 +24,12 @@ export class MapService {
     return this.maps;
   }
 
+  async getMapById(mapId: string) {
+    if(!this.maps) await this.init();
+
+    return this.maps.find(map => map.uuid === mapId);
+  }
+
   async addMap(map: Map) {
     if(!this.maps) await this.init();
 
