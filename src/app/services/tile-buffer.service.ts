@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WebServer, Request, Response } from '@awesome-cordova-plugins/web-server/ngx';
+import { Map } from '../models/map.model';
 
 const PORT = 8080;
 
@@ -9,13 +10,13 @@ const PORT = 8080;
 export class TileBufferService {
 
   constructor(
-    private webserver: WebServer
+    private webserver: WebServer,
   ) {
     this.startServer();
   }
 
-  url(mapId: string) {
-    return `http://localhost:${PORT}/${mapId}/\${z}/\${x}/\${y}`;
+  url(map: Map) {
+    return `http://localhost:${PORT}/${map.uuid}/{z}/{x}/{y}`;
   }
 
   private startServer() {
@@ -33,7 +34,7 @@ export class TileBufferService {
     
     const [, mapId, zoom, x, y] = args;
 
-    const tile = this.loadTile(mapId, zoom, x, y);
+    const tile = this.loadTile(mapId, zoom, x, y);    
 
     this.webserver.sendResponse(req.requestId, <Response>{
       status: 200,
