@@ -11,6 +11,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/map-layers/map-layers.module').then(m => m.MapLayersPageModule),
   },
   {
+    path: 'tracks',
+    loadChildren: () => import('./pages/tracks/tracks.module').then( m => m.TracksPageModule)
+  },
+  {
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule),
   },
