@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActionSheetController, AlertController, ModalController } from '@ionic/angular';
 import { Track } from 'src/app/models/track.model';
 import { TrackService } from 'src/app/services/track.service';
+import { TrackEditPage } from '../track-edit/track-edit.page';
 
 @Component({
   selector: 'app-tracks',
@@ -36,16 +37,16 @@ export class TracksPage implements OnInit {
   }
 
   async editHandler(track: Track) {
-    // const modal = await this.modalCtrl.create({
-    //   component: TrackEditPage,
-    //   componentProps: {
-    //     track: track,
-    //   },
-    // });
+    const modal = await this.modalCtrl.create({
+      component: TrackEditPage,
+      componentProps: {
+        track: track,
+      },
+    });
 
-    // modal.onWillDismiss().then(() => this.loadTracks());
+    modal.onWillDismiss().then(() => this.loadTracks());
 
-    // await modal.present();
+    await modal.present();
   }
 
   async deleteHandler(track: Track) {
