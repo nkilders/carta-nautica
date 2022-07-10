@@ -10,10 +10,12 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
+import { TrackLengthPipe } from './pipes/track-length.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
+    TrackLengthPipe,
   ],
   imports: [
     BrowserModule,

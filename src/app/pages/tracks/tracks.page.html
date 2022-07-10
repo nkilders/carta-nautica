@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Tracks</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item *ngFor="let t of tracks">
+    
+    <ion-label>
+      {{ t.name }} <small>({{ t | trackLength }})</small>
+    </ion-label>
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="showTrackOptions(t)">
+        <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+
+</ion-content>

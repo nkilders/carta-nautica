@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { GeolocationService } from 'src/app/services/geolocation.service';
 import { Geoposition, PositionError, Coordinates } from '@ionic-native/geolocation/ngx'
 import { useGeographic } from 'ol/proj';
-import { Geometry, Point } from 'ol/geom';
+import { LineString, Point } from 'ol/geom';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import VectorLayer from 'ol/layer/Vector';
@@ -17,6 +17,9 @@ import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { MapService } from 'src/app/services/map.service';
 import XYZ from 'ol/source/XYZ';
 import { SettingsService } from 'src/app/services/settings.service';
+import { TrackRecorderService } from 'src/app/services/track-recorder.service';
+import Stroke from 'ol/style/Stroke';
+import { getCoordinatesForRendering } from 'src/app/models/track.model';
 
 useGeographic();
 @Component({
@@ -27,8 +30,10 @@ useGeographic();
 export class MapPage implements OnInit {
   private map: OLMap;
 
-  private boatLayer: VectorLayer<VectorSource<Geometry>>;
   private boat: Feature<Point>;
+
+  private trackLayer: VectorLayer<VectorSource>;
+  private track: Feature<LineString>;
 
   private tileLayers: Map<string, TileLayer<XYZ>>;
 
@@ -36,12 +41,14 @@ export class MapPage implements OnInit {
   private position: Coordinates;
 
   private fabFollowToggler: FabToggler;
+  private fabRecordToggler: FabToggler;
 
   constructor(
     private insomnia: Insomnia,
     private geolocation: GeolocationService,
     private mapSrv: MapService,
     private settingsSrv: SettingsService,
+    private trackRecordSrv: TrackRecorderService,
   ) { }
 
   ngOnInit() {
@@ -81,9 +88,10 @@ export class MapPage implements OnInit {
 
     // Sometimes the map doesn't render until the window gets resized
     // This seems to improve the problem, but doesn't fix it
-    setTimeout(() => this.map.updateSize(), 100);
+    setInterval(() => this.map.updateSize(), 1000);
 
     this.tileLayersSetup();
+    this.trackLayerSetup();
     this.settingsListenerSetup();
   }
 
@@ -140,6 +148,36 @@ export class MapPage implements OnInit {
     });
   }
 
+  async trackLayerSetup() {
+    this.track = new Feature({
+      geometry: new LineString([]),
+    });
+
+    this.trackLayer = new VectorLayer({
+      source: new VectorSource({
+        features: [
+          this.track,
+        ],
+      }),
+      style: new Style({
+        stroke: new Stroke({
+          color: '#e74c3c',
+          width: 4,
+        }),
+      }),
+      visible: false,
+      zIndex: 1,
+    });
+
+    this.map.addLayer(this.trackLayer);
+
+    this.trackRecordSrv.on('newPoint', (track) => {
+      console.log('new point');
+      
+      this.track.setGeometry(new LineString(getCoordinatesForRendering(track)));
+    });
+  }
+
   async settingsListenerSetup() {
     this.settingsSrv.on('mapPreloading', state => {
       for(const layer of this.tileLayers.values()) {
@@ -189,7 +227,7 @@ export class MapPage implements OnInit {
     this.updateBoat(coords);
 
     // Create layer and add marker to it
-    this.boatLayer = new VectorLayer({
+    const boatLayer = new VectorLayer({
       source: new VectorSource({
         features: [
           this.boat,
@@ -199,7 +237,7 @@ export class MapPage implements OnInit {
     });
 
     // Add layer to map
-    this.map.addLayer(this.boatLayer);
+    this.map.addLayer(boatLayer);
   }
 
   /**
@@ -233,6 +271,8 @@ export class MapPage implements OnInit {
         this.fabFollowToggler.toggle();
       }
     });
+
+    this.fabRecordToggler = new FabToggler('fabRecord', 'dark', 'danger');
   }
 
   fabFollow() {
@@ -240,6 +280,18 @@ export class MapPage implements OnInit {
     
     if(active) {
       this.flyTo(this.position.longitude, this.position.latitude, 15, 500);
+    }
+  }
+
+  fabRecord() {
+    const active = this.fabRecordToggler.toggle();
+
+    if(active) {
+      this.trackRecordSrv.startRecording();
+      this.trackLayer.setVisible(true);
+    } else {
+      this.trackRecordSrv.stopRecording();
+      this.trackLayer.setVisible(false);
     }
   }
 

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+
 import { MapLayersPage } from './pages/map-layers/map-layers.page';
+import { TracksPage } from './pages/tracks/tracks.page';
 import { SettingsPage } from './pages/settings/settings.page';
 
 @Component({
@@ -12,6 +14,7 @@ export class AppComponent {
   
   public modals = [
     { title: 'Map Layers', page: MapLayersPage, icon: 'layers' },
+    { title: 'Tracks', page: TracksPage, icon: 'analytics' },
     { title: 'Settings', page: SettingsPage, icon: 'settings' },
   ];
 
