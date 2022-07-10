@@ -42,7 +42,7 @@ jobs:
         run: ionic capacitor copy
 
       - name: Build Android App
-        run: ionic capacitor build android --no-open --configuration=mobile
+        run: ionic capacitor build android --no-open
 
       - name: Generate APK
         working-directory: ./android/
