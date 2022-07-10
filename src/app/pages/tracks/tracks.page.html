@@ -9,7 +9,7 @@
   <ion-item *ngFor="let t of tracks">
     
     <ion-label>
-      {{ t.name }}
+      {{ t.name }} <small>({{ t | trackLength }})</small>
     </ion-label>
     
     <ion-buttons slot="end">

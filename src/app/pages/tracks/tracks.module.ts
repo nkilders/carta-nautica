@@ -7,14 +7,18 @@ import { IonicModule } from '@ionic/angular';
 import { TracksPageRoutingModule } from './tracks-routing.module';
 
 import { TracksPage } from './tracks.page';
+import { TrackLengthPipe } from 'src/app/pipes/track-length.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TracksPageRoutingModule
+    TracksPageRoutingModule,
   ],
-  declarations: [TracksPage]
+  declarations: [
+    TracksPage,
+    TrackLengthPipe,
+  ],
 })
 export class TracksPageModule {}
