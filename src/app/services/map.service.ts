@@ -19,19 +19,19 @@ export class MapService {
   }
 
   async getAllMaps() {
-    if(!this.maps) await this.init();
+    await this.init();
 
     return this.maps;
   }
 
   async getMapById(mapId: string) {
-    if(!this.maps) await this.init();
+    await this.init();
 
     return this.maps.find(map => map.uuid === mapId);
   }
 
   async addMap(map: Map) {
-    if(!this.maps) await this.init();
+    await this.init();
 
     map.position = this.maps.length;
 
@@ -43,7 +43,7 @@ export class MapService {
   }
 
   async updateMap(map: Map) {
-    if(!this.maps) await this.init();
+    await this.init();
 
     this.maps.forEach((m, i) => {
       if(m.uuid !== map.uuid) return;
@@ -57,7 +57,7 @@ export class MapService {
   }
 
   async updateMapPosition(map: Map, newPosition: number) {
-    if(!this.maps) await this.init();
+    await this.init();
 
     this.maps.sort((a, b) => a.position - b.position);
 
@@ -76,7 +76,7 @@ export class MapService {
   }
 
   async deleteMap(map: Map) {
-    if(!this.maps) await this.init();
+    await this.init();
 
     this.eventEmitter.emit('delete', map.uuid, map);
 
@@ -112,6 +112,8 @@ export class MapService {
   }
   
   private async init() {
+    if(this.maps) return;
+
     this.maps = await this.storageSrv.get(STORAGE_KEY);
 
     if(!this.maps) {

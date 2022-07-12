@@ -19,19 +19,19 @@ export class SettingsService {
   }
 
   async getAllSettings() {
-    if(!this.settings) await this.init();
+    await this.init();
 
     return this.settings;
   }
 
   async getSpeedUnit() {
-    if(!this.settings) await this.init();
+    await this.init();
 
     return this.settings.speedUnit;
   }
 
   async setSpeedUnit(unit: SpeedUnit) {
-    if(!this.settings) await this.init();
+    await this.init();
     
     this.settings.speedUnit = unit;
     this.eventEmitter.emit('speedUnit', unit);
@@ -40,13 +40,13 @@ export class SettingsService {
   }
 
   async getDistanceUnit() {
-    if(!this.settings) await this.init();
+    await this.init();
 
     return this.settings.distanceUnit;
   }
 
   async setDistanceUnit(unit: DistanceUnit) {
-    if(!this.settings) await this.init();
+    await this.init();
 
     this.settings.distanceUnit = unit;
     this.eventEmitter.emit('distanceUnit', unit);
@@ -55,13 +55,13 @@ export class SettingsService {
   }
 
   async getMapPreloading() {
-    if(!this.settings) await this.init();
+    await this.init();
     
     return this.settings.mapPreloading;
   }
 
   async setMapPreloading(preloading: boolean) {
-    if(!this.settings) await this.init();
+    await this.init();
 
     this.settings.mapPreloading = preloading;
     this.eventEmitter.emit('mapPreloading', preloading);
@@ -70,13 +70,13 @@ export class SettingsService {
   }
 
   async getKeepAwake() {
-    if(!this.settings) await this.init();
+    await this.init();
 
     return this.settings.keepAwake;
   }
 
   async setKeepAwake(keepAwake: boolean) {
-    if(!this.settings) await this.init();
+    await this.init();
 
     this.settings.keepAwake = keepAwake;
     this.eventEmitter.emit('keepAwake', keepAwake);
@@ -94,6 +94,8 @@ export class SettingsService {
   }
   
   private async init() {
+    if(this.settings) return;
+
     this.settings = await this.storageSrv.get(STORAGE_KEY);
 
     if(!this.settings) {
