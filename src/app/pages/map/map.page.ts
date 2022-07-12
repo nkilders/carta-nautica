@@ -20,6 +20,8 @@ import { SettingsService } from 'src/app/services/settings.service';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
 import Stroke from 'ol/style/Stroke';
 import { getCoordinatesForRendering } from 'src/app/models/track.model';
+import { SpeedHeadingControl } from 'src/app/models/speed-heading-control.model';
+import { UnitService } from 'src/app/services/unit.service';
 
 useGeographic();
 @Component({
@@ -49,6 +51,7 @@ export class MapPage implements OnInit {
     private mapSrv: MapService,
     private settingsSrv: SettingsService,
     private trackRecordSrv: TrackRecorderService,
+    private unitSrv: UnitService,
   ) { }
 
   ngOnInit() {
@@ -85,6 +88,8 @@ export class MapPage implements OnInit {
       bar: false,
       units: 'metric',
     }));
+
+    this.map.addControl(new SpeedHeadingControl(this.settingsSrv, this.geolocation, this.unitSrv));
 
     // Sometimes the map doesn't render until the window gets resized
     // This seems to improve the problem, but doesn't fix it
