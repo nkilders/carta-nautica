@@ -13,7 +13,7 @@ export class MapService {
   private eventEmitter: EventEmitter;
 
   constructor(
-    private storage: StorageService,
+    private storageSrv: StorageService,
   ) {
     this.eventEmitter = new EventEmitter();
   }
@@ -112,7 +112,7 @@ export class MapService {
   }
   
   private async init() {
-    this.maps = await this.storage.get(STORAGE_KEY);
+    this.maps = await this.storageSrv.get(STORAGE_KEY);
 
     if(!this.maps) {
       this.maps = this.initialMaps();
@@ -121,7 +121,7 @@ export class MapService {
   }
 
   private async save() {
-    await this.storage.set(STORAGE_KEY, this.maps);
+    await this.storageSrv.set(STORAGE_KEY, this.maps);
   }
 
   private initialMaps(): Map[] {

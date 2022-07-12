@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Geoposition, PositionError, Coordinates } from '@ionic-native/geolocation/ngx'
+import { Subscription } from 'rxjs';
+import { Insomnia } from '@ionic-native/insomnia/ngx';
+
 import { Feature, Map as OLMap, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import { ScaleLine } from 'ol/control';
-import { Subscription } from 'rxjs';
-import { GeolocationService } from 'src/app/services/geolocation.service';
-import { Geoposition, PositionError, Coordinates } from '@ionic-native/geolocation/ngx'
 import { useGeographic } from 'ol/proj';
 import { LineString, Point } from 'ol/geom';
 import Icon from 'ol/style/Icon';
@@ -12,16 +13,18 @@ import Style from 'ol/style/Style';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { DragRotateAndZoom, defaults as defaultInteractions } from 'ol/interaction';
-import { FabToggler } from 'src/app/models/fab-toggler.model';
-import { Insomnia } from '@ionic-native/insomnia/ngx';
-import { MapService } from 'src/app/services/map.service';
 import XYZ from 'ol/source/XYZ';
-import { SettingsService } from 'src/app/services/settings.service';
-import { TrackRecorderService } from 'src/app/services/track-recorder.service';
 import Stroke from 'ol/style/Stroke';
+
+import { FabToggler } from 'src/app/models/fab-toggler.model';
 import { getCoordinatesForRendering } from 'src/app/models/track.model';
 import { SpeedHeadingControl } from 'src/app/models/speed-heading-control.model';
+
+import { MapService } from 'src/app/services/map.service';
+import { GeolocationService } from 'src/app/services/geolocation.service';
+import { TrackRecorderService } from 'src/app/services/track-recorder.service';
 import { UnitService } from 'src/app/services/unit.service';
+import { SettingsService } from 'src/app/services/settings.service';
 
 useGeographic();
 @Component({
@@ -47,7 +50,7 @@ export class MapPage implements OnInit {
 
   constructor(
     private insomnia: Insomnia,
-    private geolocation: GeolocationService,
+    private geolocationSrv: GeolocationService,
     private mapSrv: MapService,
     private settingsSrv: SettingsService,
     private trackRecordSrv: TrackRecorderService,
@@ -89,7 +92,7 @@ export class MapPage implements OnInit {
       units: 'metric',
     }));
 
-    this.map.addControl(new SpeedHeadingControl(this.settingsSrv, this.geolocation, this.unitSrv));
+    this.map.addControl(new SpeedHeadingControl(this.settingsSrv, this.geolocationSrv, this.unitSrv));
 
     // Sometimes the map doesn't render until the window gets resized
     // This seems to improve the problem, but doesn't fix it
@@ -106,7 +109,7 @@ export class MapPage implements OnInit {
     const maps = await this.mapSrv.getAllMaps();
     const preload = await this.settingsSrv.getMapPreloading();
 
-    maps.forEach(map => {
+    maps.forEach((map) => {
       const layer = new TileLayer({
         source: new XYZ({
           url: map.src,
@@ -184,7 +187,7 @@ export class MapPage implements OnInit {
   }
 
   async settingsListenerSetup() {
-    this.settingsSrv.on('mapPreloading', state => {
+    this.settingsSrv.on('mapPreloading', (state) => {
       for(const layer of this.tileLayers.values()) {
         layer.setPreload(state ? Infinity : 0);
       }
@@ -192,8 +195,8 @@ export class MapPage implements OnInit {
   }
 
   async geoSetup() {
-    const observable = await this.geolocation.watchPosition();
-    this.geoSub = observable.subscribe(pos => {
+    const observable = await this.geolocationSrv.watchPosition();
+    this.geoSub = observable.subscribe((pos) => {
       this.geoHandle(pos)
     });
   }

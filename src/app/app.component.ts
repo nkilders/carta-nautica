@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
+// Modals
 import { MapLayersPage } from './pages/map-layers/map-layers.page';
 import { TracksPage } from './pages/tracks/tracks.page';
 import { SettingsPage } from './pages/settings/settings.page';

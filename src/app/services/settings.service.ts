@@ -13,7 +13,7 @@ export class SettingsService {
   private eventEmitter: EventEmitter;
 
   constructor(
-    private storage: StorageService
+    private storageSrv: StorageService
   ) {
     this.eventEmitter = new EventEmitter();
   }
@@ -78,7 +78,7 @@ export class SettingsService {
   }
   
   private async init() {
-    this.settings = await this.storage.get(STORAGE_KEY);
+    this.settings = await this.storageSrv.get(STORAGE_KEY);
 
     if(!this.settings) {
       this.settings = this.defaultSettings();
@@ -95,6 +95,6 @@ export class SettingsService {
   }
 
   private async save() {
-    await this.storage.set(STORAGE_KEY, this.settings);
+    await this.storageSrv.set(STORAGE_KEY, this.settings);
   }
 }

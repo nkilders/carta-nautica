@@ -20,24 +20,24 @@ export class SettingsPage implements OnInit {
   };
 
   constructor(
-    private settings: SettingsService
+    private settingsSrv: SettingsService
   ) { }
 
   async ngOnInit() {
-    this.speedUnit = (await this.settings.getSpeedUnit()).toString();
-    this.distanceUnit = (await this.settings.getDistanceUnit()).toString();
-    this.mapPreloading = await this.settings.getMapPreloading();
+    this.speedUnit = (await this.settingsSrv.getSpeedUnit()).toString();
+    this.distanceUnit = (await this.settingsSrv.getDistanceUnit()).toString();
+    this.mapPreloading = await this.settingsSrv.getMapPreloading();
   }
 
   speedUnitUpdate() {
-    this.settings.setSpeedUnit(Number.parseInt(this.speedUnit));
+    this.settingsSrv.setSpeedUnit(Number.parseInt(this.speedUnit));
   }
 
   distanceUnitUpdate() {
-    this.settings.setDistanceUnit(Number.parseInt(this.distanceUnit));
+    this.settingsSrv.setDistanceUnit(Number.parseInt(this.distanceUnit));
   }
 
   mapPreloadingUpdate() {
-    this.settings.setMapPreloading(this.mapPreloading);
+    this.settingsSrv.setMapPreloading(this.mapPreloading);
   }
 }
