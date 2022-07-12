@@ -58,8 +58,7 @@ export class MapPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.insomnia.keepAwake();
-
+    this.insomniaSetup();
     this.mapSetup();
     this.geoSetup();
     this.fabSetup();
@@ -70,6 +69,19 @@ export class MapPage implements OnInit {
 
     // Unsubscribe from geolocation service
     if(this.geoSub) this.geoSub.unsubscribe();
+  }
+
+  async insomniaSetup() {
+    const initKeepAwake = await this.settingsSrv.getKeepAwake();
+    if(initKeepAwake) this.insomnia.keepAwake();
+
+    this.settingsSrv.on('keepAwake', (keepAwake) => {
+      if(keepAwake) {
+        this.insomnia.keepAwake();
+      } else {
+        this.insomnia.allowSleepAgain();
+      }
+    });
   }
 
   mapSetup() {
