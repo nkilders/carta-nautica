@@ -1,6 +1,5 @@
 import { Geoposition, PositionError } from "@ionic-native/geolocation";
 import { Control } from "ol/control";
-import { Subscription } from "rxjs";
 import { GeolocationService } from "../services/geolocation.service";
 import { SettingsService } from "../services/settings.service";
 import { UnitService } from "../services/unit.service";
