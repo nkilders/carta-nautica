@@ -23,7 +23,7 @@ export class GeolocationService {
     return this.geolocation.watchPosition(GEO_OPTIONS);
   }
 
-  isPosition(pos: any): pos is Geoposition {
+  static isPosition(pos: any): pos is Geoposition {
     return 'coords' in pos && 'timestamp' in pos;
   }
 }

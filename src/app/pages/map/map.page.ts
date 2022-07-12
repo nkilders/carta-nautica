@@ -203,7 +203,7 @@ export class MapPage implements OnInit {
    */
   geoHandle(pos: Geoposition | PositionError) {
     // Cancel if pos is an error
-    if(!this.geolocation.isPosition(pos)) return;
+    if(!GeolocationService.isPosition(pos)) return;
 
     const coords = this.position = pos.coords;
 

@@ -10,7 +10,6 @@ export class SpeedHeadingControl extends Control {
     private headingElement: HTMLButtonElement;
 
     private settingsSrv: SettingsService;
-    private geolocationSrv: GeolocationService;
     private unitSrv: UnitService;
 
     private speed: number = 0;
@@ -25,7 +24,6 @@ export class SpeedHeadingControl extends Control {
         });
         
         this.settingsSrv = settingsSrv;
-        this.geolocationSrv = geolocationSrv;
         this.unitSrv = unitSrv;
 
         this.speedElement = document.createElement('button');
@@ -39,18 +37,18 @@ export class SpeedHeadingControl extends Control {
         this.headingElement.innerHTML = '0°';
         element.appendChild(this.headingElement);
 
-        this.init();
+        this.init(geolocationSrv);
     }
 
-    async init() {
-        const obs = await this.geolocationSrv.watchPosition();
+    async init(geolocationSrv: GeolocationService) {
+        const obs = await geolocationSrv.watchPosition();
         obs.subscribe((pos) => this.geoHandle(pos));
 
         this.settingsSrv.on('speedUnit', () => this.updateSpeedText());
     }
 
     geoHandle(pos: Geoposition | PositionError) {
-        if(!this.geolocationSrv.isPosition(pos)) return;
+        if(!GeolocationService.isPosition(pos)) return;
 
         const heading = (pos.coords.heading || 0).toFixed(0);
         this.headingElement.innerHTML = heading + '°';
