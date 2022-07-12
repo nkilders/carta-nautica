@@ -68,10 +68,26 @@ export class SettingsService {
 
     await this.save();
   }
+
+  async getKeepAwake() {
+    if(!this.settings) await this.init();
+
+    return this.settings.keepAwake;
+  }
+
+  async setKeepAwake(keepAwake: boolean) {
+    if(!this.settings) await this.init();
+
+    this.settings.keepAwake = keepAwake;
+    this.eventEmitter.emit('keepAwake', keepAwake);
+
+    await this.save();
+  }
   
   on(event: 'speedUnit', listener: (newValue: SpeedUnit) => void): void;
   on(event: 'distanceUnit', listener: (newValue: DistanceUnit) => void): void;
   on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
+  on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
 
   on(event: string, listener: (...args: any) => void) {
     this.eventEmitter.on(event, listener);
@@ -91,6 +107,7 @@ export class SettingsService {
       distanceUnit: DistanceUnit.KILOMETERS,
       speedUnit: SpeedUnit.KILOMETERS_PER_HOUR,
       mapPreloading: true,
+      keepAwake: true,
     }
   }
 
