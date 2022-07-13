@@ -10,6 +10,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
+import { DeviceOrientation } from '@awesome-cordova-plugins/device-orientation/ngx';
 import { TrackLengthPipe } from './pipes/track-length.pipe';
 
 @NgModule({
@@ -32,6 +33,7 @@ import { TrackLengthPipe } from './pipes/track-length.pipe';
     },
     Geolocation,
     Insomnia,
+    DeviceOrientation,
   ],
   bootstrap: [
     AppComponent,
