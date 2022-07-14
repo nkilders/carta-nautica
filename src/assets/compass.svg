@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+    version="1.1" baseProfile="full"
+    width="1000px" height="1000px" viewBox="0 0 1000 1000">
+
+
+    <!-- Background -->
+
+    <circle cx="500" cy="500" r="500" fill="#000000" />
+    <circle cx="500" cy="500" r="490" fill="#428cff" />
+    <circle cx="500" cy="500" r="400" fill="#000000" />
+
+
+    <!-- Inner Circle -->
+
+    <text
+        x="500" y="170"
+        font-family="Arial"
+        font-size="100"
+        font-weight="bold"
+        fill="#ff0000"
+        text-anchor="middle"
+        dominant-baseline="central">
+        N
+    </text>
+
+    <path d="M 570 170 A 330 330, 0, 0 1, 830 430" stroke="#222222" stroke-width="5" />
+    <path d="M 570 190 A 310 310, 0, 0 1, 810 430" stroke="#222222" stroke-width="5" />
+
+    <text
+        x="830" y="500"
+        font-family="Arial"
+        font-size="100"
+        font-weight="bold"
+        fill="#eeeeee"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(90, 830, 500)">
+        E
+    </text>
+    
+    <path d="M 830 570 A 330 330, 0, 0 1, 570 830" stroke="#222222" stroke-width="5" />
+    <path d="M 810 570 A 310 310, 0, 0 1, 570 810" stroke="#222222" stroke-width="5" />
+
+    <text
+        x="500" y="830"
+        font-family="Arial"
+        font-size="100"
+        font-weight="bold"
+        fill="#eeeeee"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(180, 500, 830)">
+        S
+    </text>
+    
+    <path d="M 430 830 A 330 330, 0, 0 1, 170 570" stroke="#222222" stroke-width="5" />
+    <path d="M 430 810 A 310 310, 0, 0 1, 190 570" stroke="#222222" stroke-width="5" />
+
+    <text
+        x="170" y="500"
+        font-family="Arial"
+        font-size="100"
+        font-weight="bold"
+        fill="#eeeeee"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(270, 170, 500)">
+        W
+    </text>
+    
+    <path d="M 170 430 A 330 330, 0, 0 1, 430 170" stroke="#222222" stroke-width="5" />
+    <path d="M 190 430 A 310 310, 0, 0 1, 430 190" stroke="#222222" stroke-width="5" />
+
+
+    <!-- Outer Circle -->
+
+    <text
+        x="500" y="60"
+        font-family="Arial"
+        font-size="40"
+        font-weight="bold"
+        fill="#000000"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(0, 500, 60)">
+        0
+    </text>
+
+    <text
+        x="815" y="185"
+        font-family="Arial"
+        font-size="40"
+        font-weight="bold"
+        fill="#000000"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(45, 815, 185)">
+        45
+    </text>
+
+    <text
+        x="940" y="500"
+        font-family="Arial"
+        font-size="40"
+        font-weight="bold"
+        fill="#000000"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(90, 940, 500)">
+        90
+    </text>
+
+    <text
+        x="815" y="815"
+        font-family="Arial"
+        font-size="40"
+        font-weight="bold"
+        fill="#000000"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(135, 815, 815)">
+        135
+    </text>
+
+    <text
+        x="500" y="940"
+        font-family="Arial"
+        font-size="40"
+        font-weight="bold"
+        fill="#000000"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(180, 500, 940)">
+        180
+    </text>
+
+    <text
+        x="185" y="815"
+        font-family="Arial"
+        font-size="40"
+        font-weight="bold"
+        fill="#000000"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(225, 185, 815)">
+        225
+    </text>
+
+    <text
+        x="60" y="500"
+        font-family="Arial"
+        font-size="40"
+        font-weight="bold"
+        fill="#000000"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(270, 60, 500)">
+        270
+    </text>
+
+    <text
+        x="185" y="185"
+        font-family="Arial"
+        font-size="40"
+        font-weight="bold"
+        fill="#000000"
+        text-anchor="middle"
+        dominant-baseline="central"
+        transform="rotate(315, 185, 185)">
+        315
+    </text>
+</svg>
