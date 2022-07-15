@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
 import { SettingsService } from '../../services/settings.service';
 
 @Component({
@@ -12,6 +13,8 @@ export class SettingsPage implements OnInit {
   mapPreloading: boolean = false;
   keepAwake: boolean = false;
 
+  appVersion: string;
+
   speedUnitAlertOptions = {
     header: 'Speed Unit',
   };
@@ -21,7 +24,8 @@ export class SettingsPage implements OnInit {
   };
 
   constructor(
-    private settingsSrv: SettingsService
+    private settingsSrv: SettingsService,
+    private appVersionPlugin: AppVersion,
   ) { }
 
   async ngOnInit() {
@@ -29,6 +33,8 @@ export class SettingsPage implements OnInit {
     this.distanceUnit = (await this.settingsSrv.getDistanceUnit()).toString();
     this.mapPreloading = await this.settingsSrv.getMapPreloading();
     this.keepAwake = await this.settingsSrv.getKeepAwake();
+
+    this.appVersion = (await this.appVersionPlugin.getVersionNumber());
   }
 
   speedUnitUpdate() {

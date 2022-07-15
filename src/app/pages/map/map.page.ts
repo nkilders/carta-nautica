@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Geoposition, PositionError, Coordinates } from '@ionic-native/geolocation/ngx'
 import { Subscription } from 'rxjs';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
+import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { countryCodeEmoji } from 'country-code-emoji';
 
 import { Feature, Map as OLMap, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
@@ -48,8 +50,12 @@ export class MapPage implements OnInit {
   private fabFollowToggler: FabToggler;
   private fabRecordToggler: FabToggler;
 
+  lastGeocode: number = 0;
+  toolbarTitle: string = '';
+
   constructor(
     private insomnia: Insomnia,
+    private geocoder: NativeGeocoder,
     private geolocationSrv: GeolocationService,
     private mapSrv: MapService,
     private settingsSrv: SettingsService,
@@ -234,6 +240,35 @@ export class MapPage implements OnInit {
     if(this.fabFollowToggler.active) {
       this.flyTo(coords.longitude, coords.latitude, 15, 1000);
     }
+
+    this.updateToolbarTitle();
+  }
+  
+  /**
+   * Reverse Geocodes the current position every 5 minutes
+   * and displays the result in the toolbar title
+   */
+  async updateToolbarTitle() {
+    if(Date.now() - this.lastGeocode < 1000 * 60 * 5) return;
+    this.lastGeocode = Date.now();
+
+    const results = await this.geocoder.reverseGeocode(
+      this.position.latitude,
+      this.position.longitude,
+      {
+        maxResults: 1,
+        useLocale: true,
+      },
+    );
+  
+    if(results.length === 0) return;
+
+    const res = results[0];
+
+    const flag = countryCodeEmoji(res.countryCode);
+    const detail = res.locality ? `${res.locality} ${res.subLocality}` : res.countryName;
+  
+    this.toolbarTitle = `${flag} ${detail}`;
   }
 
   /**
