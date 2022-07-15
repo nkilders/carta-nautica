@@ -1,5 +1,3 @@
-# Carta Nautica vX.Y.Z
-
 ## Features
 
 -
