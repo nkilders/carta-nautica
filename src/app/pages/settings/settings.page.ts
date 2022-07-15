@@ -10,6 +10,7 @@ export class SettingsPage implements OnInit {
   speedUnit: string = '-1';
   distanceUnit: string = '-1';
   mapPreloading: boolean = false;
+  keepAwake: boolean = false;
 
   speedUnitAlertOptions = {
     header: 'Speed Unit',
@@ -20,24 +21,29 @@ export class SettingsPage implements OnInit {
   };
 
   constructor(
-    private settings: SettingsService
+    private settingsSrv: SettingsService
   ) { }
 
   async ngOnInit() {
-    this.speedUnit = (await this.settings.getSpeedUnit()).toString();
-    this.distanceUnit = (await this.settings.getDistanceUnit()).toString();
-    this.mapPreloading = await this.settings.getMapPreloading();
+    this.speedUnit = (await this.settingsSrv.getSpeedUnit()).toString();
+    this.distanceUnit = (await this.settingsSrv.getDistanceUnit()).toString();
+    this.mapPreloading = await this.settingsSrv.getMapPreloading();
+    this.keepAwake = await this.settingsSrv.getKeepAwake();
   }
 
   speedUnitUpdate() {
-    this.settings.setSpeedUnit(Number.parseInt(this.speedUnit));
+    this.settingsSrv.setSpeedUnit(Number.parseInt(this.speedUnit));
   }
 
   distanceUnitUpdate() {
-    this.settings.setDistanceUnit(Number.parseInt(this.distanceUnit));
+    this.settingsSrv.setDistanceUnit(Number.parseInt(this.distanceUnit));
   }
 
   mapPreloadingUpdate() {
-    this.settings.setMapPreloading(this.mapPreloading);
+    this.settingsSrv.setMapPreloading(this.mapPreloading);
+  }
+
+  keepAwakeUpdate() {
+    this.settingsSrv.setKeepAwake(this.keepAwake);
   }
 }

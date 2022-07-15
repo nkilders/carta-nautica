@@ -72,7 +72,7 @@ export class TrackRecorderService {
   private geoHandle(pos: Geoposition | PositionError) {
     if(!this.recording) return;
     if(this.paused) return;
-    if(!this.geolocationSrv.isPosition(pos)) return;
+    if(!GeolocationService.isPosition(pos)) return;
     
     this.track.points.push([pos.timestamp, [pos.coords.longitude, pos.coords.latitude]]);
 

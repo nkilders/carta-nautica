@@ -13,25 +13,25 @@ export class SettingsService {
   private eventEmitter: EventEmitter;
 
   constructor(
-    private storage: StorageService
+    private storageSrv: StorageService
   ) {
     this.eventEmitter = new EventEmitter();
   }
 
   async getAllSettings() {
-    if(!this.settings) await this.init();
+    await this.init();
 
     return this.settings;
   }
 
   async getSpeedUnit() {
-    if(!this.settings) await this.init();
+    await this.init();
 
     return this.settings.speedUnit;
   }
 
   async setSpeedUnit(unit: SpeedUnit) {
-    if(!this.settings) await this.init();
+    await this.init();
     
     this.settings.speedUnit = unit;
     this.eventEmitter.emit('speedUnit', unit);
@@ -40,13 +40,13 @@ export class SettingsService {
   }
 
   async getDistanceUnit() {
-    if(!this.settings) await this.init();
+    await this.init();
 
     return this.settings.distanceUnit;
   }
 
   async setDistanceUnit(unit: DistanceUnit) {
-    if(!this.settings) await this.init();
+    await this.init();
 
     this.settings.distanceUnit = unit;
     this.eventEmitter.emit('distanceUnit', unit);
@@ -55,16 +55,31 @@ export class SettingsService {
   }
 
   async getMapPreloading() {
-    if(!this.settings) await this.init();
+    await this.init();
     
     return this.settings.mapPreloading;
   }
 
   async setMapPreloading(preloading: boolean) {
-    if(!this.settings) await this.init();
+    await this.init();
 
     this.settings.mapPreloading = preloading;
     this.eventEmitter.emit('mapPreloading', preloading);
+
+    await this.save();
+  }
+
+  async getKeepAwake() {
+    await this.init();
+
+    return this.settings.keepAwake;
+  }
+
+  async setKeepAwake(keepAwake: boolean) {
+    await this.init();
+
+    this.settings.keepAwake = keepAwake;
+    this.eventEmitter.emit('keepAwake', keepAwake);
 
     await this.save();
   }
@@ -72,13 +87,16 @@ export class SettingsService {
   on(event: 'speedUnit', listener: (newValue: SpeedUnit) => void): void;
   on(event: 'distanceUnit', listener: (newValue: DistanceUnit) => void): void;
   on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
+  on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
 
   on(event: string, listener: (...args: any) => void) {
     this.eventEmitter.on(event, listener);
   }
   
   private async init() {
-    this.settings = await this.storage.get(STORAGE_KEY);
+    if(this.settings) return;
+
+    this.settings = await this.storageSrv.get(STORAGE_KEY);
 
     if(!this.settings) {
       this.settings = this.defaultSettings();
@@ -91,10 +109,11 @@ export class SettingsService {
       distanceUnit: DistanceUnit.KILOMETERS,
       speedUnit: SpeedUnit.KILOMETERS_PER_HOUR,
       mapPreloading: true,
+      keepAwake: true,
     }
   }
 
   private async save() {
-    await this.storage.set(STORAGE_KEY, this.settings);
+    await this.storageSrv.set(STORAGE_KEY, this.settings);
   }
 }
