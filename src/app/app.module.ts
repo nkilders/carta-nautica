@@ -14,6 +14,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { DeviceOrientation } from '@awesome-cordova-plugins/device-orientation/ngx';
 import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
     Insomnia,
     DeviceOrientation,
     NativeGeocoder,
+    AppVersion,
   ],
   bootstrap: [
     AppComponent,
