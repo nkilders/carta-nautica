@@ -8,10 +8,12 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
+import { TrackLengthPipe } from './pipes/track-length.pipe';
+
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { DeviceOrientation } from '@awesome-cordova-plugins/device-orientation/ngx';
-import { TrackLengthPipe } from './pipes/track-length.pipe';
+import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,7 @@ import { TrackLengthPipe } from './pipes/track-length.pipe';
     Geolocation,
     Insomnia,
     DeviceOrientation,
+    NativeGeocoder,
   ],
   bootstrap: [
     AppComponent,
