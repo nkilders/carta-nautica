@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 // Modals
+import { CompassPage } from './pages/compass/compass.page';
 import { MapLayersPage } from './pages/map-layers/map-layers.page';
 import { TracksPage } from './pages/tracks/tracks.page';
 import { SettingsPage } from './pages/settings/settings.page';
@@ -14,6 +15,7 @@ import { SettingsPage } from './pages/settings/settings.page';
 export class AppComponent {
   
   public modals = [
+    { title: 'Compass', page: CompassPage, icon: 'compass' },
     { title: 'Map Layers', page: MapLayersPage, icon: 'layers' },
     { title: 'Tracks', page: TracksPage, icon: 'analytics' },
     { title: 'Settings', page: SettingsPage, icon: 'settings' },
