@@ -8,8 +8,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./compass.page.scss'],
 })
 export class CompassPage implements OnInit {
-  heading: number = 0;
-
   sub: Subscription;
 
   constructor(
@@ -20,9 +18,7 @@ export class CompassPage implements OnInit {
     this.sub = this.devOrientation.watchHeading({
       frequency: 50,
     }).subscribe((data: DeviceOrientationCompassHeading) => {
-      this.heading = data.trueHeading;
-
-      const rotation = (360 - this.heading).toFixed(1);
+      const rotation = (360 - data.trueHeading).toFixed(1);
 
       document.getElementById('compass').setAttribute('style', `transform: rotate(${rotation}deg);`);
     });
