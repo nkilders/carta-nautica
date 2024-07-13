@@ -1,0 +1,7 @@
+{
+  "name": "carta-nautica",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
