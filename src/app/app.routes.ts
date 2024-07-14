@@ -3,12 +3,12 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/inbox',
+    redirectTo: 'map',
     pathMatch: 'full',
   },
   {
-    path: 'folder/:id',
+    path: 'map',
     loadComponent: () =>
-      import('./folder/folder.page').then((m) => m.FolderPage),
+      import('./map/map.page').then( m => m.MapPage),
   },
 ];
