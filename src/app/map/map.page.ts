@@ -7,6 +7,9 @@ import { useGeographic } from 'ol/proj';
 import { ScaleLine } from 'ol/control';
 import TileLayer from 'ol/layer/Tile';
 import { XYZ } from 'ol/source';
+import { GeolocationService } from '../services/geolocation.service';
+import { Position } from '@capacitor/geolocation';
+import { BoatMarker } from '../boat';
 
 @Component({
   selector: 'app-map',
@@ -17,12 +20,18 @@ import { XYZ } from 'ol/source';
 })
 export class MapPage implements OnInit {
   private map?: Map;
+  private posWatchId?: string;
+  private position?: Position;
+  private boat?: BoatMarker;
 
-  constructor() { 
+  constructor(
+    private geolocation: GeolocationService
+  ) { 
   }
   
   ngOnInit() {
     this.initMap();
+    this.initPositionWatch();
   }
   
   private initMap() {
@@ -56,6 +65,23 @@ export class MapPage implements OnInit {
       bar: false,
       units: 'metric',
     }));
+
+    this.boat = new BoatMarker(this.map);
   }
 
+  private async initPositionWatch() {
+    this.posWatchId = await this.geolocation.watchPosition((pos, err) => {
+      this.onGeolocationChanged(pos, err);
+    });
+  }
+
+  private onGeolocationChanged(position: Position | null, err: unknown) {
+    if(!position) {
+      return;
+    }
+
+    this.position = position;
+
+    this.boat?.updatePosition(position);
+  }
 }
