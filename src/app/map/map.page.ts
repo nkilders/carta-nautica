@@ -34,11 +34,20 @@ export class MapPage implements OnInit {
         center: [0, 0],
         zoom: 2,
       }),
+      
       layers: [
         new TileLayer({
           source: new XYZ({
-            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            url: 'https://a.tile.openstreetmap.de/{z}/{x}/{y}.png', // OpenStreetMap DE
+            // url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OpenStreetMap
           }),
+          preload: Infinity,
+        }),
+        new TileLayer({
+          source: new XYZ({
+            url: 'https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', // OpenSeaMap
+          }),
+          preload: Infinity,
         }),
       ],
     });
