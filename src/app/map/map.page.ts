@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { Map, View } from 'ol';
 import { useGeographic } from 'ol/proj';
-import { ScaleLine } from 'ol/control';
+import { Control, ScaleLine } from 'ol/control';
 import TileLayer from 'ol/layer/Tile';
 import { XYZ } from 'ol/source';
 import { GeolocationService } from '../services/geolocation.service';
@@ -19,6 +19,9 @@ import { BoatMarker } from '../boat';
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class MapPage implements OnInit {
+  public speed = '';
+  public heading = '';
+
   private map?: Map;
   private posWatchId?: string;
   private position?: Position;
@@ -34,6 +37,10 @@ export class MapPage implements OnInit {
   ngOnInit() {
     this.initMap();
     this.initPositionWatch();
+  }
+  
+  public changeSpeedUnit() {
+    // TODO: implement when app supports different speed units
   }
   
   private initMap() {
@@ -68,6 +75,10 @@ export class MapPage implements OnInit {
       units: 'metric',
     }));
 
+    this.map.addControl(new Control({
+      element: document.getElementById('speedHeadingControl')!
+    }));
+
     this.boat = new BoatMarker(this.map);
   }
 
@@ -91,6 +102,7 @@ export class MapPage implements OnInit {
     }
 
     this.boat?.updatePosition(position);
+    this.updateSpeedHeadingControl();
   }
   
   private onInitialPositionReceived(position: Position) {
@@ -113,5 +125,17 @@ export class MapPage implements OnInit {
       zoom,
       duration: durationMs,
     });
+  }
+
+  private updateSpeedHeadingControl() {
+    if(!this.position) {
+      return;
+    }
+
+    const heading = this.position.coords.heading ?? 0;
+    this.heading = `${heading.toFixed(0)}°`;
+
+    const speed = this.position.coords.speed ?? 0;
+    this.speed = `${speed.toFixed(2)} m/s`;
   }
 }
