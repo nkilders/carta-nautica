@@ -19,6 +19,7 @@ import { BoatMarker } from '../boat';
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class MapPage implements OnInit {
+  public toolbarTitle = 'Carta Nautica';
   public speed = '';
   public heading = '';
 
@@ -27,11 +28,13 @@ export class MapPage implements OnInit {
   private position?: Position;
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
+  private lastToolbarTitleUpdate: number;
 
   constructor(
     private geolocation: GeolocationService
   ) {
     this.receivedInitialPosition = false;
+    this.lastToolbarTitleUpdate = 0;
   }
   
   ngOnInit() {
@@ -103,6 +106,7 @@ export class MapPage implements OnInit {
 
     this.boat?.updatePosition(position);
     this.updateSpeedHeadingControl();
+    this.updateToolbarTitle();
   }
   
   private onInitialPositionReceived(position: Position) {
@@ -137,5 +141,24 @@ export class MapPage implements OnInit {
 
     const speed = this.position.coords.speed ?? 0;
     this.speed = `${speed.toFixed(2)} m/s`;
+  }
+
+  private async updateToolbarTitle() {
+    if(Date.now() - this.lastToolbarTitleUpdate < 60_000) {
+      return;
+    }
+
+    if(this.position == null) {
+      return;
+    }
+
+    this.lastToolbarTitleUpdate = Date.now();
+
+    const { longitude, latitude } = this.position.coords;
+    const result = await this.geolocation.reverseGeocode(longitude, latitude);
+    const countryEmoji = ``;
+    const localityString = result.locality ? `${result.locality}, ${result.subLocality}` : `${result.countryName}`;
+
+    this.toolbarTitle = `${countryEmoji} ${localityString}`.trim();
   }
 }
