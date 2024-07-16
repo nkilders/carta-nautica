@@ -10,6 +10,7 @@ import { XYZ } from 'ol/source';
 import { GeolocationService } from '../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
 import { BoatMarker } from '../boat';
+import { countryCodeEmoji } from 'country-code-emoji';
 
 @Component({
   selector: 'app-map',
@@ -156,7 +157,7 @@ export class MapPage implements OnInit {
 
     const { longitude, latitude } = this.position.coords;
     const result = await this.geolocation.reverseGeocode(longitude, latitude);
-    const countryEmoji = ``;
+    const countryEmoji = countryCodeEmoji(result.countryCode);
     const localityString = result.locality ? `${result.locality}, ${result.subLocality}` : `${result.countryName}`;
 
     this.toolbarTitle = `${countryEmoji} ${localityString}`.trim();
