@@ -23,10 +23,12 @@ export class MapPage implements OnInit {
   private posWatchId?: string;
   private position?: Position;
   private boat?: BoatMarker;
+  private receivedInitialPosition: boolean;
 
   constructor(
     private geolocation: GeolocationService
-  ) { 
+  ) {
+    this.receivedInitialPosition = false;
   }
   
   ngOnInit() {
@@ -71,17 +73,45 @@ export class MapPage implements OnInit {
 
   private async initPositionWatch() {
     this.posWatchId = await this.geolocation.watchPosition((pos, err) => {
-      this.onGeolocationChanged(pos, err);
+      this.onPositionChanged(pos, err);
     });
   }
 
-  private onGeolocationChanged(position: Position | null, err: unknown) {
+  private onPositionChanged(position: Position | null, err: unknown) {
     if(!position) {
       return;
     }
 
     this.position = position;
 
+    if(!this.receivedInitialPosition) {
+      this.receivedInitialPosition = true;
+
+      this.onInitialPositionReceived(position);
+    }
+
     this.boat?.updatePosition(position);
+  }
+  
+  private onInitialPositionReceived(position: Position) {
+    this.flyToCurrentPosition();
+  }
+
+  private flyToCurrentPosition() {
+    if(!this.position) {
+      return;
+    }
+
+    const {longitude, latitude} = this.position.coords;
+
+    this.flyTo(longitude, latitude, 15, 1_000);
+  }
+
+  private flyTo(longitude: number, latitude: number, zoom: number, durationMs: number) {
+    this.map?.getView().animate({
+      center: [ longitude, latitude ],
+      zoom,
+      duration: durationMs,
+    });
   }
 }
