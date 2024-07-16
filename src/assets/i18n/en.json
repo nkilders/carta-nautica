@@ -1,5 +1,8 @@
 {
     "sidebar": {
-        "title": "Hello World"
+        "title": "Hello World",
+        "layers": "Layers",
+        "tracks": "Tracks",
+        "settings": "Settings"
     }
 }

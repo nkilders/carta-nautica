@@ -1,0 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Carta Nautica</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="map"></div>
+</ion-content>
+
+<div id="speedHeadingControl" class="ol-control" style="top: 0.5em; left: 3em; overflow: hidden;">
+  <button style="height: 2.75em; width: auto; float: left; margin-right: 0.25em; padding: 0 10px;" (click)="changeSpeedUnit()">{{ speed }}</button>
+
+  <button style="height: 2.75em; width: auto; float: left; padding: 0 10px; pointer-events: none;" disabled>{{ heading }}</button>
+</div>

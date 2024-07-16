@@ -1,5 +1,8 @@
 {
     "sidebar": {
-        "title": "Hallo Welt"
+        "title": "Hallo Welt",
+        "layers": "Ebenen",
+        "tracks": "Routen",
+        "settings": "Einstellungen"
     }
 }
