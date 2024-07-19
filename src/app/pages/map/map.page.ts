@@ -7,9 +7,9 @@ import { useGeographic } from 'ol/proj';
 import { Control, ScaleLine } from 'ol/control';
 import TileLayer from 'ol/layer/Tile';
 import { XYZ } from 'ol/source';
-import { GeolocationService } from '../services/geolocation.service';
+import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
-import { BoatMarker } from '../boat';
+import { BoatMarker } from '../../boat';
 import { countryCodeEmoji } from 'country-code-emoji';
 import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 

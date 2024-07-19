@@ -9,6 +9,6 @@ export const routes: Routes = [
   {
     path: 'map',
     loadComponent: () =>
-      import('./map/map.page').then( m => m.MapPage),
+      import('./pages/map/map.page').then( m => m.MapPage),
   },
 ];
