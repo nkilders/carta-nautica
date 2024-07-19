@@ -5,5 +5,29 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  
+  <ion-list>
+    <ion-list-header>{{ 'settings.speedUnit' | translate }}</ion-list-header>
+    <ion-select [(ngModel)]="speedUnit" (ionChange)="updateSpeedUnit()">
+      <ion-select-option value="0">km/h</ion-select-option>
+      <ion-select-option value="1">m/s</ion-select-option>
+      <ion-select-option value="2">knt</ion-select-option>
+    </ion-select>
+
+    <ion-list-header>{{ 'settings.distanceUnit' | translate }}</ion-list-header>
+    <ion-select [(ngModel)]="distanceUnit" (ionChange)="updateDistanceUnit()">
+      <ion-select-option value="0">Kilometer</ion-select-option>
+      <ion-select-option value="1">Meter</ion-select-option>
+      <ion-select-option value="2">Sea Miles</ion-select-option>
+    </ion-select>
+
+    <ion-item>
+      <ion-label>{{ 'settings.mapPreloading' | translate }}</ion-label>
+      <ion-toggle [(ngModel)]="mapPreloading" (ionChange)="updateMapPreloading()"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{ 'settings.keepScreenAwake' | translate }}</ion-label>
+      <ion-toggle [(ngModel)]="keepAwake" (ionChange)="updateKeepAwake()"></ion-toggle>
+    </ion-item>
+  </ion-list>
 </ion-content>

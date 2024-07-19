@@ -4,5 +4,11 @@
         "layers": "Ebenen",
         "tracks": "Routen",
         "settings": "Einstellungen"
+    },
+    "settings": {
+        "speedUnit": "Geschwindigkeitseinheit",
+        "distanceUnit": "Entfernungseinheit",
+        "mapPreloading": "Karte vorladen",
+        "keepScreenAwake": "Bildschirm immer aktiv"
     }
 }
