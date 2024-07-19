@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonListHeader, IonSelect, IonSelectOption, IonItem, IonLabel, IonToggle } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
+import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -17,29 +18,38 @@ export class SettingsPage implements OnInit {
   public mapPreloading = false;
   public keepAwake = false;
 
-  constructor() { }
+  constructor(
+    private settings: SettingsService,
+  ) { }
 
-  ngOnInit() {
-    this.loadSettingsValues();
+  async ngOnInit() {
+    await this.loadSettingsValues();
   }
 
   private async loadSettingsValues() {
-    // TODO: load all values
+    const {speedUnit, distanceUnit, mapPreloading, keepAwake} = await this.settings.getAllSettings();
+
+    this.speedUnit = speedUnit.toString();
+    this.distanceUnit = distanceUnit.toString();
+    this.mapPreloading = mapPreloading;
+    this.keepAwake = keepAwake;
   }
 
-  protected updateSpeedUnit() {
-    // TODO: save new value
-  }
-
-  protected updateDistanceUnit() {
-    // TODO: save new value
+  protected async updateSpeedUnit() {
+    const value= Number.parseInt(this.speedUnit);
+    await this.settings.setSpeedUnit(value);
   }
   
-  protected updateMapPreloading() {
-    // TODO: save new value
+  protected async updateDistanceUnit() {
+    const value= Number.parseInt(this.distanceUnit);
+    await this.settings.setDistanceUnit(value);
   }
   
-  protected updateKeepAwake() {
-    // TODO: save new value
+  protected async updateMapPreloading() {
+    await this.settings.setMapPreloading(this.mapPreloading);
+  }
+  
+  protected async updateKeepAwake() {
+    await this.settings.setKeepAwake(this.keepAwake);
   }
 }

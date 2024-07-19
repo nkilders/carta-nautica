@@ -17,7 +17,7 @@ export class SettingsService {
   public async getAllSettings() {
     await this.init();
 
-    return this.settings;
+    return this.settings!;
   }
 
   public async getSpeedUnit() {
