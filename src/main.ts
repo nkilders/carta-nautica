@@ -8,6 +8,7 @@ import { importProvidersFrom } from '@angular/core';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -26,6 +27,9 @@ bootstrapApplication(AppComponent, {
           HttpClient,
         ],
       },
+    })),
+    importProvidersFrom(IonicStorageModule.forRoot({
+      name: 'carta-nautica',
     })),
   ],
 });
