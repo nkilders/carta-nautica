@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonMenuButton } from '@ionic/angular/standalone';
 import { Map, View } from 'ol';
 import { useGeographic } from 'ol/proj';
 import { Control, ScaleLine } from 'ol/control';
@@ -18,7 +18,7 @@ import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton]
 })
 export class MapPage implements OnInit {
   public toolbarTitle = 'Carta Nautica';
