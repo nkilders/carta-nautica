@@ -28,8 +28,8 @@ export class GeolocationService {
     const result = await NativeGeocoder.reverseGeocode(latitude, longitude, {
       maxResults: 1,
       useLocale: true,
-    });
+    }).catch(() => null);
 
-    return result[0];
+    return result && result[0];
   }
 }
