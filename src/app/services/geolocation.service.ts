@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder';
 import { Geolocation, PositionOptions, WatchPositionCallback } from '@capacitor/geolocation';
 
 @Injectable({
@@ -23,5 +24,12 @@ export class GeolocationService {
     Geolocation.clearWatch({ id });
   }
 
-  public reverseGeocode(longitude: number, latitude: number) {}
+  public async reverseGeocode(longitude: number, latitude: number) {
+    const result = await NativeGeocoder.reverseGeocode(latitude, longitude, {
+      maxResults: 1,
+      useLocale: true,
+    }).catch(() => null);
+
+    return result && result[0];
+  }
 }

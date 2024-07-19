@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
@@ -10,6 +10,8 @@ import { XYZ } from 'ol/source';
 import { GeolocationService } from '../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
 import { BoatMarker } from '../boat';
+import { countryCodeEmoji } from 'country-code-emoji';
+import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 
 @Component({
   selector: 'app-map',
@@ -19,6 +21,7 @@ import { BoatMarker } from '../boat';
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class MapPage implements OnInit {
+  public toolbarTitle = 'Carta Nautica';
   public speed = '';
   public heading = '';
 
@@ -27,11 +30,14 @@ export class MapPage implements OnInit {
   private position?: Position;
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
+  private lastToolbarTitleUpdate: number;
 
   constructor(
-    private geolocation: GeolocationService
+    private geolocation: GeolocationService,
+    private ref: ChangeDetectorRef,
   ) {
     this.receivedInitialPosition = false;
+    this.lastToolbarTitleUpdate = 0;
   }
   
   ngOnInit() {
@@ -103,6 +109,7 @@ export class MapPage implements OnInit {
 
     this.boat?.updatePosition(position);
     this.updateSpeedHeadingControl();
+    this.updateToolbarTitle();
   }
   
   private onInitialPositionReceived(position: Position) {
@@ -137,5 +144,54 @@ export class MapPage implements OnInit {
 
     const speed = this.position.coords.speed ?? 0;
     this.speed = `${speed.toFixed(2)} m/s`;
+  }
+
+  private async updateToolbarTitle() {
+    if(Date.now() - this.lastToolbarTitleUpdate < 60_000) {
+      return;
+    }
+
+    if(this.position == null) {
+      return;
+    }
+
+    this.lastToolbarTitleUpdate = Date.now();
+
+    const { longitude, latitude } = this.position.coords;
+    const result = await this.geolocation.reverseGeocode(longitude, latitude);
+    
+    this.toolbarTitle = this.formatToolbarTitle(result);
+
+    // The toolbar's text doesn't refresh correctly until one
+    // manually interacts with the UI. Maybe there is a better
+    // way to fix this, but unfortunately I don't know it atm.
+    this.ref.markForCheck();
+  }
+
+  private formatToolbarTitle(result : NativeGeocoderResult | null ) {
+    if(result == null) {
+      return '🌍 Carta Nautica';
+    }
+
+    let emoji = '🌍';
+    let text = 'Carta Nautica';
+
+    if(result.countryCode) {
+      emoji = countryCodeEmoji(result.countryCode);
+    }
+
+    if(result.locality && result.subLocality) {
+      text = `${result.locality}, ${result.subLocality}`;
+    } else if(result.locality) {
+      text = result.locality;
+    } else if(result.administrativeArea && result.subAdministrativeArea) {
+      text = `${result.administrativeArea}, ${result.subAdministrativeArea}`;
+    } else if(result.administrativeArea) {
+      text = result.administrativeArea;
+    } else if(result.countryName) {
+      text = result.countryName;
+    }
+
+    return `${emoji} ${text}`;
   }
 }
