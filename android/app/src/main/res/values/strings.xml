@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">carta-nautica</string>
-    <string name="title_activity_main">carta-nautica</string>
+    <string name="app_name">Carta Nautica</string>
+    <string name="title_activity_main">Carta Nautica</string>
     <string name="package_name">de.nkilders.cartanautica</string>
     <string name="custom_url_scheme">de.nkilders.cartanautica</string>
 </resources>

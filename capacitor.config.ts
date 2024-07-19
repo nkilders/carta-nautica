@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'de.nkilders.cartanautica',
-  appName: 'carta-nautica',
+  appName: 'Carta Nautica',
   webDir: 'www',
 };
 
