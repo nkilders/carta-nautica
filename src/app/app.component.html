@@ -7,7 +7,7 @@
           <ion-note>👋</ion-note>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" lines="none" detail="false" routerLinkActive="selected">
+            <ion-item lines="none" detail="false" (click)="openModal(p.page)">
               <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title | translate }}</ion-label>
             </ion-item>
