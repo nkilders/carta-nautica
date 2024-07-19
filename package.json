@@ -32,6 +32,7 @@
     "@ionic/angular": "^8.0.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
+    "cordova-plugin-nativegeocoder": "^3.5.1",
     "country-code-emoji": "^2.3.0",
     "ionicons": "^7.2.1",
     "ol": "^9.2.4",
