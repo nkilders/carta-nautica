@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
 import { DistanceUnit, Settings, SpeedUnit } from '../models/settings';
+import { EventEmitter } from 'events';
 
 const STORAGE_KEY = 'settings';
 
@@ -9,10 +10,13 @@ const STORAGE_KEY = 'settings';
 })
 export class SettingsService {
   private settings?: Settings;
+  private eventEmitter: EventEmitter;
 
   constructor(
     private storage: StorageService,
-  ) { }
+  ) {
+    this.eventEmitter = new EventEmitter();
+  }
 
   public async getAllSettings() {
     await this.init();
@@ -30,7 +34,7 @@ export class SettingsService {
     await this.init();
 
     this.settings!.speedUnit = unit;
-    // TODO: emit event
+    this.eventEmitter.emit('speedUnit', unit);
 
     await this.save();
   }
@@ -45,7 +49,7 @@ export class SettingsService {
     await this.init();
 
     this.settings!.distanceUnit = unit;
-    // TODO: emit event
+    this.eventEmitter.emit('distanceUnit', unit);
 
     await this.save();
   }
@@ -60,7 +64,7 @@ export class SettingsService {
     await this.init();
 
     this.settings!.mapPreloading = preloading;
-    // TODO: emit event
+    this.eventEmitter.emit('mapPreloading', preloading);
 
     await this.save();
   }
@@ -75,9 +79,18 @@ export class SettingsService {
     await this.init();
 
     this.settings!.keepAwake = keepAwake;
-    // TODO: emit event
+    this.eventEmitter.emit('keepAwake', keepAwake);
 
     await this.save();
+  }
+
+  on(event: 'speedUnit', listener: (newValue: SpeedUnit) => void): void;
+  on(event: 'distanceUnit', listener: (newValue: DistanceUnit) => void): void;
+  on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
+  on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
+
+  public on(event: string, listener: (...args: any) => void) {
+    this.eventEmitter.on(event, listener);
   }
 
   private async init() {
