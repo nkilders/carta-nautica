@@ -12,6 +12,8 @@ import { Position } from '@capacitor/geolocation';
 import { BoatMarker } from '../../boat';
 import { countryCodeEmoji } from 'country-code-emoji';
 import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
+import { SettingsService } from 'src/app/services/settings.service';
+import BaseTileLayer from 'ol/layer/BaseTile';
 
 @Component({
   selector: 'app-map',
@@ -34,6 +36,7 @@ export class MapPage implements OnInit {
 
   constructor(
     private geolocation: GeolocationService,
+    private settings: SettingsService,
     private ref: ChangeDetectorRef,
   ) {
     this.receivedInitialPosition = false;
@@ -43,14 +46,17 @@ export class MapPage implements OnInit {
   ngOnInit() {
     this.initMap();
     this.initPositionWatch();
+    this.initSettingsListeners();
   }
   
   public changeSpeedUnit() {
     // TODO: implement when app supports different speed units
   }
   
-  private initMap() {
+  private async initMap() {
     useGeographic();
+
+    const mapPreloading = await this.settings.getMapPreloading();
 
     this.map = new Map({
       target: 'map',
@@ -65,13 +71,13 @@ export class MapPage implements OnInit {
             url: 'https://a.tile.openstreetmap.de/{z}/{x}/{y}.png', // OpenStreetMap DE
             // url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OpenStreetMap
           }),
-          preload: Infinity,
+          preload: mapPreloading ? Infinity : 0,
         }),
         new TileLayer({
           source: new XYZ({
             url: 'https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', // OpenSeaMap
           }),
-          preload: Infinity,
+          preload: mapPreloading ? Infinity : 0,
         }),
       ],
     });
@@ -91,6 +97,24 @@ export class MapPage implements OnInit {
   private async initPositionWatch() {
     this.posWatchId = await this.geolocation.watchPosition((pos, err) => {
       this.onPositionChanged(pos, err);
+    });
+  }
+
+  private initSettingsListeners() {
+    this.settings.on('mapPreloading', (newValue) => {
+      const layers = this.map?.getAllLayers();
+
+      if(!layers) {
+        return;
+      }
+      
+      const preload = newValue ? Infinity : 0;
+
+      for(const layer of layers) {
+        if(layer instanceof BaseTileLayer) {
+          layer.setPreload(preload);
+        }
+      }
     });
   }
 
