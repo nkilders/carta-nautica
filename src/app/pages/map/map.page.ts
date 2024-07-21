@@ -14,6 +14,8 @@ import { countryCodeEmoji } from 'country-code-emoji';
 import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 import { SettingsService } from 'src/app/services/settings.service';
 import BaseTileLayer from 'ol/layer/BaseTile';
+import { UnitService } from 'src/app/services/unit.service';
+import { SpeedUnit } from 'src/app/models/settings';
 
 @Component({
   selector: 'app-map',
@@ -37,6 +39,7 @@ export class MapPage implements OnInit {
   constructor(
     private geolocation: GeolocationService,
     private settings: SettingsService,
+    private unit: UnitService,
     private ref: ChangeDetectorRef,
   ) {
     this.receivedInitialPosition = false;
@@ -116,6 +119,10 @@ export class MapPage implements OnInit {
         }
       }
     });
+
+    this.settings.on('speedUnit', (newValue) => {
+      this.updateSpeedHeadingControl();
+    });
   }
 
   private onPositionChanged(position: Position | null, err: unknown) {
@@ -158,7 +165,7 @@ export class MapPage implements OnInit {
     });
   }
 
-  private updateSpeedHeadingControl() {
+  private async updateSpeedHeadingControl() {
     if(!this.position) {
       return;
     }
@@ -166,8 +173,10 @@ export class MapPage implements OnInit {
     const heading = this.position.coords.heading ?? 0;
     this.heading = `${heading.toFixed(0)}°`;
 
-    const speed = this.position.coords.speed ?? 0;
-    this.speed = `${speed.toFixed(2)} m/s`;
+    const speedMps = this.position.coords.speed ?? 0;
+    const speed = await this.unit.convertSpeed(speedMps, SpeedUnit.METERS_PER_SECOND);
+    const unit = this.unit.speedUnitToText(speed.unit);
+    this.speed = `${speed.value.toFixed(2)} ${unit}`;
   }
 
   private async updateToolbarTitle() {
