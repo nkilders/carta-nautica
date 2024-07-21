@@ -4,5 +4,12 @@
         "layers": "Layers",
         "tracks": "Tracks",
         "settings": "Settings"
+    },
+    "settings": {
+        "speedUnit": "Speed Unit",
+        "distanceUnit": "Distance Unit",
+        "language": "Language",
+        "mapPreloading": "Map Preloading",
+        "keepScreenAwake": "Keep Screen Awake"
     }
 }

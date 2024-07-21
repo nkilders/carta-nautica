@@ -1,0 +1,138 @@
+import { Injectable } from '@angular/core';
+import { StorageService } from './storage.service';
+import { DistanceUnit, Language, Settings, SpeedUnit } from '../models/settings';
+import { EventEmitter } from 'events';
+
+const STORAGE_KEY = 'settings';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SettingsService {
+  private settings?: Settings;
+  private eventEmitter: EventEmitter;
+
+  constructor(
+    private storage: StorageService,
+  ) {
+    this.eventEmitter = new EventEmitter();
+  }
+
+  public async getAllSettings() {
+    await this.init();
+
+    return this.settings!;
+  }
+
+  public async getSpeedUnit() {
+    await this.init();
+
+    return this.settings!.speedUnit;
+  }
+
+  public async setSpeedUnit(unit: SpeedUnit) {
+    await this.init();
+
+    this.settings!.speedUnit = unit;
+    this.eventEmitter.emit('speedUnit', unit);
+
+    await this.save();
+  }
+
+  public async getDistanceUnit() {
+    await this.init();
+
+    return this.settings!.distanceUnit;
+  }
+
+  public async setDistanceUnit(unit: DistanceUnit) {
+    await this.init();
+
+    this.settings!.distanceUnit = unit;
+    this.eventEmitter.emit('distanceUnit', unit);
+
+    await this.save();
+  }
+
+  public async getLanguage() {
+    await this.init();
+
+    return this.settings!.language;
+  }
+
+  public async setLanguage(language: Language) {
+    await this.init();
+
+    this.settings!.language = language;
+    this.eventEmitter.emit('language', language);
+
+    await this.save();
+  }
+
+  public async getMapPreloading() {
+    await this.init();
+
+    return this.settings!.mapPreloading;
+  }
+
+  public async setMapPreloading(preloading: boolean) {
+    await this.init();
+
+    this.settings!.mapPreloading = preloading;
+    this.eventEmitter.emit('mapPreloading', preloading);
+
+    await this.save();
+  }
+
+  public async getKeepAwake() {
+    await this.init();
+
+    return this.settings!.keepAwake;
+  }
+
+  public async setKeepAwake(keepAwake: boolean) {
+    await this.init();
+
+    this.settings!.keepAwake = keepAwake;
+    this.eventEmitter.emit('keepAwake', keepAwake);
+
+    await this.save();
+  }
+
+  on(event: 'speedUnit', listener: (newValue: SpeedUnit) => void): void;
+  on(event: 'distanceUnit', listener: (newValue: DistanceUnit) => void): void;
+  on(event: 'language', listener: (newValue: Language) => void): void;
+  on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
+  on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
+
+  public on(event: string, listener: (...args: any) => void) {
+    this.eventEmitter.on(event, listener);
+  }
+
+  private async init() {
+    if(this.settings) {
+      return;
+    }
+
+    this.settings = await this.storage.get(STORAGE_KEY);
+
+    if(!this.settings) {
+      this.settings = this.defaultSettings();
+      await this.save();
+    }
+  }
+
+  private defaultSettings() : Settings {
+    return {
+      speedUnit: SpeedUnit.KILOMETERS_PER_HOUR,
+      distanceUnit: DistanceUnit.KILOMETERS,
+      language: Language.GERMAN,
+      mapPreloading: true,
+      keepAwake: true,
+    };
+  }
+
+  private async save() {
+    await this.storage.set(STORAGE_KEY, this.settings);
+  }
+}
