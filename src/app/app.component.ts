@@ -10,6 +10,7 @@ import { LayersPage } from './pages/layers/layers.page';
 import { TracksPage } from './pages/tracks/tracks.page';
 import { SettingsPage } from './pages/settings/settings.page';
 import { SettingsService } from './services/settings.service';
+import { KeepAwake } from '@capacitor-community/keep-awake';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +36,8 @@ export class AppComponent {
       this.translate.setDefaultLang(language);
     });
 
+    this.initKeepAwake();
+
     addIcons({ 
       settingsOutline, settingsSharp,
       layersOutline, layersSharp,
@@ -49,5 +52,23 @@ export class AppComponent {
     });
 
     await modal.present();
+  }
+
+  private async initKeepAwake() {
+    const keepAwake = await this.settings.getKeepAwake();
+
+    if(keepAwake) {
+      await KeepAwake.keepAwake();
+    } else {
+      await KeepAwake.allowSleep();
+    }
+    
+    this.settings.on('keepAwake', async (newValue) => {
+      if(newValue) {
+        await KeepAwake.keepAwake();
+      } else {
+        await KeepAwake.allowSleep();
+      }
+    })
   }
 }
