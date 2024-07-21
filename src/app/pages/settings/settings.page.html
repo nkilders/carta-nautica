@@ -20,6 +20,12 @@
       <ion-select-option value="2">Sea Miles</ion-select-option>
     </ion-select>
 
+    <ion-list-header>{{ 'settings.language' | translate }}</ion-list-header>
+    <ion-select [(ngModel)]="language" (ionChange)="updateLanguage()">
+      <ion-select-option value="de">Deutsch</ion-select-option>
+      <ion-select-option value="en">English</ion-select-option>
+    </ion-select>
+
     <ion-item>
       <ion-label>{{ 'settings.mapPreloading' | translate }}</ion-label>
       <ion-toggle [(ngModel)]="mapPreloading" (ionChange)="updateMapPreloading()"></ion-toggle>

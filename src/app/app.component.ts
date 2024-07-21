@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { settingsOutline, settingsSharp, layersOutline, layersSharp, analyticsOutline, analyticsSharp } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular';
 import { LayersPage } from './pages/layers/layers.page';
 import { TracksPage } from './pages/tracks/tracks.page';
 import { SettingsPage } from './pages/settings/settings.page';
+import { SettingsService } from './services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,13 @@ export class AppComponent {
   
   constructor(
     private readonly modalCtrl: ModalController,
+    private settings: SettingsService,
+    private translate: TranslateService,
   ) {
+    this.settings.getLanguage().then(language => {
+      this.translate.setDefaultLang(language);
+    });
+
     addIcons({ 
       settingsOutline, settingsSharp,
       layersOutline, layersSharp,

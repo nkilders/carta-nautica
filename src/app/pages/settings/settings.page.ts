@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonListHeader, IonSelect, IonSelectOption, IonItem, IonLabel, IonToggle } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SettingsService } from 'src/app/services/settings.service';
+import { Language } from 'src/app/models/settings';
 
 @Component({
   selector: 'app-settings',
@@ -15,11 +16,13 @@ import { SettingsService } from 'src/app/services/settings.service';
 export class SettingsPage implements OnInit {
   public speedUnit = '0';
   public distanceUnit = '0';
+  public language = Language.GERMAN;
   public mapPreloading = false;
   public keepAwake = false;
 
   constructor(
     private settings: SettingsService,
+    private translate: TranslateService,
   ) { }
 
   async ngOnInit() {
@@ -27,10 +30,11 @@ export class SettingsPage implements OnInit {
   }
 
   private async loadSettingsValues() {
-    const {speedUnit, distanceUnit, mapPreloading, keepAwake} = await this.settings.getAllSettings();
+    const {speedUnit, distanceUnit, language, mapPreloading, keepAwake} = await this.settings.getAllSettings();
 
     this.speedUnit = speedUnit.toString();
     this.distanceUnit = distanceUnit.toString();
+    this.language = language;
     this.mapPreloading = mapPreloading;
     this.keepAwake = keepAwake;
   }
@@ -43,6 +47,12 @@ export class SettingsPage implements OnInit {
   protected async updateDistanceUnit() {
     const value= Number.parseInt(this.distanceUnit);
     await this.settings.setDistanceUnit(value);
+  }
+
+  protected async updateLanguage() {
+    const value = this.language;
+    await this.settings.setLanguage(value);
+    this.translate.setDefaultLang(value);
   }
   
   protected async updateMapPreloading() {

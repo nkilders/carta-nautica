@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
-import { DistanceUnit, Settings, SpeedUnit } from '../models/settings';
+import { DistanceUnit, Language, Settings, SpeedUnit } from '../models/settings';
 import { EventEmitter } from 'events';
 
 const STORAGE_KEY = 'settings';
@@ -54,6 +54,21 @@ export class SettingsService {
     await this.save();
   }
 
+  public async getLanguage() {
+    await this.init();
+
+    return this.settings!.language;
+  }
+
+  public async setLanguage(language: Language) {
+    await this.init();
+
+    this.settings!.language = language;
+    this.eventEmitter.emit('language', language);
+
+    await this.save();
+  }
+
   public async getMapPreloading() {
     await this.init();
 
@@ -86,6 +101,7 @@ export class SettingsService {
 
   on(event: 'speedUnit', listener: (newValue: SpeedUnit) => void): void;
   on(event: 'distanceUnit', listener: (newValue: DistanceUnit) => void): void;
+  on(event: 'language', listener: (newValue: Language) => void): void;
   on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
   on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
 
@@ -110,6 +126,7 @@ export class SettingsService {
     return {
       speedUnit: SpeedUnit.KILOMETERS_PER_HOUR,
       distanceUnit: DistanceUnit.KILOMETERS,
+      language: Language.GERMAN,
       mapPreloading: true,
       keepAwake: true,
     };

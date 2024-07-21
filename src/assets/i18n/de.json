@@ -8,6 +8,7 @@
     "settings": {
         "speedUnit": "Geschwindigkeitseinheit",
         "distanceUnit": "Entfernungseinheit",
+        "language": "Sprache",
         "mapPreloading": "Karte vorladen",
         "keepScreenAwake": "Bildschirm immer aktiv"
     }
