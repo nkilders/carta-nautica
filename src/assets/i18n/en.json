@@ -11,5 +11,34 @@
         "language": "Language",
         "mapPreloading": "Map Preloading",
         "keepScreenAwake": "Keep Screen Awake"
+    },
+    "layers": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleteConfirmHeader": "Delete Map Layer",
+        "deleteCancel": "Cancel",
+        "deleteConfirm": "Delete"
+    },
+    "layersEdit": {
+        "title": "Edit Map Layer",
+        "name": "Name",
+        "url": "URL",
+        "save": "Save",
+        "cancel": "Cancel",
+        "errorNameEmpty": "Name must not be empty",
+        "errorUrlEmpty": "URL must not be empty",
+        "errorHeader": "Invalid input",
+        "errorOk": "Ok"
+    },
+    "layersCreate": {
+        "title": "Create Map Layer",
+        "name": "Name",
+        "url": "URL",
+        "create": "Create",
+        "cancel": "Cancel",
+        "errorNameEmpty": "Name must not be empty",
+        "errorUrlEmpty": "URL must not be empty",
+        "errorHeader": "Invalid input",
+        "errorOk": "Ok"
     }
 }

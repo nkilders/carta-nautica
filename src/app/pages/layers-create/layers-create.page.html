@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ 'layersCreate.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">{{ 'layersCreate.name' | translate }}</ion-label>
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">{{ 'layersCreate.url' | translate }}</ion-label>
+      <ion-input type="text" [(ngModel)]="url"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button color="dark" (click)="closeModal()">{{ 'layersCreate.cancel' | translate }}</ion-button>
+  <ion-button color="primary" (click)="createLayer()">{{ 'layersCreate.create' | translate }}</ion-button>
+</ion-content>

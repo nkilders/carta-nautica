@@ -2,11 +2,10 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonMenuButton } from '@ionic/angular/standalone';
-import { Map, View } from 'ol';
+import { Map as OLMap, View } from 'ol';
 import { useGeographic } from 'ol/proj';
 import { Control, ScaleLine } from 'ol/control';
 import TileLayer from 'ol/layer/Tile';
-import { XYZ } from 'ol/source';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
 import { BoatMarker } from '../../boat';
@@ -16,6 +15,8 @@ import { SettingsService } from 'src/app/services/settings.service';
 import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
 import { SpeedUnit } from 'src/app/models/settings';
+import { LayersService } from 'src/app/services/layers.service';
+import { XYZ } from 'ol/source';
 
 @Component({
   selector: 'app-map',
@@ -29,21 +30,24 @@ export class MapPage implements OnInit {
   public speed = '';
   public heading = '';
 
-  private map?: Map;
+  private map?: OLMap;
   private posWatchId?: string;
   private position?: Position;
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
   private lastToolbarTitleUpdate: number;
+  private tileLayers: Map<string, TileLayer<any>>;
 
   constructor(
     private geolocation: GeolocationService,
     private settings: SettingsService,
     private unit: UnitService,
+    private layers: LayersService,
     private ref: ChangeDetectorRef,
   ) {
     this.receivedInitialPosition = false;
     this.lastToolbarTitleUpdate = 0;
+    this.tileLayers = new Map();
   }
   
   ngOnInit() {
@@ -61,28 +65,12 @@ export class MapPage implements OnInit {
 
     const mapPreloading = await this.settings.getMapPreloading();
 
-    this.map = new Map({
+    this.map = new OLMap({
       target: 'map',
       view: new View({
         center: [0, 0],
         zoom: 2,
       }),
-      
-      layers: [
-        new TileLayer({
-          source: new XYZ({
-            url: 'https://a.tile.openstreetmap.de/{z}/{x}/{y}.png', // OpenStreetMap DE
-            // url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // OpenStreetMap
-          }),
-          preload: mapPreloading ? Infinity : 0,
-        }),
-        new TileLayer({
-          source: new XYZ({
-            url: 'https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', // OpenSeaMap
-          }),
-          preload: mapPreloading ? Infinity : 0,
-        }),
-      ],
     });
 
     this.map.addControl(new ScaleLine({
@@ -95,6 +83,50 @@ export class MapPage implements OnInit {
     }));
 
     this.boat = new BoatMarker(this.map);
+    await this.initMapLayers();
+  }
+
+  private async initMapLayers() {
+    await this.reloadAllTileLayers();
+
+    // TODO: this can be improved
+    // create -> just add the new layer; order of existing layers won't change
+    // update -> just update URL and visibility of layer
+    // remove -> just remove layer
+    // updateOrder -> reloadAllTileLayers()
+    this.layers.on('create', () => this.reloadAllTileLayers());
+    this.layers.on('update', () => this.reloadAllTileLayers());
+    this.layers.on('delete', () => this.reloadAllTileLayers());
+    this.layers.on('updateOrder', () => this.reloadAllTileLayers());
+  }
+
+  private async reloadAllTileLayers() {
+    this.removeAllTileLayers();
+    
+    const layers = await this.layers.getAll();
+    const preload = await this.settings.getMapPreloading();
+
+    layers.forEach((layer, i) => {
+      const tileLayer = new TileLayer({
+        source: new XYZ({
+          url: layer.source,
+        }),
+        zIndex: -i,
+        visible: layer.visible,
+        preload: preload ? Infinity : 0,
+      });
+
+      this.map?.addLayer(tileLayer);
+      this.tileLayers.set(layer.id, tileLayer);
+    });
+  }
+
+  private removeAllTileLayers() {
+    this.tileLayers.forEach((layer) => {
+      this.map?.removeLayer(layer);
+    });
+
+    this.tileLayers.clear();
   }
 
   private async initPositionWatch() {
