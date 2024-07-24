@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonReorderGroup, IonItem, IonReorder, IonLabel, IonToggle, IonButtons, IonButton, IonIcon } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Layer } from 'src/app/models/layers';
 import { ellipsisVertical } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { LayersService } from 'src/app/services/layers.service';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-layers',
@@ -18,7 +19,12 @@ import { LayersService } from 'src/app/services/layers.service';
 export class LayersPage implements OnInit {
   protected layers: Layer[] = [];
 
-  constructor(private layerSrv: LayersService) {
+  constructor(
+    private layerSrv: LayersService,
+    private translate: TranslateService,
+    private actionSheetCtrl: ActionSheetController,
+    private alertCtrl: AlertController,
+  ) {
     addIcons({ ellipsisVertical });
   }
 
@@ -44,9 +50,61 @@ export class LayersPage implements OnInit {
     await this.layerSrv.update(layer.id, layer);
   }
   
-  protected async showLayerOptions(layer: Layer) {}
+  protected async showLayerOptions(layer: Layer) {
+    const editText = this.translate.instant('layers.edit');
+    const deleteText = this.translate.instant('layers.delete');
+
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: layer.name,
+      buttons: [
+        {
+          text: editText,
+          handler: () => this.editLayer(layer),
+        },
+        {
+          text: deleteText,
+          handler: () => this.confirmDeleteLayer(layer),
+        },
+      ],
+      animated: true,
+    });
+
+    await actionSheet.present();
+  }
 
   private async loadLayers() {
     this.layers = await this.layerSrv.getAll();
+  }
+
+  private editLayer(layer: Layer) {
+
+  }
+
+  private async confirmDeleteLayer(layer: Layer) {
+    const deleteTitleText = this.translate.instant('layers.deleteConfirmHeader');
+    const cancelText = this.translate.instant('layers.deleteCancel');
+    const deleteText = this.translate.instant('layers.deleteConfirm');
+
+    const alert = await this.alertCtrl.create({
+      header: deleteTitleText,
+      subHeader: layer.name,
+      buttons: [
+        {
+          text: cancelText,
+          role: 'cancel',
+        },
+        {
+          text: deleteText,
+          handler: async () => {
+            await this.layerSrv.delete(layer.id);
+            await alert.dismiss();
+            await this.loadLayers();
+          },
+        },
+      ],
+      animated: true,
+    });
+
+    await alert.present();
   }
 }

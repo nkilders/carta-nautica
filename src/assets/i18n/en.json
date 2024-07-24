@@ -11,5 +11,12 @@
         "language": "Language",
         "mapPreloading": "Map Preloading",
         "keepScreenAwake": "Keep Screen Awake"
+    },
+    "layers": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleteConfirmHeader": "Delete Map Layer",
+        "deleteCancel": "Cancel",
+        "deleteConfirm": "Delete"
     }
 }

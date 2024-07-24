@@ -11,5 +11,12 @@
         "language": "Sprache",
         "mapPreloading": "Karte vorladen",
         "keepScreenAwake": "Bildschirm immer aktiv"
+    },
+    "layers": {
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "deleteConfirmHeader": "Ebene löschen",
+        "deleteCancel": "Abbrechen",
+        "deleteConfirm": "Löschen"
     }
 }
