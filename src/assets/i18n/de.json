@@ -25,5 +25,12 @@
         "url": "URL",
         "save": "Speichern",
         "cancel": "Abbrechen"
+    },
+    "layersCreate": {
+        "title": "Kartenebene hinzufügen",
+        "name": "Name",
+        "url": "URL",
+        "create": "Hinzufügen",
+        "cancel": "Abbrechen"
     }
 }

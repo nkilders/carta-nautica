@@ -25,5 +25,12 @@
         "url": "URL",
         "save": "Save",
         "cancel": "Cancel"
+    },
+    "layersCreate": {
+        "title": "Create Map Layer",
+        "name": "Name",
+        "url": "URL",
+        "create": "Create",
+        "cancel": "Cancel"
     }
 }
