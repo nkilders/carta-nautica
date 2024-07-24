@@ -18,5 +18,12 @@
         "deleteConfirmHeader": "Delete Map Layer",
         "deleteCancel": "Cancel",
         "deleteConfirm": "Delete"
+    },
+    "layersEdit": {
+        "title": "Edit Map Layer",
+        "name": "Name",
+        "url": "URL",
+        "save": "Save",
+        "cancel": "Cancel"
     }
 }

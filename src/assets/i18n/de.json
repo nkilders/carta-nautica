@@ -18,5 +18,12 @@
         "deleteConfirmHeader": "Ebene löschen",
         "deleteCancel": "Abbrechen",
         "deleteConfirm": "Löschen"
+    },
+    "layersEdit": {
+        "title": "Kartenebene bearbeiten",
+        "name": "Name",
+        "url": "URL",
+        "save": "Speichern",
+        "cancel": "Abbrechen"
     }
 }
