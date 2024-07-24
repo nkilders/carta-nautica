@@ -5,5 +5,23 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  
+  <ion-reorder-group disabled="false" (ionItemReorder)="onReorder($event)">
+    @for (layer of layers; track layer.id) {
+      <ion-item>
+        <ion-reorder slot="start" />
+
+        <ion-label>
+          {{ layer.name }}
+        </ion-label>
+
+        <ion-toggle color="primary" slot="end" [attr.checked]="layer.visible" (ionChange)="toggleLayerVisibility($event, layer)" />
+
+        <ion-buttons slot="end">
+          <ion-button (click)="showLayerOptions(layer)">
+            <ion-icon slot="icon-only" ios="ellipsis-vertical" md="ellipsis-vertical" />
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    }
+  </ion-reorder-group>
 </ion-content>
