@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonLabel, IonInput, IonItem, IonButton } from '@ionic/angular/standalone';
 import { Layer } from 'src/app/models/layers';
 import { LayersService } from 'src/app/services/layers.service';
-import { ModalController } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { ModalController, AlertController } from '@ionic/angular';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-layers-edit',
@@ -24,6 +24,8 @@ export class LayersEditPage implements OnInit {
   constructor(
     private layers: LayersService,
     private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -32,7 +34,15 @@ export class LayersEditPage implements OnInit {
   }
 
   protected async saveChanges() {
-    // TODO: validate inputs
+    if (this.name.trim().length === 0) {
+      await this.errorToast('layersEdit.errorNameEmpty');
+      return;
+    }
+
+    if (this.url.trim().length === 0) {
+      await this.errorToast('layersEdit.errorUrlEmpty');
+      return;
+    }
 
     const updatedLayer: Layer = {
       ...this.layer!,
@@ -53,5 +63,24 @@ export class LayersEditPage implements OnInit {
     }
 
     await modal.dismiss();
+  }
+
+  private async errorToast(textKey: string) {
+    const headerText = await this.translate.instant('layersEdit.errorHeader');
+    const messageText = await this.translate.instant(textKey);
+    const okText = await this.translate.instant('layersEdit.errorOk');
+
+    const toast = await this.alertCtrl.create({
+      header: headerText,
+      message: messageText,
+      buttons: [
+        {
+          text: okText,
+        },
+      ],
+      animated: true,
+    });
+
+    await toast.present();
   }
 }

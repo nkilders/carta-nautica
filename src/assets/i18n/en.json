@@ -24,13 +24,21 @@
         "name": "Name",
         "url": "URL",
         "save": "Save",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "errorNameEmpty": "Name must not be empty",
+        "errorUrlEmpty": "URL must not be empty",
+        "errorHeader": "Invalid input",
+        "errorOk": "Ok"
     },
     "layersCreate": {
         "title": "Create Map Layer",
         "name": "Name",
         "url": "URL",
         "create": "Create",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "errorNameEmpty": "Name must not be empty",
+        "errorUrlEmpty": "URL must not be empty",
+        "errorHeader": "Invalid input",
+        "errorOk": "Ok"
     }
 }

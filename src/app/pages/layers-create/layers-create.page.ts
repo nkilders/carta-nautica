@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonList } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LayersService } from 'src/app/services/layers.service';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { LayerWithoutId } from 'src/app/models/layers';
 
 @Component({
@@ -21,10 +21,20 @@ export class LayersCreatePage {
   constructor(
     private modalCtrl: ModalController,
     private layers: LayersService,
+    private alertCtrl: AlertController,
+    private translate: TranslateService,
   ) {}
 
   protected async createLayer() {
-    // TODO: validate inputs
+    if (this.name.trim().length === 0) {
+      await this.errorToast('layersCreate.errorNameEmpty');
+      return;
+    }
+
+    if (this.url.trim().length === 0) {
+      await this.errorToast('layersCreate.errorUrlEmpty');
+      return;
+    }
 
     const newLayer: LayerWithoutId = {
       name: this.name,
@@ -45,5 +55,24 @@ export class LayersCreatePage {
     }
 
     await modal.dismiss();
+  }
+
+  private async errorToast(textKey: string) {
+    const headerText = await this.translate.instant('layersCreate.errorHeader');
+    const messageText = await this.translate.instant(textKey);
+    const okText = await this.translate.instant('layersCreate.errorOk');
+
+    const toast = await this.alertCtrl.create({
+      header: headerText,
+      message: messageText,
+      buttons: [
+        {
+          text: okText,
+        },
+      ],
+      animated: true,
+    });
+
+    await toast.present();
   }
 }

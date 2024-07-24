@@ -24,13 +24,21 @@
         "name": "Name",
         "url": "URL",
         "save": "Speichern",
-        "cancel": "Abbrechen"
+        "cancel": "Abbrechen",
+        "errorNameEmpty": "Name darf nicht leer sein",
+        "errorUrlEmpty": "URL darf nicht leer sein",
+        "errorHeader": "Ungültige Eingabe",
+        "errorOk": "Ok"
     },
     "layersCreate": {
         "title": "Kartenebene hinzufügen",
         "name": "Name",
         "url": "URL",
         "create": "Hinzufügen",
-        "cancel": "Abbrechen"
+        "cancel": "Abbrechen",
+        "errorNameEmpty": "Name darf nicht leer sein",
+        "errorUrlEmpty": "URL darf nicht leer sein",
+        "errorHeader": "Ungültige Eingabe",
+        "errorOk": "Ok"
     }
 }
