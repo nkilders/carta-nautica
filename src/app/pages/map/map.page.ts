@@ -72,8 +72,13 @@ export class MapPage implements OnInit {
     this.initSettingsListeners();
   }
 
-  public changeSpeedUnit() {
-    // TODO: implement when app supports different speed units
+  public async changeSpeedUnit() {
+    const oldSpeedUnit = await this.settings.getSpeedUnit();
+    const numberOfSpeedUnits = Object.keys(SpeedUnit).length / 2;
+
+    const newSpeedUnit = (oldSpeedUnit + 1) % numberOfSpeedUnits;
+
+    await this.settings.setSpeedUnit(newSpeedUnit);
   }
 
   private async initMap() {
