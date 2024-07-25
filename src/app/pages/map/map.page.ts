@@ -84,8 +84,6 @@ export class MapPage implements OnInit {
   private async initMap() {
     useGeographic();
 
-    const mapPreloading = await this.settings.getMapPreloading();
-
     this.map = new OLMap({
       target: 'map',
       view: new View({
