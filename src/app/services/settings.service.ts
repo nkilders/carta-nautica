@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
-import { DistanceUnit, Language, Settings, SpeedUnit } from '../models/settings';
+import {
+  DistanceUnit,
+  Language,
+  Settings,
+  SpeedUnit,
+} from '../models/settings';
 import { EventEmitter } from 'events';
 
 const STORAGE_KEY = 'settings';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SettingsService {
   private settings?: Settings;
   private eventEmitter: EventEmitter;
 
-  constructor(
-    private storage: StorageService,
-  ) {
+  constructor(private storage: StorageService) {
     this.eventEmitter = new EventEmitter();
   }
 
@@ -110,19 +113,19 @@ export class SettingsService {
   }
 
   private async init() {
-    if(this.settings) {
+    if (this.settings) {
       return;
     }
 
     this.settings = await this.storage.get(STORAGE_KEY);
 
-    if(!this.settings) {
+    if (!this.settings) {
       this.settings = this.defaultSettings();
       await this.save();
     }
   }
 
-  private defaultSettings() : Settings {
+  private defaultSettings(): Settings {
     return {
       speedUnit: SpeedUnit.KILOMETERS_PER_HOUR,
       distanceUnit: DistanceUnit.KILOMETERS,

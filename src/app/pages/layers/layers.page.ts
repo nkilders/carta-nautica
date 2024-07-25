@@ -1,13 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonReorderGroup, IonItem, IonReorder, IonLabel, IonToggle, IonButtons, IonButton, IonIcon, IonFab, IonFabButton } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonReorderGroup,
+  IonItem,
+  IonReorder,
+  IonLabel,
+  IonToggle,
+  IonButtons,
+  IonButton,
+  IonIcon,
+  IonFab,
+  IonFabButton,
+} from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Layer } from 'src/app/models/layers';
 import { add, ellipsisVertical } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { LayersService } from 'src/app/services/layers.service';
-import { ActionSheetController, AlertController, ModalController } from '@ionic/angular';
+import {
+  ActionSheetController,
+  AlertController,
+  ModalController,
+} from '@ionic/angular';
 import { LayersEditPage } from '../layers-edit/layers-edit.page';
 import { LayersCreatePage } from '../layers-create/layers-create.page';
 
@@ -16,7 +35,27 @@ import { LayersCreatePage } from '../layers-create/layers-create.page';
   templateUrl: './layers.page.html',
   styleUrls: ['./layers.page.scss'],
   standalone: true,
-  imports: [IonFabButton, IonFab, IonIcon, IonButton, IonButtons, IonToggle, IonLabel, IonReorder, IonItem, IonReorderGroup, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, TranslateModule, IonReorderGroup, IonItem],
+  imports: [
+    IonFabButton,
+    IonFab,
+    IonIcon,
+    IonButton,
+    IonButtons,
+    IonToggle,
+    IonLabel,
+    IonReorder,
+    IonItem,
+    IonReorderGroup,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+    IonReorderGroup,
+    IonItem,
+  ],
 })
 export class LayersPage implements OnInit {
   protected layers: Layer[] = [];
@@ -52,7 +91,7 @@ export class LayersPage implements OnInit {
 
     await this.layerSrv.update(layer.id, layer);
   }
-  
+
   protected async showLayerOptions(layer: Layer) {
     const editText = this.translate.instant('layers.edit');
     const deleteText = this.translate.instant('layers.delete');
@@ -107,7 +146,9 @@ export class LayersPage implements OnInit {
   }
 
   private async confirmDeleteLayer(layer: Layer) {
-    const deleteTitleText = this.translate.instant('layers.deleteConfirmHeader');
+    const deleteTitleText = this.translate.instant(
+      'layers.deleteConfirmHeader',
+    );
     const cancelText = this.translate.instant('layers.deleteCancel');
     const deleteText = this.translate.instant('layers.deleteConfirm');
 

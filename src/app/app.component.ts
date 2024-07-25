@@ -1,10 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink } from '@ionic/angular/standalone';
+import {
+  IonApp,
+  IonSplitPane,
+  IonMenu,
+  IonContent,
+  IonList,
+  IonListHeader,
+  IonNote,
+  IonMenuToggle,
+  IonItem,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonRouterLink,
+} from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { settingsOutline, settingsSharp, layersOutline, layersSharp, analyticsOutline, analyticsSharp } from 'ionicons/icons';
+import {
+  settingsOutline,
+  settingsSharp,
+  layersOutline,
+  layersSharp,
+  analyticsOutline,
+  analyticsSharp,
+} from 'ionicons/icons';
 import { ModalController } from '@ionic/angular';
 import { LayersPage } from './pages/layers/layers.page';
 import { TracksPage } from './pages/tracks/tracks.page';
@@ -17,7 +38,25 @@ import { KeepAwake } from '@capacitor-community/keep-awake';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterLink, IonRouterOutlet, TranslateModule],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    IonApp,
+    IonSplitPane,
+    IonMenu,
+    IonContent,
+    IonList,
+    IonListHeader,
+    IonNote,
+    IonMenuToggle,
+    IonItem,
+    IonIcon,
+    IonLabel,
+    IonRouterLink,
+    IonRouterOutlet,
+    TranslateModule,
+  ],
   providers: [ModalController],
 })
 export class AppComponent {
@@ -26,22 +65,25 @@ export class AppComponent {
     { title: 'sidebar.tracks', icon: 'analytics', page: TracksPage },
     { title: 'sidebar.settings', icon: 'settings', page: SettingsPage },
   ];
-  
+
   constructor(
     private readonly modalCtrl: ModalController,
     private settings: SettingsService,
     private translate: TranslateService,
   ) {
-    this.settings.getLanguage().then(language => {
+    this.settings.getLanguage().then((language) => {
       this.translate.setDefaultLang(language);
     });
 
     this.initKeepAwake();
 
-    addIcons({ 
-      settingsOutline, settingsSharp,
-      layersOutline, layersSharp,
-      analyticsOutline, analyticsSharp,
+    addIcons({
+      settingsOutline,
+      settingsSharp,
+      layersOutline,
+      layersSharp,
+      analyticsOutline,
+      analyticsSharp,
     });
   }
 
@@ -57,18 +99,18 @@ export class AppComponent {
   private async initKeepAwake() {
     const keepAwake = await this.settings.getKeepAwake();
 
-    if(keepAwake) {
+    if (keepAwake) {
       await KeepAwake.keepAwake();
     } else {
       await KeepAwake.allowSleep();
     }
-    
+
     this.settings.on('keepAwake', async (newValue) => {
-      if(newValue) {
+      if (newValue) {
         await KeepAwake.keepAwake();
       } else {
         await KeepAwake.allowSleep();
       }
-    })
+    });
   }
 }

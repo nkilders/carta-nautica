@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
 import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder';
-import { Geolocation, PositionOptions, WatchPositionCallback } from '@capacitor/geolocation';
+import {
+  Geolocation,
+  PositionOptions,
+  WatchPositionCallback,
+} from '@capacitor/geolocation';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GeolocationService {
   private readonly options: PositionOptions = {
     enableHighAccuracy: true,
   };
 
-  constructor() { }
+  constructor() {}
 
   public getPosition() {
     return Geolocation.getCurrentPosition(this.options);

@@ -3,18 +3,15 @@ import { SettingsService } from './settings.service';
 import { DistanceUnit, SpeedUnit } from '../models/settings';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UnitService {
-
-  constructor(
-    private settings: SettingsService,
-  ) { }
+  constructor(private settings: SettingsService) {}
 
   public async convertSpeed(speed: number, sourceUnit: SpeedUnit) {
     const targetUnit = await this.settings.getSpeedUnit();
-    
-    if(sourceUnit == targetUnit) {
+
+    if (sourceUnit == targetUnit) {
       return {
         value: speed,
         unit: targetUnit,
@@ -22,7 +19,7 @@ export class UnitService {
     }
 
     const metersPerSecond = (() => {
-      switch(sourceUnit) {
+      switch (sourceUnit) {
         case SpeedUnit.KILOMETERS_PER_HOUR:
           return speed / 3.6;
         case SpeedUnit.METERS_PER_SECOND:
@@ -33,7 +30,7 @@ export class UnitService {
     })();
 
     const targetSpeed = (() => {
-      switch(targetUnit) {
+      switch (targetUnit) {
         case SpeedUnit.KILOMETERS_PER_HOUR:
           return metersPerSecond * 3.6;
         case SpeedUnit.METERS_PER_SECOND:
@@ -52,7 +49,7 @@ export class UnitService {
   public async convertDistance(distance: number, sourceUnit: DistanceUnit) {
     const targetUnit = await this.settings.getDistanceUnit();
 
-    if(sourceUnit == targetUnit) {
+    if (sourceUnit == targetUnit) {
       return {
         value: distance,
         unit: targetUnit,
@@ -60,7 +57,7 @@ export class UnitService {
     }
 
     const meters = (() => {
-      switch(sourceUnit) {
+      switch (sourceUnit) {
         case DistanceUnit.KILOMETERS:
           return distance * 1000;
         case DistanceUnit.METER:
@@ -71,7 +68,7 @@ export class UnitService {
     })();
 
     const targetDistance = (() => {
-      switch(targetUnit) {
+      switch (targetUnit) {
         case DistanceUnit.KILOMETERS:
           return meters / 1000;
         case DistanceUnit.METER:
@@ -88,7 +85,7 @@ export class UnitService {
   }
 
   public speedUnitToText(unit: SpeedUnit) {
-    switch(unit) {
+    switch (unit) {
       case SpeedUnit.KILOMETERS_PER_HOUR:
         return 'km/h';
       case SpeedUnit.METERS_PER_SECOND:
@@ -99,7 +96,7 @@ export class UnitService {
   }
 
   public distanceUnitToText(unit: DistanceUnit) {
-    switch(unit) {
+    switch (unit) {
       case DistanceUnit.KILOMETERS:
         return 'km';
       case DistanceUnit.METER:

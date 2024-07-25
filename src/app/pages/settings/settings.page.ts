@@ -1,7 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonListHeader, IonSelect, IonSelectOption, IonItem, IonLabel, IonToggle } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonList,
+  IonListHeader,
+  IonSelect,
+  IonSelectOption,
+  IonItem,
+  IonLabel,
+  IonToggle,
+} from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SettingsService } from 'src/app/services/settings.service';
 import { Language } from 'src/app/models/settings';
@@ -11,7 +23,22 @@ import { Language } from 'src/app/models/settings';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, TranslateModule, IonList, IonListHeader, IonSelect, IonSelectOption, IonItem, IonLabel, IonToggle]
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+    IonList,
+    IonListHeader,
+    IonSelect,
+    IonSelectOption,
+    IonItem,
+    IonLabel,
+    IonToggle,
+  ],
 })
 export class SettingsPage implements OnInit {
   public speedUnit = '0';
@@ -23,14 +50,15 @@ export class SettingsPage implements OnInit {
   constructor(
     private settings: SettingsService,
     private translate: TranslateService,
-  ) { }
+  ) {}
 
   async ngOnInit() {
     await this.loadSettingsValues();
   }
 
   private async loadSettingsValues() {
-    const {speedUnit, distanceUnit, language, mapPreloading, keepAwake} = await this.settings.getAllSettings();
+    const { speedUnit, distanceUnit, language, mapPreloading, keepAwake } =
+      await this.settings.getAllSettings();
 
     this.speedUnit = speedUnit.toString();
     this.distanceUnit = distanceUnit.toString();
@@ -40,12 +68,12 @@ export class SettingsPage implements OnInit {
   }
 
   protected async updateSpeedUnit() {
-    const value= Number.parseInt(this.speedUnit);
+    const value = Number.parseInt(this.speedUnit);
     await this.settings.setSpeedUnit(value);
   }
-  
+
   protected async updateDistanceUnit() {
-    const value= Number.parseInt(this.distanceUnit);
+    const value = Number.parseInt(this.distanceUnit);
     await this.settings.setDistanceUnit(value);
   }
 
@@ -54,11 +82,11 @@ export class SettingsPage implements OnInit {
     await this.settings.setLanguage(value);
     this.translate.setDefaultLang(value);
   }
-  
+
   protected async updateMapPreloading() {
     await this.settings.setMapPreloading(this.mapPreloading);
   }
-  
+
   protected async updateKeepAwake() {
     await this.settings.setKeepAwake(this.keepAwake);
   }
