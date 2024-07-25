@@ -1,7 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonList } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonList,
+} from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LayersService } from 'src/app/services/layers.service';
 import { ModalController, AlertController } from '@ionic/angular';
@@ -12,7 +22,20 @@ import { LayerWithoutId } from 'src/app/models/layers';
   templateUrl: './layers-create.page.html',
   styleUrls: ['./layers-create.page.scss'],
   standalone: true,
-  imports: [IonList, IonButton, IonInput, IonLabel, IonItem, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, TranslateModule],
+  imports: [
+    IonList,
+    IonButton,
+    IonInput,
+    IonLabel,
+    IonItem,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+  ],
 })
 export class LayersCreatePage {
   protected name: string = '';
@@ -50,7 +73,7 @@ export class LayersCreatePage {
   protected async closeModal() {
     const modal = await this.modalCtrl.getTop();
 
-    if(!modal) {
+    if (!modal) {
       return;
     }
 

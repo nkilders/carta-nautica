@@ -1,7 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonLabel, IonInput, IonItem, IonButton } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonList,
+  IonLabel,
+  IonInput,
+  IonItem,
+  IonButton,
+} from '@ionic/angular/standalone';
 import { Layer } from 'src/app/models/layers';
 import { LayersService } from 'src/app/services/layers.service';
 import { ModalController, AlertController } from '@ionic/angular';
@@ -12,7 +22,20 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   templateUrl: './layers-edit.page.html',
   styleUrls: ['./layers-edit.page.scss'],
   standalone: true,
-  imports: [IonButton, IonItem, IonInput, IonLabel, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, TranslateModule],
+  imports: [
+    IonButton,
+    IonItem,
+    IonInput,
+    IonLabel,
+    IonList,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+  ],
 })
 export class LayersEditPage implements OnInit {
   @Input({ required: true })
@@ -58,7 +81,7 @@ export class LayersEditPage implements OnInit {
   protected async closeModal() {
     const modal = await this.modalCtrl.getTop();
 
-    if(!modal) {
+    if (!modal) {
       return;
     }
 

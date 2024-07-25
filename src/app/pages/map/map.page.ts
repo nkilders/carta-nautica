@@ -1,7 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonMenuButton } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+} from '@ionic/angular/standalone';
 import { Map as OLMap, View } from 'ol';
 import { useGeographic } from 'ol/proj';
 import { Control, ScaleLine } from 'ol/control';
@@ -23,7 +30,16 @@ import { XYZ } from 'ol/source';
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton]
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    IonButtons,
+    IonMenuButton,
+  ],
 })
 export class MapPage implements OnInit {
   public toolbarTitle = 'Carta Nautica';
@@ -49,17 +65,17 @@ export class MapPage implements OnInit {
     this.lastToolbarTitleUpdate = 0;
     this.tileLayers = new Map();
   }
-  
+
   ngOnInit() {
     this.initMap();
     this.initPositionWatch();
     this.initSettingsListeners();
   }
-  
+
   public changeSpeedUnit() {
     // TODO: implement when app supports different speed units
   }
-  
+
   private async initMap() {
     useGeographic();
 
@@ -73,14 +89,18 @@ export class MapPage implements OnInit {
       }),
     });
 
-    this.map.addControl(new ScaleLine({
-      bar: false,
-      units: 'metric',
-    }));
+    this.map.addControl(
+      new ScaleLine({
+        bar: false,
+        units: 'metric',
+      }),
+    );
 
-    this.map.addControl(new Control({
-      element: document.getElementById('speedHeadingControl')!
-    }));
+    this.map.addControl(
+      new Control({
+        element: document.getElementById('speedHeadingControl')!,
+      }),
+    );
 
     this.boat = new BoatMarker(this.map);
     await this.initMapLayers();
@@ -102,7 +122,7 @@ export class MapPage implements OnInit {
 
   private async reloadAllTileLayers() {
     this.removeAllTileLayers();
-    
+
     const layers = await this.layers.getAll();
     const preload = await this.settings.getMapPreloading();
 
@@ -139,14 +159,14 @@ export class MapPage implements OnInit {
     this.settings.on('mapPreloading', (newValue) => {
       const layers = this.map?.getAllLayers();
 
-      if(!layers) {
+      if (!layers) {
         return;
       }
-      
+
       const preload = newValue ? Infinity : 0;
 
-      for(const layer of layers) {
-        if(layer instanceof BaseTileLayer) {
+      for (const layer of layers) {
+        if (layer instanceof BaseTileLayer) {
           layer.setPreload(preload);
         }
       }
@@ -158,13 +178,13 @@ export class MapPage implements OnInit {
   }
 
   private onPositionChanged(position: Position | null, err: unknown) {
-    if(!position) {
+    if (!position) {
       return;
     }
 
     this.position = position;
 
-    if(!this.receivedInitialPosition) {
+    if (!this.receivedInitialPosition) {
       this.receivedInitialPosition = true;
 
       this.onInitialPositionReceived(position);
@@ -174,31 +194,36 @@ export class MapPage implements OnInit {
     this.updateSpeedHeadingControl();
     this.updateToolbarTitle();
   }
-  
+
   private onInitialPositionReceived(position: Position) {
     this.flyToCurrentPosition();
   }
 
   private flyToCurrentPosition() {
-    if(!this.position) {
+    if (!this.position) {
       return;
     }
 
-    const {longitude, latitude} = this.position.coords;
+    const { longitude, latitude } = this.position.coords;
 
     this.flyTo(longitude, latitude, 15, 1_000);
   }
 
-  private flyTo(longitude: number, latitude: number, zoom: number, durationMs: number) {
+  private flyTo(
+    longitude: number,
+    latitude: number,
+    zoom: number,
+    durationMs: number,
+  ) {
     this.map?.getView().animate({
-      center: [ longitude, latitude ],
+      center: [longitude, latitude],
       zoom,
       duration: durationMs,
     });
   }
 
   private async updateSpeedHeadingControl() {
-    if(!this.position) {
+    if (!this.position) {
       return;
     }
 
@@ -206,17 +231,20 @@ export class MapPage implements OnInit {
     this.heading = `${heading.toFixed(0)}°`;
 
     const speedMps = this.position.coords.speed ?? 0;
-    const speed = await this.unit.convertSpeed(speedMps, SpeedUnit.METERS_PER_SECOND);
+    const speed = await this.unit.convertSpeed(
+      speedMps,
+      SpeedUnit.METERS_PER_SECOND,
+    );
     const unit = this.unit.speedUnitToText(speed.unit);
     this.speed = `${speed.value.toFixed(2)} ${unit}`;
   }
 
   private async updateToolbarTitle() {
-    if(Date.now() - this.lastToolbarTitleUpdate < 60_000) {
+    if (Date.now() - this.lastToolbarTitleUpdate < 60_000) {
       return;
     }
 
-    if(this.position == null) {
+    if (this.position == null) {
       return;
     }
 
@@ -224,7 +252,7 @@ export class MapPage implements OnInit {
 
     const { longitude, latitude } = this.position.coords;
     const result = await this.geolocation.reverseGeocode(longitude, latitude);
-    
+
     this.toolbarTitle = this.formatToolbarTitle(result);
 
     // The toolbar's text doesn't refresh correctly until one
@@ -233,27 +261,27 @@ export class MapPage implements OnInit {
     this.ref.markForCheck();
   }
 
-  private formatToolbarTitle(result : NativeGeocoderResult | null ) {
-    if(result == null) {
+  private formatToolbarTitle(result: NativeGeocoderResult | null) {
+    if (result == null) {
       return '🌍 Carta Nautica';
     }
 
     let emoji = '🌍';
     let text = 'Carta Nautica';
 
-    if(result.countryCode) {
+    if (result.countryCode) {
       emoji = countryCodeEmoji(result.countryCode);
     }
 
-    if(result.locality && result.subLocality) {
+    if (result.locality && result.subLocality) {
       text = `${result.locality}, ${result.subLocality}`;
-    } else if(result.locality) {
+    } else if (result.locality) {
       text = result.locality;
-    } else if(result.administrativeArea && result.subAdministrativeArea) {
+    } else if (result.administrativeArea && result.subAdministrativeArea) {
       text = `${result.administrativeArea}, ${result.subAdministrativeArea}`;
-    } else if(result.administrativeArea) {
+    } else if (result.administrativeArea) {
       text = result.administrativeArea;
-    } else if(result.countryName) {
+    } else if (result.countryName) {
       text = result.countryName;
     }
 

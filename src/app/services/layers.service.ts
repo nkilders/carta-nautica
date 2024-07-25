@@ -93,7 +93,7 @@ export class LayersService {
     const updatedLayer: Layer = { id: layerId, ...layer };
 
     this.layers = this.layers!.map((l) =>
-      l.id === layerId ? updatedLayer : l
+      l.id === layerId ? updatedLayer : l,
     );
 
     this.eventEmitter.emit('update', layerId, updatedLayer);
@@ -122,7 +122,7 @@ export class LayersService {
 
   on(
     event: 'create' | 'update' | 'delete',
-    listener: (id: string, layer: Layer) => void
+    listener: (id: string, layer: Layer) => void,
   ): void;
   on(event: 'updateOrder', listener: (layers: Layer[]) => void): void;
 

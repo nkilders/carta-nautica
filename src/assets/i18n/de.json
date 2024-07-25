@@ -1,44 +1,44 @@
 {
-    "sidebar": {
-        "title": "Hallo Welt",
-        "layers": "Ebenen",
-        "tracks": "Routen",
-        "settings": "Einstellungen"
-    },
-    "settings": {
-        "speedUnit": "Geschwindigkeitseinheit",
-        "distanceUnit": "Entfernungseinheit",
-        "language": "Sprache",
-        "mapPreloading": "Karte vorladen",
-        "keepScreenAwake": "Bildschirm immer aktiv"
-    },
-    "layers": {
-        "edit": "Bearbeiten",
-        "delete": "Löschen",
-        "deleteConfirmHeader": "Ebene löschen",
-        "deleteCancel": "Abbrechen",
-        "deleteConfirm": "Löschen"
-    },
-    "layersEdit": {
-        "title": "Kartenebene bearbeiten",
-        "name": "Name",
-        "url": "URL",
-        "save": "Speichern",
-        "cancel": "Abbrechen",
-        "errorNameEmpty": "Name darf nicht leer sein",
-        "errorUrlEmpty": "URL darf nicht leer sein",
-        "errorHeader": "Ungültige Eingabe",
-        "errorOk": "Ok"
-    },
-    "layersCreate": {
-        "title": "Kartenebene hinzufügen",
-        "name": "Name",
-        "url": "URL",
-        "create": "Hinzufügen",
-        "cancel": "Abbrechen",
-        "errorNameEmpty": "Name darf nicht leer sein",
-        "errorUrlEmpty": "URL darf nicht leer sein",
-        "errorHeader": "Ungültige Eingabe",
-        "errorOk": "Ok"
-    }
+  "sidebar": {
+    "title": "Hallo Welt",
+    "layers": "Ebenen",
+    "tracks": "Routen",
+    "settings": "Einstellungen"
+  },
+  "settings": {
+    "speedUnit": "Geschwindigkeitseinheit",
+    "distanceUnit": "Entfernungseinheit",
+    "language": "Sprache",
+    "mapPreloading": "Karte vorladen",
+    "keepScreenAwake": "Bildschirm immer aktiv"
+  },
+  "layers": {
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "deleteConfirmHeader": "Ebene löschen",
+    "deleteCancel": "Abbrechen",
+    "deleteConfirm": "Löschen"
+  },
+  "layersEdit": {
+    "title": "Kartenebene bearbeiten",
+    "name": "Name",
+    "url": "URL",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "errorNameEmpty": "Name darf nicht leer sein",
+    "errorUrlEmpty": "URL darf nicht leer sein",
+    "errorHeader": "Ungültige Eingabe",
+    "errorOk": "Ok"
+  },
+  "layersCreate": {
+    "title": "Kartenebene hinzufügen",
+    "name": "Name",
+    "url": "URL",
+    "create": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "errorNameEmpty": "Name darf nicht leer sein",
+    "errorUrlEmpty": "URL darf nicht leer sein",
+    "errorHeader": "Ungültige Eingabe",
+    "errorOk": "Ok"
+  }
 }
