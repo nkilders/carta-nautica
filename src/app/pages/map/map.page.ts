@@ -12,7 +12,6 @@ import {
 import { Map as OLMap, View } from 'ol';
 import { useGeographic } from 'ol/proj';
 import { Control, ScaleLine } from 'ol/control';
-import TileLayer from 'ol/layer/Tile';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
 import { BoatMarker } from '../../boat';
@@ -23,7 +22,7 @@ import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
 import { SpeedUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
-import { XYZ } from 'ol/source';
+import { LayerManager } from 'src/app/layer-manager';
 
 @Component({
   selector: 'app-map',
@@ -52,7 +51,6 @@ export class MapPage implements OnInit {
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
   private lastToolbarTitleUpdate: number;
-  private tileLayers: Map<string, TileLayer<any>>;
 
   constructor(
     private geolocation: GeolocationService,
@@ -63,7 +61,6 @@ export class MapPage implements OnInit {
   ) {
     this.receivedInitialPosition = false;
     this.lastToolbarTitleUpdate = 0;
-    this.tileLayers = new Map();
   }
 
   ngOnInit() {
@@ -72,14 +69,17 @@ export class MapPage implements OnInit {
     this.initSettingsListeners();
   }
 
-  public changeSpeedUnit() {
-    // TODO: implement when app supports different speed units
+  public async changeSpeedUnit() {
+    const oldSpeedUnit = await this.settings.getSpeedUnit();
+    const numberOfSpeedUnits = Object.keys(SpeedUnit).length / 2;
+
+    const newSpeedUnit = (oldSpeedUnit + 1) % numberOfSpeedUnits;
+
+    await this.settings.setSpeedUnit(newSpeedUnit);
   }
 
   private async initMap() {
     useGeographic();
-
-    const mapPreloading = await this.settings.getMapPreloading();
 
     this.map = new OLMap({
       target: 'map',
@@ -103,50 +103,8 @@ export class MapPage implements OnInit {
     );
 
     this.boat = new BoatMarker(this.map);
-    await this.initMapLayers();
-  }
 
-  private async initMapLayers() {
-    await this.reloadAllTileLayers();
-
-    // TODO: this can be improved
-    // create -> just add the new layer; order of existing layers won't change
-    // update -> just update URL and visibility of layer
-    // remove -> just remove layer
-    // updateOrder -> reloadAllTileLayers()
-    this.layers.on('create', () => this.reloadAllTileLayers());
-    this.layers.on('update', () => this.reloadAllTileLayers());
-    this.layers.on('delete', () => this.reloadAllTileLayers());
-    this.layers.on('updateOrder', () => this.reloadAllTileLayers());
-  }
-
-  private async reloadAllTileLayers() {
-    this.removeAllTileLayers();
-
-    const layers = await this.layers.getAll();
-    const preload = await this.settings.getMapPreloading();
-
-    layers.forEach((layer, i) => {
-      const tileLayer = new TileLayer({
-        source: new XYZ({
-          url: layer.source,
-        }),
-        zIndex: -i,
-        visible: layer.visible,
-        preload: preload ? Infinity : 0,
-      });
-
-      this.map?.addLayer(tileLayer);
-      this.tileLayers.set(layer.id, tileLayer);
-    });
-  }
-
-  private removeAllTileLayers() {
-    this.tileLayers.forEach((layer) => {
-      this.map?.removeLayer(layer);
-    });
-
-    this.tileLayers.clear();
+    new LayerManager(this.map!, this.layers, this.settings);
   }
 
   private async initPositionWatch() {
