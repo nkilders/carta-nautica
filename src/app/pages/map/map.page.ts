@@ -12,7 +12,6 @@ import {
 import { Map as OLMap, View } from 'ol';
 import { useGeographic } from 'ol/proj';
 import { Control, ScaleLine } from 'ol/control';
-import TileLayer from 'ol/layer/Tile';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
 import { BoatMarker } from '../../boat';
@@ -23,8 +22,7 @@ import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
 import { SpeedUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
-import { XYZ } from 'ol/source';
-import { Layer } from 'src/app/models/layers';
+import { LayerManager } from 'src/app/layer-manager';
 
 @Component({
   selector: 'app-map',
@@ -53,7 +51,6 @@ export class MapPage implements OnInit {
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
   private lastToolbarTitleUpdate: number;
-  private tileLayers: Map<string, TileLayer<any>>;
 
   constructor(
     private geolocation: GeolocationService,
@@ -64,7 +61,6 @@ export class MapPage implements OnInit {
   ) {
     this.receivedInitialPosition = false;
     this.lastToolbarTitleUpdate = 0;
-    this.tileLayers = new Map();
   }
 
   ngOnInit() {
@@ -107,79 +103,8 @@ export class MapPage implements OnInit {
     );
 
     this.boat = new BoatMarker(this.map);
-    await this.initMapLayers();
-  }
 
-  private async initMapLayers() {
-    await this.reloadAllTileLayers();
-
-    this.layers.on('create', (id, layer) => this.addNewTileLayer(layer));
-    this.layers.on('update', (id, layer) => this.updateTileLayer(id, layer));
-    this.layers.on('delete', (id, layer) => this.removeTileLayer(id));
-    this.layers.on('updateOrder', () => this.reloadAllTileLayers());
-  }
-
-  private async reloadAllTileLayers() {
-    this.removeAllTileLayers();
-
-    const layers = await this.layers.getAll();
-
-    layers.forEach((layer, i) => {
-      this.addTileLayerToMap(layer, i);
-    });
-  }
-
-  private async addNewTileLayer(layer: Layer) {
-    const index = this.tileLayers.size;
-    await this.addTileLayerToMap(layer, index);
-  }
-
-  private updateTileLayer(layerId: string, layer: Layer) {
-    const tileLayer = this.tileLayers.get(layerId);
-    if (!tileLayer) {
-      return;
-    }
-
-    tileLayer.setSource(
-      new XYZ({
-        url: layer.source,
-      }),
-    );
-
-    tileLayer.setVisible(layer.visible);
-  }
-
-  private removeTileLayer(layerId: string) {
-    const tileLayer = this.tileLayers.get(layerId);
-    if (!tileLayer) {
-      return;
-    }
-
-    this.map?.removeLayer(tileLayer);
-    this.tileLayers.delete(layerId);
-  }
-
-  private async addTileLayerToMap(layer: Layer, zIndex: number) {
-    const preload = await this.settings.getMapPreloading();
-    const tileLayer = new TileLayer({
-      source: new XYZ({
-        url: layer.source,
-      }),
-      zIndex: -zIndex,
-      visible: layer.visible,
-      preload: preload ? Infinity : 0,
-    });
-
-    this.map?.addLayer(tileLayer);
-    this.tileLayers.set(layer.id, tileLayer);
-  }
-
-  private removeAllTileLayers() {
-    this.tileLayers.forEach((layer) => {
-      this.map?.removeLayer(layer);
-    });
-
-    this.tileLayers.clear();
+    new LayerManager(this.map!, this.layers, this.settings);
   }
 
   private async initPositionWatch() {
