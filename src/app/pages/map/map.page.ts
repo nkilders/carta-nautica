@@ -24,6 +24,7 @@ import { UnitService } from 'src/app/services/unit.service';
 import { SpeedUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
 import { XYZ } from 'ol/source';
+import { Layer } from 'src/app/models/layers';
 
 @Component({
   selector: 'app-map',
@@ -112,14 +113,9 @@ export class MapPage implements OnInit {
   private async initMapLayers() {
     await this.reloadAllTileLayers();
 
-    // TODO: this can be improved
-    // create -> just add the new layer; order of existing layers won't change
-    // update -> just update URL and visibility of layer
-    // remove -> just remove layer
-    // updateOrder -> reloadAllTileLayers()
-    this.layers.on('create', () => this.reloadAllTileLayers());
-    this.layers.on('update', () => this.reloadAllTileLayers());
-    this.layers.on('delete', () => this.reloadAllTileLayers());
+    this.layers.on('create', (id, layer) => this.addNewTileLayer(layer));
+    this.layers.on('update', (id, layer) => this.updateTileLayer(id, layer));
+    this.layers.on('delete', (id, layer) => this.removeTileLayer(id));
     this.layers.on('updateOrder', () => this.reloadAllTileLayers());
   }
 
@@ -127,21 +123,55 @@ export class MapPage implements OnInit {
     this.removeAllTileLayers();
 
     const layers = await this.layers.getAll();
-    const preload = await this.settings.getMapPreloading();
 
     layers.forEach((layer, i) => {
-      const tileLayer = new TileLayer({
-        source: new XYZ({
-          url: layer.source,
-        }),
-        zIndex: -i,
-        visible: layer.visible,
-        preload: preload ? Infinity : 0,
-      });
-
-      this.map?.addLayer(tileLayer);
-      this.tileLayers.set(layer.id, tileLayer);
+      this.addTileLayerToMap(layer, i);
     });
+  }
+
+  private async addNewTileLayer(layer: Layer) {
+    const index = this.tileLayers.size;
+    await this.addTileLayerToMap(layer, index);
+  }
+
+  private updateTileLayer(layerId: string, layer: Layer) {
+    const tileLayer = this.tileLayers.get(layerId);
+    if (!tileLayer) {
+      return;
+    }
+
+    tileLayer.setSource(
+      new XYZ({
+        url: layer.source,
+      }),
+    );
+
+    tileLayer.setVisible(layer.visible);
+  }
+
+  private removeTileLayer(layerId: string) {
+    const tileLayer = this.tileLayers.get(layerId);
+    if (!tileLayer) {
+      return;
+    }
+
+    this.map?.removeLayer(tileLayer);
+    this.tileLayers.delete(layerId);
+  }
+
+  private async addTileLayerToMap(layer: Layer, zIndex: number) {
+    const preload = await this.settings.getMapPreloading();
+    const tileLayer = new TileLayer({
+      source: new XYZ({
+        url: layer.source,
+      }),
+      zIndex: -zIndex,
+      visible: layer.visible,
+      preload: preload ? Infinity : 0,
+    });
+
+    this.map?.addLayer(tileLayer);
+    this.tileLayers.set(layer.id, tileLayer);
   }
 
   private removeAllTileLayers() {
