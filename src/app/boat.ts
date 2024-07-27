@@ -10,7 +10,7 @@ const ICON_URL = '/assets/boat-marker.png';
 
 export class BoatMarker {
   private boat?: Feature<Point>;
-  private boatLayer?: VectorLayer<Feature<Point>>;
+  private boatLayer?: VectorLayer<VectorSource<Feature<Point>>, Feature<Point>>;
   private icon?: Icon;
 
   constructor(map: Map) {
