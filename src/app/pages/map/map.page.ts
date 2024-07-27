@@ -8,6 +8,9 @@ import {
   IonToolbar,
   IonButtons,
   IonMenuButton,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { Map as OLMap, View } from 'ol';
 import { useGeographic } from 'ol/proj';
@@ -23,6 +26,9 @@ import { UnitService } from 'src/app/services/unit.service';
 import { SpeedUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
 import { LayerManager } from 'src/app/layer-manager';
+import { FabToggler } from 'src/app/fab-toggler';
+import { addIcons } from 'ionicons';
+import { locate } from 'ionicons/icons';
 
 @Component({
   selector: 'app-map',
@@ -30,6 +36,9 @@ import { LayerManager } from 'src/app/layer-manager';
   styleUrls: ['./map.page.scss'],
   standalone: true,
   imports: [
+    IonIcon,
+    IonFabButton,
+    IonFab,
     IonContent,
     IonHeader,
     IonTitle,
@@ -51,6 +60,7 @@ export class MapPage implements OnInit {
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
   private lastToolbarTitleUpdate: number;
+  private fabFollowToggler?: FabToggler;
 
   constructor(
     private geolocation: GeolocationService,
@@ -61,12 +71,17 @@ export class MapPage implements OnInit {
   ) {
     this.receivedInitialPosition = false;
     this.lastToolbarTitleUpdate = 0;
+
+    addIcons({
+      locate,
+    });
   }
 
   ngOnInit() {
     this.initMap();
     this.initPositionWatch();
     this.initSettingsListeners();
+    this.initFabs();
   }
 
   public async changeSpeedUnit() {
@@ -76,6 +91,14 @@ export class MapPage implements OnInit {
     const newSpeedUnit = (oldSpeedUnit + 1) % numberOfSpeedUnits;
 
     await this.settings.setSpeedUnit(newSpeedUnit);
+  }
+
+  public fabFollow() {
+    const active = this.fabFollowToggler?.toggle();
+
+    if (active) {
+      this.flyToCurrentPosition();
+    }
   }
 
   private async initMap() {
@@ -151,6 +174,10 @@ export class MapPage implements OnInit {
     this.boat?.updatePosition(position);
     this.updateSpeedHeadingControl();
     this.updateToolbarTitle();
+
+    if (this.fabFollowToggler?.isActive()) {
+      this.flyToCurrentPosition();
+    }
   }
 
   private onInitialPositionReceived(position: Position) {
@@ -244,5 +271,15 @@ export class MapPage implements OnInit {
     }
 
     return `${emoji} ${text}`;
+  }
+
+  private initFabs() {
+    this.fabFollowToggler = new FabToggler('fabFollow', 'dark', 'primary');
+
+    this.map?.on('pointerdrag', () => {
+      if (this.fabFollowToggler?.isActive()) {
+        this.fabFollowToggler.toggle();
+      }
+    });
   }
 }
