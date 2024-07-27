@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg2"
+   width="297.33334"
+   height="178.66667"
+   viewBox="0 0 297.33334 178.66667"
+   sodipodi:docname="A.10_Verbot,_außerhalb_der_angezeigten_Begrenzung_zu_fahren"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6">
+    <marker
+       style="overflow:visible"
+       id="marker1292"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="3.3239999"
+       markerHeight="3.8427744"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1290" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="3.3239999"
+       markerHeight="3.8427744"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="2"
+     inkscape:cx="116.5"
+     inkscape:cy="44"
+     inkscape:window-width="956"
+     inkscape:window-height="1041"
+     inkscape:window-x="0"
+     inkscape:window-y="18"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g8" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g8">
+    <g
+       id="g1673">
+      <path
+         id="rect1612"
+         style="fill:#ff0000;stroke-width:1.25358;stop-color:#000000;stroke:none"
+         d="M 52.328664 -35.753087 L 52.328664 29.264829 L 117.34658 29.264829 L 52.328664 -35.753087 z "
+         transform="rotate(45)" />
+      <rect
+         style="fill:none;stroke-width:2;stop-color:#000000;stroke:#000000;stroke-dasharray:none"
+         id="rect291"
+         width="65.308189"
+         height="65.308189"
+         x="52.327705"
+         y="-36.043198"
+         transform="rotate(45)" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.3;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:13.2, 3.3;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 62.680661,103.55794 V 165.9815"
+         id="path421" />
+    </g>
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:5.12263;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.6;stroke-dasharray:20.4906, 5.12263;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#TriangleStart);marker-end:url(#marker1292)"
+       d="M 73.119914,147.61699 H 223.52122"
+       id="path1023" />
+    <g
+       id="g1693"
+       transform="matrix(-1,0,0,1,296.97533,0)">
+      <path
+         id="path1687"
+         style="fill:#ff0000;stroke:none;stroke-width:1.25358;stop-color:#000000"
+         d="M 52.328664,-35.753087 V 29.264829 H 117.34658 Z"
+         transform="rotate(45)" />
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:2;stop-color:#000000;stroke-dasharray:none"
+         id="rect1689"
+         width="65.308189"
+         height="65.308189"
+         x="52.327705"
+         y="-36.043198"
+         transform="rotate(45)" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.3;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:13.2, 3.3;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 62.680661,103.55794 V 165.9815"
+         id="path1691" />
+    </g>
+  </g>
+</svg>

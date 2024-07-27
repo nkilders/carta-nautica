@@ -30,6 +30,11 @@ export const routes: Routes = [
       import('./pages/settings/settings.page').then((m) => m.SettingsPage),
   },
   {
+    path: 'signs',
+    loadComponent: () =>
+      import('./pages/signs/signs.page').then((m) => m.SignsPage),
+  },
+  {
     path: 'tracks',
     loadComponent: () =>
       import('./pages/tracks/tracks.page').then((m) => m.TracksPage),

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg2"
+   width="59.473969"
+   height="52.41869"
+   viewBox="0 0 59.473969 52.41869"
+   sodipodi:docname="A.11_Verbot_der_Einfahrt.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="11.40537"
+     inkscape:cx="30.59962"
+     inkscape:cy="23.234668"
+     inkscape:window-width="956"
+     inkscape:window-height="1041"
+     inkscape:window-x="0"
+     inkscape:window-y="18"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g8" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g8"
+     transform="translate(-0.44497523,-0.39561084)">
+    <g
+       id="g631">
+      <circle
+         style="fill:#ff0000;stroke-width:1.05037;stop-color:#000000"
+         id="path343"
+         cx="14.759654"
+         cy="11.378238"
+         r="6.3937306" />
+      <circle
+         style="fill:#008000;stroke-width:1.05037;stop-color:#000000"
+         id="circle399"
+         cx="46.759655"
+         cy="11.378238"
+         r="6.3937306" />
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:0.973813;stop-color:#000000"
+         id="rect626"
+         width="58.500156"
+         height="21.444876"
+         x="0.93188173"
+         y="0.88251734" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:8px;line-height:1.25;font-family:'Arnoia Display';-inkscape-font-specification:'Arnoia Display';letter-spacing:0px"
+       x="22.378988"
+       y="29.609972"
+       id="text522"><tspan
+         sodipodi:role="line"
+         id="tspan520"
+         x="22.378988"
+         y="29.609972"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif">oder</tspan></text>
+    <g
+       id="g1198"
+       transform="translate(0,30)">
+      <circle
+         style="fill:#000000;stroke-width:1.05037;stop-color:#000000"
+         id="circle1192"
+         cx="14.759654"
+         cy="11.378238"
+         r="6.3937306" />
+      <circle
+         style="fill:#ff0000;stroke-width:1.05037;stop-color:#000000"
+         id="circle1194"
+         cx="46.759655"
+         cy="11.378238"
+         r="6.3937306" />
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:0.973813;stop-color:#000000"
+         id="rect1196"
+         width="58.500156"
+         height="21.444876"
+         x="0.93188173"
+         y="0.88251734" />
+    </g>
+  </g>
+</svg>
