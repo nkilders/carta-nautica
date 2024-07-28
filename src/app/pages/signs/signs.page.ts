@@ -49,23 +49,23 @@ export class SignsPage {
           image: this.url('a.1-1'),
         },
         {
-          name: '',
+          name: 'Verbot der Durchfahrt und Sperrung der Schifffahrt',
           image: this.url('a.1-2'),
         },
         {
-          name: '',
+          name: 'Verbot der Durchfahrt und Sperrung der Schifffahrt',
           image: this.url('a.1-3'),
         },
         {
-          name: '',
+          name: 'Verbot der Durchfahrt und Sperrung der Schifffahrt',
           image: this.url('a.1-4'),
         },
         {
-          name: '',
+          name: 'Verbot der Durchfahrt und Sperrung der Schifffahrt',
           image: this.url('a.1-5'),
         },
         {
-          name: '',
+          name: 'Verbot der Durchfahrt und Sperrung der Schifffahrt',
           image: this.url('a.1-6'),
         },
         {
@@ -109,7 +109,7 @@ export class SignsPage {
           image: this.url('a.9-1'),
         },
         {
-          name: '',
+          name: 'Vermeidung von Wellenschlag oder Sogwirkungen',
           image: this.url('a.9-2'),
         },
         {
@@ -206,7 +206,7 @@ export class SignsPage {
           image: this.url('b.9a'),
         },
         {
-          name: '',
+          name: 'Gebot, nur dann in die Hauptwasserstraße einzufahren oder sie zu überqueren, wenn dadurch ein Fahrzeug auf der Hauptwasserstraße nicht gezwungen wird, seinen Kurs oder seine Geschwindigkeit zu ändern',
           image: this.url('b.9b'),
         },
         {
@@ -214,7 +214,7 @@ export class SignsPage {
           image: this.url('b.11a-1'),
         },
         {
-          name: '',
+          name: 'Gebot, Sprechfunk zu benutzen',
           image: this.url('b.11a-2'),
         },
         {
@@ -222,7 +222,7 @@ export class SignsPage {
           image: this.url('b.11b-1'),
         },
         {
-          name: '',
+          name: 'Gebot, Sprechfunk auf dem angegebenen Kanal zu benutzen',
           image: this.url('b.11b-2'),
         },
         {
@@ -268,7 +268,7 @@ export class SignsPage {
           image: this.url('d.1b-1'),
         },
         {
-          name: '',
+          name: 'Empfohlene Durchfahrtsöffnung für Verkehr nur in Richtung, in der die Zeichen sichtbar sind',
           image: this.url('d.1b-2'),
         },
         {
@@ -445,11 +445,11 @@ export class SignsPage {
           image: this.url('e.21'),
         },
         {
-          name: 'Hochwassermarken',
+          name: 'Hochwassermarke',
           image: this.url('e.22-1'),
         },
         {
-          name: '',
+          name: 'Hochwassermarke',
           image: this.url('e.22-2'),
         },
         {
