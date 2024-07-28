@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>{{ 'sidebar.signs' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    @for (signGroup of signGroups; track $index) {
+      <ion-list-header>{{ signGroup.name }}</ion-list-header>
+      @for (sign of signGroup.signs; track $index) {
+        <ion-item>
+          <ion-col>
+            <ion-note>{{ sign.name }}</ion-note>
+          </ion-col>
+
+          <img slot="end" [src]="sign.image" style="max-width: 3em; max-height: 3em; margin-top: 0.5em; margin-bottom: 0.5em;" [alt]="sign.name">
+        </ion-item>
+      }
+    }
+  </ion-list>
+</ion-content>
