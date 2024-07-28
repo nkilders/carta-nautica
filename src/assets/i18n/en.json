@@ -41,5 +41,9 @@
     "errorUrlEmpty": "URL must not be empty",
     "errorHeader": "Invalid input",
     "errorOk": "Ok"
+  },
+  "longClick": {
+    "title": "Actions at this position",
+    "cancel": "Cancel"
   }
 }

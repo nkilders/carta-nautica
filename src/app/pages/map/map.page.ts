@@ -31,6 +31,7 @@ import { addIcons } from 'ionicons';
 import { locate } from 'ionicons/icons';
 import { LongClick } from 'src/app/longclick';
 import { ActionSheetController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-map',
@@ -71,6 +72,7 @@ export class MapPage implements OnInit {
     private layers: LayersService,
     private ref: ChangeDetectorRef,
     private actionSheetCtrl: ActionSheetController,
+    private translate: TranslateService,
   ) {
     this.receivedInitialPosition = false;
     this.lastToolbarTitleUpdate = 0;
@@ -132,11 +134,14 @@ export class MapPage implements OnInit {
 
     new LayerManager(this.map!, this.layers, this.settings);
     new LongClick(this.map, async (coords) => {
+      const titleText = this.translate.instant('longClick.title');
+      const cancelText = this.translate.instant('longClick.cancel');
+
       const actionSheet = await this.actionSheetCtrl.create({
-        header: 'Aktion an dieser Stelle',
+        header: titleText,
         buttons: [
           {
-            text: 'Abbrechen',
+            text: cancelText,
             role: 'cancel',
           },
         ],
