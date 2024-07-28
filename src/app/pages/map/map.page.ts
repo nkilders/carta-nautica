@@ -29,6 +29,8 @@ import { LayerManager } from 'src/app/layer-manager';
 import { FabToggler } from 'src/app/fab-toggler';
 import { addIcons } from 'ionicons';
 import { locate } from 'ionicons/icons';
+import { LongClick } from 'src/app/longclick';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-map',
@@ -68,6 +70,7 @@ export class MapPage implements OnInit {
     private unit: UnitService,
     private layers: LayersService,
     private ref: ChangeDetectorRef,
+    private actionSheetCtrl: ActionSheetController,
   ) {
     this.receivedInitialPosition = false;
     this.lastToolbarTitleUpdate = 0;
@@ -128,6 +131,19 @@ export class MapPage implements OnInit {
     this.boat = new BoatMarker(this.map);
 
     new LayerManager(this.map!, this.layers, this.settings);
+    new LongClick(this.map, async (coords) => {
+      const actionSheet = await this.actionSheetCtrl.create({
+        header: 'Aktion an dieser Stelle',
+        buttons: [
+          {
+            text: 'Abbrechen',
+            role: 'cancel',
+          },
+        ],
+      });
+
+      await actionSheet.present();
+    });
   }
 
   private async initPositionWatch() {
