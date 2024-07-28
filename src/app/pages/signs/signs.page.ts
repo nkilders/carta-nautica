@@ -15,6 +15,7 @@ import {
   IonNote,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
+import { SignGroup } from 'src/app/models/signs';
 
 @Component({
   selector: 'app-signs',
@@ -39,7 +40,7 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
 })
 export class SignsPage {
-  protected signGroups = [
+  protected signGroups: SignGroup[] = [
     {
       name: 'Verbotszeichen',
       signs: [
