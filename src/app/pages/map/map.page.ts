@@ -23,12 +23,16 @@ import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 import { SettingsService } from 'src/app/services/settings.service';
 import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
-import { SpeedUnit } from 'src/app/models/settings';
+import { DistanceUnit, SpeedUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
 import { LayerManager } from 'src/app/layer-manager';
 import { FabToggler } from 'src/app/fab-toggler';
 import { addIcons } from 'ionicons';
 import { locate } from 'ionicons/icons';
+import { LongClick } from 'src/app/longclick';
+import { ActionSheetController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+import { geoDistance } from 'src/app/coordinates';
 
 @Component({
   selector: 'app-map',
@@ -68,6 +72,8 @@ export class MapPage implements OnInit {
     private unit: UnitService,
     private layers: LayersService,
     private ref: ChangeDetectorRef,
+    private actionSheetCtrl: ActionSheetController,
+    private translate: TranslateService,
   ) {
     this.receivedInitialPosition = false;
     this.lastToolbarTitleUpdate = 0;
@@ -128,6 +134,54 @@ export class MapPage implements OnInit {
     this.boat = new BoatMarker(this.map);
 
     new LayerManager(this.map!, this.layers, this.settings);
+    new LongClick(this.map, async ([lon, lat]) => {
+      const titleText = this.translate.instant('longClick.title');
+      const cancelText = this.translate.instant('longClick.cancel');
+      const distanceText = await this.buildLongClickDistanceText(lon, lat);
+
+      const actionSheet = await this.actionSheetCtrl.create({
+        header: titleText,
+        buttons: [
+          {
+            text: distanceText,
+            disabled: true,
+          },
+          {
+            text: cancelText,
+            role: 'cancel',
+          },
+        ],
+      });
+
+      await actionSheet.present();
+    });
+  }
+
+  private async buildLongClickDistanceText(
+    clickLongitude: number,
+    clickLatitude: number,
+  ) {
+    const { longitude, latitude } = this.position!.coords;
+
+    const distanceKm = geoDistance(
+      clickLatitude,
+      clickLongitude,
+      latitude,
+      longitude,
+    );
+
+    const distance = await this.unit.convertDistance(
+      distanceKm,
+      DistanceUnit.KILOMETERS,
+    );
+
+    const distanceText = distance.value.toFixed(2);
+    const unitText = this.unit.distanceUnitToText(distance.unit);
+
+    return this.translate.instant('longClick.distance', {
+      distance: distanceText,
+      unit: unitText,
+    });
   }
 
   private async initPositionWatch() {
