@@ -2,6 +2,7 @@ import { Map as OLMap } from 'ol';
 import { Coordinate } from 'ol/coordinate';
 
 const CLICK_DURATION_MS = 500;
+const MAX_DISTANCE_FROM_START_BEFORE_CANCEL = 10;
 
 type Listener = (coord: Coordinate) => void;
 
@@ -70,7 +71,7 @@ export class LongClick {
   private tooFarFromStartPos(x: number, y: number) {
     const distance = Math.abs(x - this.startX) + Math.abs(y - this.startY);
 
-    return distance > 10;
+    return distance > MAX_DISTANCE_FROM_START_BEFORE_CANCEL;
   }
 
   private clearTimeout() {
