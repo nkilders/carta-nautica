@@ -44,6 +44,7 @@
   },
   "longClick": {
     "title": "Actions at this position",
+    "distance": "Distance: {{distance}} {{unit}}",
     "cancel": "Cancel"
   }
 }

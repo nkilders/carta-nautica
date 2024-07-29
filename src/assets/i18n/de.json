@@ -44,6 +44,7 @@
   },
   "longClick": {
     "title": "Aktionen an dieser Stelle",
+    "distance": "Entfernung: {{distance}} {{unit}}",
     "cancel": "Abbrechen"
   }
 }
