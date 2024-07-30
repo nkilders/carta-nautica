@@ -25,6 +25,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/map/map.page').then((m) => m.MapPage),
   },
   {
+    path: 'markers',
+    loadComponent: () =>
+      import('./pages/markers/markers.page').then((m) => m.MarkersPage),
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./pages/settings/settings.page').then((m) => m.SettingsPage),

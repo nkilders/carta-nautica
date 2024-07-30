@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ 'sidebar.markers' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    @for (marker of markers; track marker.id) {
+    <ion-item>
+      <ion-label>{{marker.name}}</ion-label>
+
+      <ion-buttons slot="end">
+        <ion-button (click)="showMarkerOptions(marker)">
+          <ion-icon
+            slot="icon-only"
+            ios="ellipsis-vertical"
+            md="ellipsis-vertical"
+          />
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    }
+  </ion-list>
+
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="createMarker()">
+      <ion-icon ios="add" md="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab> -->
+</ion-content>

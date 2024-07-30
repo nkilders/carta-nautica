@@ -4,6 +4,7 @@
     "layers": "Layers",
     "tracks": "Tracks",
     "signs": "Signs",
+    "markers": "Markers",
     "settings": "Settings"
   },
   "settings": {
@@ -41,6 +42,14 @@
     "errorUrlEmpty": "URL must not be empty",
     "errorHeader": "Invalid input",
     "errorOk": "Ok"
+  },
+  "markers": {
+    "flyTo": "Show on map",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirmHeader": "Delete Marker",
+    "deleteCancel": "Cancel",
+    "deleteConfirm": "Delete"
   },
   "longClick": {
     "title": "Actions at this position",
