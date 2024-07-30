@@ -30,6 +30,13 @@ export const routes: Routes = [
       import('./pages/markers/markers.page').then((m) => m.MarkersPage),
   },
   {
+    path: 'markers-create',
+    loadComponent: () =>
+      import('./pages/markers-create/markers-create.page').then(
+        (m) => m.MarkersCreatePage,
+      ),
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./pages/settings/settings.page').then((m) => m.SettingsPage),

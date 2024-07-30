@@ -51,9 +51,19 @@
     "deleteCancel": "Cancel",
     "deleteConfirm": "Delete"
   },
+  "markersCreate": {
+    "title": "Create Marker",
+    "name": "Name",
+    "create": "Create",
+    "cancel": "Cancel",
+    "errorNameEmpty": "Name must not be empty",
+    "errorHeader": "Invalid input",
+    "errorOk": "Ok"
+  },
   "longClick": {
     "title": "Actions at this position",
     "distance": "Distance: {{distance}} {{unit}}",
+    "createMarker": "Add Marker",
     "cancel": "Cancel"
   }
 }
