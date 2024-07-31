@@ -51,6 +51,15 @@
     "deleteCancel": "Abbrechen",
     "deleteConfirm": "Löschen"
   },
+  "markersEdit": {
+    "title": "Markierung bearbeiten",
+    "name": "Name",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "errorNameEmpty": "Name darf nicht leer sein",
+    "errorHeader": "Ungültige Eingabe",
+    "errorOk": "Ok"
+  },
   "markersCreate": {
     "title": "Markierung hinzufügen",
     "name": "Name",

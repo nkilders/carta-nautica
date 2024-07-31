@@ -22,8 +22,13 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Marker } from 'src/app/models/markers';
 import { addIcons } from 'ionicons';
 import { add, ellipsisVertical } from 'ionicons/icons';
-import { ActionSheetController, AlertController } from '@ionic/angular';
+import {
+  ActionSheetController,
+  AlertController,
+  ModalController,
+} from '@ionic/angular';
 import { MarkersService } from 'src/app/services/markers.service';
+import { MarkersEditPage } from '../markers-edit/markers-edit.page';
 
 @Component({
   selector: 'app-markers',
@@ -59,6 +64,7 @@ export class MarkersPage implements OnInit {
     private translate: TranslateService,
     private actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
   ) {
     addIcons({
       add,
@@ -103,7 +109,20 @@ export class MarkersPage implements OnInit {
 
   private flyToMarker(marker: Marker) {}
 
-  private editMarker(marker: Marker) {}
+  private async editMarker(marker: Marker) {
+    const modal = await this.modalCtrl.create({
+      component: MarkersEditPage,
+      componentProps: {
+        marker,
+      },
+    });
+
+    modal.onWillDismiss().then(async () => {
+      await this.loadMarkers();
+    });
+
+    await modal.present();
+  }
 
   private async confirmDeleteMarker(marker: Marker) {
     const deleteTitleText = this.translate.instant(

@@ -37,6 +37,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'markers-edit',
+    loadComponent: () =>
+      import('./pages/markers-edit/markers-edit.page').then(
+        (m) => m.MarkersEditPage,
+      ),
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./pages/settings/settings.page').then((m) => m.SettingsPage),

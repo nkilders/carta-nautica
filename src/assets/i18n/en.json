@@ -51,6 +51,15 @@
     "deleteCancel": "Cancel",
     "deleteConfirm": "Delete"
   },
+  "markersEdit": {
+    "title": "Edit Marker",
+    "name": "Name",
+    "save": "Save",
+    "cancel": "Cancel",
+    "errorNameEmpty": "Name must not be empty",
+    "errorHeader": "Invalid input",
+    "errorOk": "Ok"
+  },
   "markersCreate": {
     "title": "Create Marker",
     "name": "Name",
