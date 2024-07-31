@@ -40,6 +40,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { geoDistance } from 'src/app/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
 import { Coordinate } from 'ol/coordinate';
+import { MarkersLayerManager } from 'src/app/markers-layer-manager';
+import { MarkersService } from 'src/app/services/markers.service';
 
 @Component({
   selector: 'app-map',
@@ -78,6 +80,7 @@ export class MapPage implements OnInit {
     private settings: SettingsService,
     private unit: UnitService,
     private layers: LayersService,
+    private markersSrv: MarkersService,
     private ref: ChangeDetectorRef,
     private actionSheetCtrl: ActionSheetController,
     private modalCtrl: ModalController,
@@ -145,6 +148,7 @@ export class MapPage implements OnInit {
     this.boat = new BoatMarker(this.map);
 
     new LayerManager(this.map!, this.layers, this.settings);
+    new MarkersLayerManager(this.map!, this.markersSrv);
     new LongClick(this.map, async (coordinate) => {
       const titleText = this.translate.instant('longClick.title');
       const cancelText = this.translate.instant('longClick.cancel');

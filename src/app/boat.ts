@@ -31,7 +31,6 @@ export class BoatMarker {
       anchor: [0.5, 0.5],
       src: ICON_URL,
       scale: 0.04,
-      rotation: 2,
       rotateWithView: true,
     });
 
