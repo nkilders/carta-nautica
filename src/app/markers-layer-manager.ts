@@ -7,6 +7,7 @@ import VectorSource from 'ol/source/Vector';
 import { Text, Style, Circle } from 'ol/style';
 import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
+import { ZIndex } from './z-indices';
 
 export class MarkersLayerManager {
   private layer?: VectorLayer;
@@ -29,6 +30,7 @@ export class MarkersLayerManager {
 
     this.layer = new VectorLayer({
       source: this.layerSource,
+      zIndex: ZIndex.MARKERS,
     });
 
     this.map.addLayer(this.layer);
