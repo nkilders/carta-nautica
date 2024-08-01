@@ -57,6 +57,9 @@ export class MarkersLayerManager {
     }
 
     markerFeature.setGeometry(new Point([marker.longitude, marker.latitude]));
+
+    const markerStyle = markerFeature.getStyle() as Style;
+    markerStyle.getText()?.setText(marker.name);
   }
 
   private onMarkerDeleted(markerId: string) {
