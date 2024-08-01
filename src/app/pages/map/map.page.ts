@@ -147,6 +147,11 @@ export class MapPage implements OnInit {
 
     this.boat = new BoatMarker(this.map);
 
+    this.markersSrv.on('flyTo', (markerId, marker) => {
+      const { longitude, latitude } = marker;
+      this.flyTo(longitude, latitude, 15, 1_000);
+    });
+
     new LayerManager(this.map!, this.layers, this.settings);
     new MarkersLayerManager(this.map!, this.markersSrv);
     new LongClick(this.map, async (coordinate) => {
@@ -171,8 +176,6 @@ export class MapPage implements OnInit {
             icon: 'location',
             handler: async () => {
               await this.openCreateMarkerPopUp(coordinate);
-              // TODO: close actionSheet?
-              // TODO: reload markers
             },
           },
           {

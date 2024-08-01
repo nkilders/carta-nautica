@@ -84,8 +84,12 @@ export class MarkersService {
     await this.save();
   }
 
+  public flyTo(marker: Marker) {
+    this.eventEmitter.emit('flyTo', marker.id, marker);
+  }
+
   on(
-    event: 'create' | 'update' | 'delete',
+    event: 'create' | 'update' | 'delete' | 'flyTo',
     listener: (markerId: string, marker: Marker) => void,
   ): void;
 

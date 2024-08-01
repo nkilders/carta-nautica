@@ -107,7 +107,11 @@ export class MarkersPage implements OnInit {
     this.markers = await this.markersSrv.getAll();
   }
 
-  private flyToMarker(marker: Marker) {}
+  private async flyToMarker(marker: Marker) {
+    this.markersSrv.flyTo(marker);
+
+    await this.modalCtrl.dismiss();
+  }
 
   private async editMarker(marker: Marker) {
     const modal = await this.modalCtrl.create({
