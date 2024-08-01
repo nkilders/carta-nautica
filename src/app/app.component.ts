@@ -27,6 +27,8 @@ import {
   analyticsSharp,
   trailSignOutline,
   trailSignSharp,
+  locationSharp,
+  locationOutline,
 } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular';
 import { LayersPage } from './pages/layers/layers.page';
@@ -35,6 +37,7 @@ import { SettingsPage } from './pages/settings/settings.page';
 import { SettingsService } from './services/settings.service';
 import { KeepAwake } from '@capacitor-community/keep-awake';
 import { SignsPage } from './pages/signs/signs.page';
+import { MarkersPage } from './pages/markers/markers.page';
 
 @Component({
   selector: 'app-root',
@@ -67,6 +70,7 @@ export class AppComponent {
     { title: 'sidebar.layers', icon: 'layers', page: LayersPage },
     { title: 'sidebar.tracks', icon: 'analytics', page: TracksPage },
     { title: 'sidebar.signs', icon: 'trail-sign', page: SignsPage },
+    { title: 'sidebar.markers', icon: 'location', page: MarkersPage },
     { title: 'sidebar.settings', icon: 'settings', page: SettingsPage },
   ];
 
@@ -86,6 +90,8 @@ export class AppComponent {
       settingsSharp,
       layersOutline,
       layersSharp,
+      locationOutline,
+      locationSharp,
       analyticsOutline,
       analyticsSharp,
       trailSignOutline,

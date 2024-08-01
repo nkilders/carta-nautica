@@ -28,11 +28,20 @@ import { LayersService } from 'src/app/services/layers.service';
 import { LayerManager } from 'src/app/layer-manager';
 import { FabToggler } from 'src/app/fab-toggler';
 import { addIcons } from 'ionicons';
-import { locate } from 'ionicons/icons';
+import {
+  closeCircle,
+  informationCircle,
+  locate,
+  location,
+} from 'ionicons/icons';
 import { LongClick } from 'src/app/longclick';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { geoDistance } from 'src/app/coordinates';
+import { MarkersCreatePage } from '../markers-create/markers-create.page';
+import { Coordinate } from 'ol/coordinate';
+import { MarkersLayerManager } from 'src/app/markers-layer-manager';
+import { MarkersService } from 'src/app/services/markers.service';
 
 @Component({
   selector: 'app-map',
@@ -71,8 +80,10 @@ export class MapPage implements OnInit {
     private settings: SettingsService,
     private unit: UnitService,
     private layers: LayersService,
+    private markersSrv: MarkersService,
     private ref: ChangeDetectorRef,
     private actionSheetCtrl: ActionSheetController,
+    private modalCtrl: ModalController,
     private translate: TranslateService,
   ) {
     this.receivedInitialPosition = false;
@@ -80,6 +91,9 @@ export class MapPage implements OnInit {
 
     addIcons({
       locate,
+      location,
+      closeCircle,
+      informationCircle,
     });
   }
 
@@ -133,11 +147,21 @@ export class MapPage implements OnInit {
 
     this.boat = new BoatMarker(this.map);
 
+    this.markersSrv.on('flyTo', (markerId, marker) => {
+      const { longitude, latitude } = marker;
+      this.flyTo(longitude, latitude, 15, 1_000);
+    });
+
     new LayerManager(this.map!, this.layers, this.settings);
-    new LongClick(this.map, async ([lon, lat]) => {
+    new MarkersLayerManager(this.map!, this.markersSrv);
+    new LongClick(this.map, async (coordinate) => {
       const titleText = this.translate.instant('longClick.title');
       const cancelText = this.translate.instant('longClick.cancel');
-      const distanceText = await this.buildLongClickDistanceText(lon, lat);
+      const createMarkerText = this.translate.instant('longClick.createMarker');
+      const distanceText = await this.buildLongClickDistanceText(
+        coordinate[0],
+        coordinate[1],
+      );
 
       const actionSheet = await this.actionSheetCtrl.create({
         header: titleText,
@@ -145,10 +169,19 @@ export class MapPage implements OnInit {
           {
             text: distanceText,
             disabled: true,
+            icon: 'information-circle',
+          },
+          {
+            text: createMarkerText,
+            icon: 'location',
+            handler: async () => {
+              await this.openCreateMarkerPopUp(coordinate);
+            },
           },
           {
             text: cancelText,
             role: 'cancel',
+            icon: 'close-circle',
           },
         ],
       });
@@ -182,6 +215,19 @@ export class MapPage implements OnInit {
       distance: distanceText,
       unit: unitText,
     });
+  }
+
+  private async openCreateMarkerPopUp(coordinate: Coordinate) {
+    const modal = await this.modalCtrl.create({
+      component: MarkersCreatePage,
+      componentProps: {
+        longitude: coordinate[0],
+        latitude: coordinate[1],
+      },
+      animated: true,
+    });
+
+    await modal.present();
   }
 
   private async initPositionWatch() {

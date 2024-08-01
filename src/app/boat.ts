@@ -5,6 +5,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
+import { ZIndex } from './z-indices';
 
 const ICON_URL = '/assets/boat-marker.png';
 
@@ -31,7 +32,6 @@ export class BoatMarker {
       anchor: [0.5, 0.5],
       src: ICON_URL,
       scale: 0.04,
-      rotation: 2,
       rotateWithView: true,
     });
 
@@ -46,7 +46,7 @@ export class BoatMarker {
       source: new VectorSource({
         features: [this.boat],
       }),
-      zIndex: 1,
+      zIndex: ZIndex.BOAT,
     });
 
     map.addLayer(this.boatLayer);

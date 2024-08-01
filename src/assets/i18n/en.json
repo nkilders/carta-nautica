@@ -4,6 +4,7 @@
     "layers": "Layers",
     "tracks": "Tracks",
     "signs": "Signs",
+    "markers": "Markers",
     "settings": "Settings"
   },
   "settings": {
@@ -42,9 +43,36 @@
     "errorHeader": "Invalid input",
     "errorOk": "Ok"
   },
+  "markers": {
+    "flyTo": "Show on map",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirmHeader": "Delete Marker",
+    "deleteCancel": "Cancel",
+    "deleteConfirm": "Delete"
+  },
+  "markersEdit": {
+    "title": "Edit Marker",
+    "name": "Name",
+    "save": "Save",
+    "cancel": "Cancel",
+    "errorNameEmpty": "Name must not be empty",
+    "errorHeader": "Invalid input",
+    "errorOk": "Ok"
+  },
+  "markersCreate": {
+    "title": "Create Marker",
+    "name": "Name",
+    "create": "Create",
+    "cancel": "Cancel",
+    "errorNameEmpty": "Name must not be empty",
+    "errorHeader": "Invalid input",
+    "errorOk": "Ok"
+  },
   "longClick": {
     "title": "Actions at this position",
     "distance": "Distance: {{distance}} {{unit}}",
+    "createMarker": "Add Marker",
     "cancel": "Cancel"
   }
 }

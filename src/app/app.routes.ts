@@ -25,6 +25,25 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/map/map.page').then((m) => m.MapPage),
   },
   {
+    path: 'markers',
+    loadComponent: () =>
+      import('./pages/markers/markers.page').then((m) => m.MarkersPage),
+  },
+  {
+    path: 'markers-create',
+    loadComponent: () =>
+      import('./pages/markers-create/markers-create.page').then(
+        (m) => m.MarkersCreatePage,
+      ),
+  },
+  {
+    path: 'markers-edit',
+    loadComponent: () =>
+      import('./pages/markers-edit/markers-edit.page').then(
+        (m) => m.MarkersEditPage,
+      ),
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./pages/settings/settings.page').then((m) => m.SettingsPage),

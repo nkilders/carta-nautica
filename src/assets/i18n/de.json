@@ -4,6 +4,7 @@
     "layers": "Ebenen",
     "tracks": "Routen",
     "signs": "Schifffahrtszeichen",
+    "markers": "Markierungen",
     "settings": "Einstellungen"
   },
   "settings": {
@@ -42,9 +43,36 @@
     "errorHeader": "Ungültige Eingabe",
     "errorOk": "Ok"
   },
+  "markers": {
+    "flyTo": "Auf Karte zeigen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "deleteConfirmHeader": "Markierung löschen",
+    "deleteCancel": "Abbrechen",
+    "deleteConfirm": "Löschen"
+  },
+  "markersEdit": {
+    "title": "Markierung bearbeiten",
+    "name": "Name",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "errorNameEmpty": "Name darf nicht leer sein",
+    "errorHeader": "Ungültige Eingabe",
+    "errorOk": "Ok"
+  },
+  "markersCreate": {
+    "title": "Markierung hinzufügen",
+    "name": "Name",
+    "create": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "errorNameEmpty": "Name darf nicht leer sein",
+    "errorHeader": "Ungültige Eingabe",
+    "errorOk": "Ok"
+  },
   "longClick": {
     "title": "Aktionen an dieser Stelle",
     "distance": "Entfernung: {{distance}} {{unit}}",
+    "createMarker": "Markierung hinzufügen",
     "cancel": "Abbrechen"
   }
 }
