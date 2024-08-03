@@ -73,5 +73,11 @@
     "distance": "Distance: {{distance}} {{unit}}",
     "createMarker": "Add Marker",
     "cancel": "Cancel"
+  },
+  "tracks": {
+    "delete": "Delete",
+    "deleteConfirmHeader": "Delete track",
+    "deleteCancel": "Cancel",
+    "deleteConfirm": "Delete"
   }
 }
