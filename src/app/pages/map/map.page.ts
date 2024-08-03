@@ -46,6 +46,7 @@ import { MarkersService } from 'src/app/services/markers.service';
 import { SpeedHeadingControl } from 'src/app/speed-heading-control';
 import { APP_NAME } from 'src/app/app';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
+import { TrackLayerManager } from 'src/app/track-layer-manager';
 
 @Component({
   selector: 'app-map',
@@ -157,8 +158,9 @@ export class MapPage implements OnInit {
       this.flyTo(longitude, latitude, 15, 1_000);
     });
 
-    new LayerManager(this.map!, this.layers, this.settings);
-    new MarkersLayerManager(this.map!, this.markersSrv);
+    new LayerManager(this.map, this.layers, this.settings);
+    new MarkersLayerManager(this.map, this.markersSrv);
+    new TrackLayerManager(this.map, this.trackRecord);
     new LongClick(this.map, async (coordinate) => {
       const titleText = this.translate.instant('longClick.title');
       const cancelText = this.translate.instant('longClick.cancel');
