@@ -14,8 +14,8 @@ export class BoatMarker {
   private boatLayer?: VectorLayer<VectorSource<Feature<Point>>, Feature<Point>>;
   private icon?: Icon;
 
-  constructor(map: Map) {
-    this.init(map);
+  constructor(private map: Map) {
+    this.init();
   }
 
   public updatePosition(position: Position) {
@@ -24,10 +24,13 @@ export class BoatMarker {
 
     this.boat?.setGeometry(new Point([longitude, latitude]));
 
-    this.icon?.setRotation(heading);
+    const rotation =
+      (this.map.getView().getRotation() + heading / 57.29578) % (2 * Math.PI);
+
+    this.icon?.setRotation(rotation);
   }
 
-  private init(map: Map) {
+  private init() {
     this.icon = new Icon({
       anchor: [0.5, 0.5],
       src: ICON_URL,
@@ -49,6 +52,6 @@ export class BoatMarker {
       zIndex: ZIndex.BOAT,
     });
 
-    map.addLayer(this.boatLayer);
+    this.map.addLayer(this.boatLayer);
   }
 }
