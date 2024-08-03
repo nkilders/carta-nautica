@@ -33,6 +33,7 @@ import {
   informationCircle,
   locate,
   location,
+  recording,
 } from 'ionicons/icons';
 import { LongClick } from 'src/app/longclick';
 import { ActionSheetController, ModalController } from '@ionic/angular';
@@ -44,6 +45,7 @@ import { MarkersLayerManager } from 'src/app/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
 import { SpeedHeadingControl } from 'src/app/speed-heading-control';
 import { APP_NAME } from 'src/app/app';
+import { TrackRecorderService } from 'src/app/services/track-recorder.service';
 
 @Component({
   selector: 'app-map',
@@ -75,6 +77,7 @@ export class MapPage implements OnInit {
   private receivedInitialPosition: boolean;
   private lastToolbarTitleUpdate: number;
   private fabFollowToggler?: FabToggler;
+  private fabRecordTrackToggler?: FabToggler;
 
   constructor(
     private geolocation: GeolocationService,
@@ -82,6 +85,7 @@ export class MapPage implements OnInit {
     private unit: UnitService,
     private layers: LayersService,
     private markersSrv: MarkersService,
+    private trackRecord: TrackRecorderService,
     private ref: ChangeDetectorRef,
     private actionSheetCtrl: ActionSheetController,
     private modalCtrl: ModalController,
@@ -92,6 +96,7 @@ export class MapPage implements OnInit {
 
     addIcons({
       locate,
+      recording,
       location,
       closeCircle,
       informationCircle,
@@ -103,6 +108,16 @@ export class MapPage implements OnInit {
     this.initPositionWatch();
     this.initSettingsListeners();
     this.initFabs();
+  }
+
+  public fabRecordTrack() {
+    const active = this.fabRecordTrackToggler?.toggle();
+
+    if (active) {
+      this.trackRecord.startRecording();
+    } else {
+      this.trackRecord.stopRecording();
+    }
   }
 
   public fabFollow() {
@@ -349,5 +364,11 @@ export class MapPage implements OnInit {
         this.fabFollowToggler.toggle();
       }
     });
+
+    this.fabRecordTrackToggler = new FabToggler(
+      'fabRecordTrack',
+      'dark',
+      'danger',
+    );
   }
 }
