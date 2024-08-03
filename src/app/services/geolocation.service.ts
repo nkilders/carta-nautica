@@ -14,18 +14,22 @@ export class GeolocationService {
     enableHighAccuracy: true,
   };
 
+  private positionWatchCallbacks: WatchPositionCallback[] = [];
+
   constructor() {}
 
   public getPosition() {
     return Geolocation.getCurrentPosition(this.options);
   }
 
-  public watchPosition(callback: WatchPositionCallback) {
-    return Geolocation.watchPosition(this.options, callback);
-  }
+  public async watchPosition(callback: WatchPositionCallback) {
+    this.positionWatchCallbacks.push(callback);
 
-  public clearWatch(id: string) {
-    Geolocation.clearWatch({ id });
+    if (this.positionWatchCallbacks.length === 1) {
+      Geolocation.watchPosition(this.options, (position, err) => {
+        this.positionWatchCallbacks.forEach((cb) => cb(position, err));
+      });
+    }
   }
 
   public async reverseGeocode(longitude: number, latitude: number) {

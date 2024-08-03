@@ -14,7 +14,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Map as OLMap, View } from 'ol';
 import { useGeographic } from 'ol/proj';
-import { Control, ScaleLine } from 'ol/control';
+import { ScaleLine } from 'ol/control';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
 import { BoatMarker } from '../../boat';
@@ -42,6 +42,7 @@ import { MarkersCreatePage } from '../markers-create/markers-create.page';
 import { Coordinate } from 'ol/coordinate';
 import { MarkersLayerManager } from 'src/app/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
+import { SpeedHeadingControl } from 'src/app/speed-heading-control';
 
 @Component({
   selector: 'app-map',
@@ -68,7 +69,6 @@ export class MapPage implements OnInit {
   public heading = '';
 
   private map?: OLMap;
-  private posWatchId?: string;
   private position?: Position;
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
@@ -104,15 +104,6 @@ export class MapPage implements OnInit {
     this.initFabs();
   }
 
-  public async changeSpeedUnit() {
-    const oldSpeedUnit = await this.settings.getSpeedUnit();
-    const numberOfSpeedUnits = Object.keys(SpeedUnit).length / 2;
-
-    const newSpeedUnit = (oldSpeedUnit + 1) % numberOfSpeedUnits;
-
-    await this.settings.setSpeedUnit(newSpeedUnit);
-  }
-
   public fabFollow() {
     const active = this.fabFollowToggler?.toggle();
 
@@ -140,9 +131,7 @@ export class MapPage implements OnInit {
     );
 
     this.map.addControl(
-      new Control({
-        element: document.getElementById('speedHeadingControl')!,
-      }),
+      new SpeedHeadingControl(this.settings, this.geolocation, this.unit),
     );
 
     this.boat = new BoatMarker(this.map);
@@ -231,7 +220,7 @@ export class MapPage implements OnInit {
   }
 
   private async initPositionWatch() {
-    this.posWatchId = await this.geolocation.watchPosition((pos, err) => {
+    await this.geolocation.watchPosition((pos, err) => {
       this.onPositionChanged(pos, err);
     });
   }
@@ -252,10 +241,6 @@ export class MapPage implements OnInit {
         }
       }
     });
-
-    this.settings.on('speedUnit', (newValue) => {
-      this.updateSpeedHeadingControl();
-    });
   }
 
   private onPositionChanged(position: Position | null, err: unknown) {
@@ -272,7 +257,6 @@ export class MapPage implements OnInit {
     }
 
     this.boat?.updatePosition(position);
-    this.updateSpeedHeadingControl();
     this.updateToolbarTitle();
 
     if (this.fabFollowToggler?.isActive()) {
@@ -305,23 +289,6 @@ export class MapPage implements OnInit {
       zoom,
       duration: durationMs,
     });
-  }
-
-  private async updateSpeedHeadingControl() {
-    if (!this.position) {
-      return;
-    }
-
-    const heading = this.position.coords.heading ?? 0;
-    this.heading = `${heading.toFixed(0)}°`;
-
-    const speedMps = this.position.coords.speed ?? 0;
-    const speed = await this.unit.convertSpeed(
-      speedMps,
-      SpeedUnit.METERS_PER_SECOND,
-    );
-    const unit = this.unit.speedUnitToText(speed.unit);
-    this.speed = `${speed.value.toFixed(2)} ${unit}`;
   }
 
   private async updateToolbarTitle() {
