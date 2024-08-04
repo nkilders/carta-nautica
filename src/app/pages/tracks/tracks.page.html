@@ -8,8 +8,18 @@
   <ion-list>
     @for (track of tracks; track track.id) {
     <ion-item>
-      <ion-label>{{track.name}}</ion-label>
-
+      <ion-col>
+        <ion-label>{{track.name}}</ion-label>
+  
+        <ion-note>
+          {{ track.duration }}
+          <br>
+          {{ track.length }}
+          <br>
+          {{ track.averageSpeed }}
+        </ion-note>
+      </ion-col>
+      
       <ion-buttons slot="end">
         <ion-button (click)="showTrackOptions(track)">
           <ion-icon

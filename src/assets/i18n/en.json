@@ -75,6 +75,9 @@
     "cancel": "Cancel"
   },
   "tracks": {
+    "duration": "Duration: {{duration}}",
+    "length": "Length: {{length}} {{unit}}",
+    "avgSpeed": "⌀ Speed: {{speed}} {{unit}}",
     "delete": "Delete",
     "deleteConfirmHeader": "Delete track",
     "deleteCancel": "Cancel",

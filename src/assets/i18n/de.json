@@ -75,6 +75,9 @@
     "cancel": "Abbrechen"
   },
   "tracks": {
+    "duration": "Dauer: {{duration}}",
+    "length": "Länge: {{length}} {{unit}}",
+    "avgSpeed": "⌀ Geschwindigkeit: {{speed}} {{unit}}",
     "delete": "Löschen",
     "deleteConfirmHeader": "Route löschen",
     "deleteCancel": "Abbrechen",
