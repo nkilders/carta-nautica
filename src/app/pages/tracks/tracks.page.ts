@@ -18,7 +18,7 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Track, TrackWithoutId } from 'src/app/models/tracks';
 import { addIcons } from 'ionicons';
-import { ellipsisVertical } from 'ionicons/icons';
+import { ellipsisVertical, trash } from 'ionicons/icons';
 import { TracksService } from 'src/app/services/tracks.service';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { geoDistance } from 'src/app/coordinates';
@@ -66,6 +66,7 @@ export class TracksPage implements OnInit {
   ) {
     addIcons({
       ellipsisVertical,
+      trash,
     });
   }
 
@@ -81,6 +82,7 @@ export class TracksPage implements OnInit {
       buttons: [
         {
           text: deleteText,
+          icon: 'trash',
           handler: () => this.confirmDeleteTrack(track),
         },
       ],
