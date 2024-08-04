@@ -38,6 +38,7 @@ import { SettingsService } from './services/settings.service';
 import { KeepAwake } from '@capacitor-community/keep-awake';
 import { SignsPage } from './pages/signs/signs.page';
 import { MarkersPage } from './pages/markers/markers.page';
+import { APP_NAME, APP_VERSION } from './app';
 
 @Component({
   selector: 'app-root',
@@ -73,6 +74,8 @@ export class AppComponent {
     { title: 'sidebar.markers', icon: 'location', page: MarkersPage },
     { title: 'sidebar.settings', icon: 'settings', page: SettingsPage },
   ];
+  readonly appName = APP_NAME;
+  readonly appVersion = APP_VERSION;
 
   constructor(
     private readonly modalCtrl: ModalController,
