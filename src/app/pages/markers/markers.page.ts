@@ -21,7 +21,7 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Marker } from 'src/app/models/markers';
 import { addIcons } from 'ionicons';
-import { add, ellipsisVertical } from 'ionicons/icons';
+import { add, ellipsisVertical, locate, pencil, trash } from 'ionicons/icons';
 import {
   ActionSheetController,
   AlertController,
@@ -69,6 +69,9 @@ export class MarkersPage implements OnInit {
     addIcons({
       add,
       ellipsisVertical,
+      locate,
+      pencil,
+      trash,
     });
   }
 
@@ -86,14 +89,17 @@ export class MarkersPage implements OnInit {
       buttons: [
         {
           text: flyToText,
+          icon: 'locate',
           handler: () => this.flyToMarker(marker),
         },
         {
           text: editText,
+          icon: 'pencil',
           handler: () => this.editMarker(marker),
         },
         {
           text: deleteText,
+          icon: 'trash',
           handler: () => this.confirmDeleteMarker(marker),
         },
       ],
