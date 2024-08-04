@@ -43,6 +43,7 @@ import { Coordinate } from 'ol/coordinate';
 import { MarkersLayerManager } from 'src/app/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
 import { SpeedHeadingControl } from 'src/app/speed-heading-control';
+import { APP_NAME } from 'src/app/app';
 
 @Component({
   selector: 'app-map',
@@ -315,11 +316,11 @@ export class MapPage implements OnInit {
 
   private formatToolbarTitle(result: NativeGeocoderResult | null) {
     if (result == null) {
-      return '🌍 Carta Nautica';
+      return `🌍 ${APP_NAME}`;
     }
 
     let emoji = '🌍';
-    let text = 'Carta Nautica';
+    let text = APP_NAME;
 
     if (result.countryCode) {
       emoji = countryCodeEmoji(result.countryCode);

@@ -19,7 +19,7 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Layer } from 'src/app/models/layers';
-import { add, ellipsisVertical } from 'ionicons/icons';
+import { add, ellipsisVertical, pencil, trash } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { LayersService } from 'src/app/services/layers.service';
 import {
@@ -67,7 +67,7 @@ export class LayersPage implements OnInit {
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
   ) {
-    addIcons({ ellipsisVertical, add });
+    addIcons({ ellipsisVertical, add, pencil, trash });
   }
 
   async ngOnInit() {
@@ -101,10 +101,12 @@ export class LayersPage implements OnInit {
       buttons: [
         {
           text: editText,
+          icon: 'pencil',
           handler: () => this.editLayer(layer),
         },
         {
           text: deleteText,
+          icon: 'trash',
           handler: () => this.confirmDeleteLayer(layer),
         },
       ],
