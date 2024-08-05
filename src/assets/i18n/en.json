@@ -73,5 +73,14 @@
     "distance": "Distance: {{distance}} {{unit}}",
     "createMarker": "Add Marker",
     "cancel": "Cancel"
+  },
+  "tracks": {
+    "duration": "Duration: {{duration}}",
+    "length": "Length: {{length}} {{unit}}",
+    "avgSpeed": "⌀ Speed: {{speed}} {{unit}}",
+    "delete": "Delete",
+    "deleteConfirmHeader": "Delete track",
+    "deleteCancel": "Cancel",
+    "deleteConfirm": "Delete"
   }
 }

@@ -5,6 +5,7 @@ import {
   PositionOptions,
   WatchPositionCallback,
 } from '@capacitor/geolocation';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,8 @@ export class GeolocationService {
     enableHighAccuracy: true,
   };
 
-  private positionWatchCallbacks: WatchPositionCallback[] = [];
+  private positionWatchCallbacks: Map<string, WatchPositionCallback> =
+    new Map();
 
   constructor() {}
 
@@ -23,13 +25,21 @@ export class GeolocationService {
   }
 
   public async watchPosition(callback: WatchPositionCallback) {
-    this.positionWatchCallbacks.push(callback);
+    const watchId = uuidv4();
 
-    if (this.positionWatchCallbacks.length === 1) {
+    this.positionWatchCallbacks.set(watchId, callback);
+
+    if (this.positionWatchCallbacks.size === 1) {
       Geolocation.watchPosition(this.options, (position, err) => {
         this.positionWatchCallbacks.forEach((cb) => cb(position, err));
       });
     }
+
+    return watchId;
+  }
+
+  public async cleanPositionWatch(watchId: string) {
+    this.positionWatchCallbacks.delete(watchId);
   }
 
   public async reverseGeocode(longitude: number, latitude: number) {

@@ -4,4 +4,32 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true"> </ion-content>
+<ion-content [fullscreen]="true">
+  <ion-list>
+    @for (track of tracks; track track.id) {
+    <ion-item>
+      <ion-col>
+        <ion-label>{{track.name}}</ion-label>
+  
+        <ion-note>
+          {{ track.duration }}
+          <br>
+          {{ track.length }}
+          <br>
+          {{ track.averageSpeed }}
+        </ion-note>
+      </ion-col>
+      
+      <ion-buttons slot="end">
+        <ion-button (click)="showTrackOptions(track)">
+          <ion-icon
+            slot="icon-only"
+            ios="ellipsis-vertical"
+            md="ellipsis-vertical"
+          />
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>
