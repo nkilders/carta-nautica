@@ -29,6 +29,11 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
+              },
+              {
+                "glob": "background.js",
+                "input": "src/app/runners",
+                "output": "./runners"
               }
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
