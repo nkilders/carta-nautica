@@ -11,7 +11,8 @@
     "distanceUnit": "Entfernungseinheit",
     "language": "Sprache",
     "mapPreloading": "Karte vorladen",
-    "keepScreenAwake": "Bildschirm immer aktiv"
+    "keepScreenAwake": "Bildschirm immer aktiv",
+    "openWeatherMapApiKey": "OpenWeatherMap API-Schlüssel"
   },
   "layers": {
     "edit": "Bearbeiten",

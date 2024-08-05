@@ -4,6 +4,7 @@ export interface Settings {
   language: Language;
   mapPreloading: boolean;
   keepAwake: boolean;
+  openWeatherMapApiKey: string;
 }
 
 export enum SpeedUnit {

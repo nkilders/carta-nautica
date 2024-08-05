@@ -13,6 +13,7 @@ import {
   IonItem,
   IonLabel,
   IonToggle,
+  IonInput,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -38,6 +39,7 @@ import { Language } from 'src/app/models/settings';
     IonItem,
     IonLabel,
     IonToggle,
+    IonInput,
   ],
 })
 export class SettingsPage implements OnInit {
@@ -46,6 +48,7 @@ export class SettingsPage implements OnInit {
   public language = Language.GERMAN;
   public mapPreloading = false;
   public keepAwake = false;
+  public openWeatherMapApiKey = '';
 
   constructor(
     private settings: SettingsService,
@@ -57,14 +60,21 @@ export class SettingsPage implements OnInit {
   }
 
   private async loadSettingsValues() {
-    const { speedUnit, distanceUnit, language, mapPreloading, keepAwake } =
-      await this.settings.getAllSettings();
+    const {
+      speedUnit,
+      distanceUnit,
+      language,
+      mapPreloading,
+      keepAwake,
+      openWeatherMapApiKey,
+    } = await this.settings.getAllSettings();
 
     this.speedUnit = speedUnit.toString();
     this.distanceUnit = distanceUnit.toString();
     this.language = language;
     this.mapPreloading = mapPreloading;
     this.keepAwake = keepAwake;
+    this.openWeatherMapApiKey = openWeatherMapApiKey;
   }
 
   protected async updateSpeedUnit() {
@@ -89,5 +99,9 @@ export class SettingsPage implements OnInit {
 
   protected async updateKeepAwake() {
     await this.settings.setKeepAwake(this.keepAwake);
+  }
+
+  protected async updateOpenWeatherMapApiKey() {
+    await this.settings.setOpenWeatherMapApiKey(this.openWeatherMapApiKey);
   }
 }
