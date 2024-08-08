@@ -29,7 +29,7 @@ import { HttpStatusCode } from '@angular/common/http';
 import { AlertController, ModalController } from '@ionic/angular';
 import { SettingsPage } from '../settings/settings.page';
 import { UnitService } from 'src/app/services/unit.service';
-import { SpeedUnit } from 'src/app/models/settings';
+import { SpeedUnit, TemperatureUnit } from 'src/app/models/settings';
 
 const FORECAST_API_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 
@@ -169,9 +169,25 @@ export class WeatherPage implements OnInit {
 
       let temperature = '';
       if (forecast.main.temp_min === forecast.main.temp_max) {
-        temperature = `${forecast.main.temp.toFixed(0)} °C`;
+        const temp = await this.unit.convertTemperature(
+          forecast.main.temp,
+          TemperatureUnit.CELSIUS,
+        );
+        const unit = this.unit.temperatureUnitToText(temp.unit);
+
+        temperature = `${temp.value.toFixed(0)} ${unit}`;
       } else {
-        temperature = `${forecast.main.temp_min.toFixed(0)} °C - ${forecast.main.temp_max.toFixed(0)} °C`;
+        const tempMin = await this.unit.convertTemperature(
+          forecast.main.temp_min,
+          TemperatureUnit.CELSIUS,
+        );
+        const tempMax = await this.unit.convertTemperature(
+          forecast.main.temp_max,
+          TemperatureUnit.CELSIUS,
+        );
+        const unit = this.unit.temperatureUnitToText(tempMin.unit);
+
+        temperature = `${tempMin.value.toFixed(0)} ${unit} - ${tempMax.value.toFixed(0)} ${unit}`;
       }
 
       const wind = await this.unit.convertSpeed(
