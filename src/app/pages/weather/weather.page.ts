@@ -26,14 +26,11 @@ import { WeatherResponse } from 'src/app/models/weather';
 import { addIcons } from 'ionicons';
 import { paperPlane, rainy, thermometer, water } from 'ionicons/icons';
 import { HttpStatusCode } from '@angular/common/http';
-import {
-  AlertController,
-  ModalController,
-  LoadingController,
-} from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { SettingsPage } from '../settings/settings.page';
 import { UnitService } from 'src/app/services/unit.service';
 import { SpeedUnit, TemperatureUnit } from 'src/app/models/settings';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 
 const FORECAST_API_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 
@@ -78,7 +75,7 @@ export class WeatherPage implements OnInit {
     private unit: UnitService,
     private translate: TranslateService,
     private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
+    private modalCtrl: ModalWrapper,
     private loadingCtrl: LoadingController,
   ) {
     addIcons({ thermometer, water, rainy, paperPlane });
@@ -144,7 +141,6 @@ export class WeatherPage implements OnInit {
           handler: async () => {
             const modal = await this.modalCtrl.create({
               component: SettingsPage,
-              animated: true,
             });
 
             modal.onWillDismiss().then(async () => {

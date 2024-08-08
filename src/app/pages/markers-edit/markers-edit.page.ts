@@ -14,8 +14,9 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Marker } from 'src/app/models/markers';
-import { ModalController, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { MarkersService } from 'src/app/services/markers.service';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 
 @Component({
   selector: 'app-markers-edit',
@@ -44,7 +45,7 @@ export class MarkersEditPage implements OnInit {
   protected name: string = '';
 
   constructor(
-    private modalCtrl: ModalController,
+    private modalCtrl: ModalWrapper,
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private markers: MarkersService,

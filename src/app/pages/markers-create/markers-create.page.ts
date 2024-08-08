@@ -14,8 +14,9 @@ import {
 } from '@ionic/angular/standalone';
 import { MarkersService } from 'src/app/services/markers.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ModalController, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { MarkerWithoutId } from 'src/app/models/markers';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 
 @Component({
   selector: 'app-markers-create',
@@ -48,7 +49,7 @@ export class MarkersCreatePage {
   constructor(
     private markersSrv: MarkersService,
     private translate: TranslateService,
-    private modalCtrl: ModalController,
+    private modalCtrl: ModalWrapper,
     private alertCtrl: AlertController,
   ) {}
 

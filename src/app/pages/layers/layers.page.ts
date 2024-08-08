@@ -22,13 +22,10 @@ import { Layer } from 'src/app/models/layers';
 import { add, ellipsisVertical, pencil, trash } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { LayersService } from 'src/app/services/layers.service';
-import {
-  ActionSheetController,
-  AlertController,
-  ModalController,
-} from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { LayersEditPage } from '../layers-edit/layers-edit.page';
 import { LayersCreatePage } from '../layers-create/layers-create.page';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 
 @Component({
   selector: 'app-layers',
@@ -65,7 +62,7 @@ export class LayersPage implements OnInit {
     private translate: TranslateService,
     private actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
+    private modalCtrl: ModalWrapper,
   ) {
     addIcons({ ellipsisVertical, add, pencil, trash });
   }

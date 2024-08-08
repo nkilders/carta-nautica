@@ -14,8 +14,9 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LayersService } from 'src/app/services/layers.service';
-import { ModalController, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { LayerWithoutId } from 'src/app/models/layers';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 
 @Component({
   selector: 'app-layers-create',
@@ -42,7 +43,7 @@ export class LayersCreatePage {
   protected url: string = '';
 
   constructor(
-    private modalCtrl: ModalController,
+    private modalCtrl: ModalWrapper,
     private layers: LayersService,
     private alertCtrl: AlertController,
     private translate: TranslateService,

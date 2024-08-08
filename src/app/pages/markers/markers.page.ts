@@ -22,13 +22,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Marker } from 'src/app/models/markers';
 import { addIcons } from 'ionicons';
 import { add, ellipsisVertical, locate, pencil, trash } from 'ionicons/icons';
-import {
-  ActionSheetController,
-  AlertController,
-  ModalController,
-} from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { MarkersService } from 'src/app/services/markers.service';
 import { MarkersEditPage } from '../markers-edit/markers-edit.page';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 
 @Component({
   selector: 'app-markers',
@@ -64,7 +61,7 @@ export class MarkersPage implements OnInit {
     private translate: TranslateService,
     private actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
+    private modalCtrl: ModalWrapper,
   ) {
     addIcons({
       add,
