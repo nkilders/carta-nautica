@@ -14,9 +14,9 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LayersService } from 'src/app/services/layers.service';
-import { AlertController } from '@ionic/angular';
 import { LayerWithoutId } from 'src/app/models/layers';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-layers-create',
@@ -45,7 +45,7 @@ export class LayersCreatePage {
   constructor(
     private modalCtrl: ModalWrapper,
     private layers: LayersService,
-    private alertCtrl: AlertController,
+    private alertCtrl: AlertWrapper,
     private translate: TranslateService,
   ) {}
 
@@ -86,7 +86,7 @@ export class LayersCreatePage {
     const messageText = await this.translate.instant(textKey);
     const okText = await this.translate.instant('layersCreate.errorOk');
 
-    const toast = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: headerText,
       message: messageText,
       buttons: [
@@ -94,9 +94,8 @@ export class LayersCreatePage {
           text: okText,
         },
       ],
-      animated: true,
     });
 
-    await toast.present();
+    await alert.present();
   }
 }

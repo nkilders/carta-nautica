@@ -14,9 +14,9 @@ import {
 } from '@ionic/angular/standalone';
 import { MarkersService } from 'src/app/services/markers.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AlertController } from '@ionic/angular';
 import { MarkerWithoutId } from 'src/app/models/markers';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-markers-create',
@@ -50,7 +50,7 @@ export class MarkersCreatePage {
     private markersSrv: MarkersService,
     private translate: TranslateService,
     private modalCtrl: ModalWrapper,
-    private alertCtrl: AlertController,
+    private alertCtrl: AlertWrapper,
   ) {}
 
   protected async createMarker() {
@@ -95,7 +95,6 @@ export class MarkersCreatePage {
           text: okText,
         },
       ],
-      animated: true,
     });
 
     await toast.present();
