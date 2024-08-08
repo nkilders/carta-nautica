@@ -153,7 +153,11 @@ export class SettingsService {
       return;
     }
 
-    this.settings = await this.storage.get(STORAGE_KEY);
+    const storedSettings = await this.storage.get(STORAGE_KEY);
+    this.settings = {
+      ...this.defaultSettings(),
+      ...storedSettings,
+    };
 
     if (!this.settings) {
       this.settings = this.defaultSettings();
