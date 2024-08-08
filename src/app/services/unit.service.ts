@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SettingsService } from './settings.service';
-import { DistanceUnit, SpeedUnit } from '../models/settings';
+import { DistanceUnit, SpeedUnit, TemperatureUnit } from '../models/settings';
 
 @Injectable({
   providedIn: 'root',
@@ -84,6 +84,43 @@ export class UnitService {
     };
   }
 
+  public async convertTemperature(
+    temperature: number,
+    sourceUnit: TemperatureUnit,
+  ) {
+    const targetUnit = await this.settings.getTemperatureUnit();
+
+    if (sourceUnit == targetUnit) {
+      return {
+        value: temperature,
+        unit: targetUnit,
+      };
+    }
+
+    const celsius = (() => {
+      switch (sourceUnit) {
+        case TemperatureUnit.CELSIUS:
+          return temperature;
+        case TemperatureUnit.FAHRENHEIT:
+          return (temperature - 32) / 1.8;
+      }
+    })();
+
+    const targetTemperature = (() => {
+      switch (targetUnit) {
+        case TemperatureUnit.CELSIUS:
+          return celsius;
+        case TemperatureUnit.FAHRENHEIT:
+          return celsius * 1.8 + 32;
+      }
+    })();
+
+    return {
+      value: targetTemperature,
+      unit: targetUnit,
+    };
+  }
+
   public speedUnitToText(unit: SpeedUnit) {
     switch (unit) {
       case SpeedUnit.KILOMETERS_PER_HOUR:
@@ -103,6 +140,15 @@ export class UnitService {
         return 'm';
       case DistanceUnit.SEA_MILES:
         return 'sm';
+    }
+  }
+
+  public temperatureUnitToText(unit: TemperatureUnit) {
+    switch (unit) {
+      case TemperatureUnit.CELSIUS:
+        return '°C';
+      case TemperatureUnit.FAHRENHEIT:
+        return '°F';
     }
   }
 }
