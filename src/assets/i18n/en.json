@@ -13,6 +13,7 @@
     "language": "Language",
     "mapPreloading": "Map Preloading",
     "keepScreenAwake": "Keep Screen Awake",
+    "animations": "Animations",
     "openWeatherMapApiKey": "OpenWeatherMap API Key"
   },
   "layers": {

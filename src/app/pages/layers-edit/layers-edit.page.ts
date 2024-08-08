@@ -14,8 +14,9 @@ import {
 } from '@ionic/angular/standalone';
 import { Layer } from 'src/app/models/layers';
 import { LayersService } from 'src/app/services/layers.service';
-import { ModalController, AlertController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-layers-edit',
@@ -46,8 +47,8 @@ export class LayersEditPage implements OnInit {
 
   constructor(
     private layers: LayersService,
-    private modalCtrl: ModalController,
-    private alertCtrl: AlertController,
+    private modalCtrl: ModalWrapper,
+    private alertCtrl: AlertWrapper,
     private translate: TranslateService,
   ) {}
 
@@ -101,7 +102,6 @@ export class LayersEditPage implements OnInit {
           text: okText,
         },
       ],
-      animated: true,
     });
 
     await toast.present();

@@ -5,6 +5,7 @@ export interface Settings {
   language: Language;
   mapPreloading: boolean;
   keepAwake: boolean;
+  animations: boolean;
   openWeatherMapApiKey: string;
 }
 

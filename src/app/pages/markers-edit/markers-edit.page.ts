@@ -14,8 +14,9 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Marker } from 'src/app/models/markers';
-import { ModalController, AlertController } from '@ionic/angular';
 import { MarkersService } from 'src/app/services/markers.service';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-markers-edit',
@@ -44,8 +45,8 @@ export class MarkersEditPage implements OnInit {
   protected name: string = '';
 
   constructor(
-    private modalCtrl: ModalController,
-    private alertCtrl: AlertController,
+    private modalCtrl: ModalWrapper,
+    private alertCtrl: AlertWrapper,
     private translate: TranslateService,
     private markers: MarkersService,
   ) {}
@@ -93,7 +94,6 @@ export class MarkersEditPage implements OnInit {
           text: okText,
         },
       ],
-      animated: true,
     });
 
     await toast.present();

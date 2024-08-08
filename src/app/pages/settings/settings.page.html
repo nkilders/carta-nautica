@@ -49,6 +49,14 @@
     </ion-item>
 
     <ion-item>
+      <ion-label>{{ 'settings.animations' | translate }}</ion-label>
+      <ion-toggle
+        [(ngModel)]="animations"
+        (ionChange)="updateAnimations()"
+      ></ion-toggle>
+    </ion-item>
+
+    <ion-item>
       <ion-label>{{ 'settings.openWeatherMapApiKey' | translate }}</ion-label>
       <ion-input
         [(ngModel)]="openWeatherMapApiKey"

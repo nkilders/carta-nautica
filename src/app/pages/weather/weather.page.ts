@@ -26,14 +26,12 @@ import { WeatherResponse } from 'src/app/models/weather';
 import { addIcons } from 'ionicons';
 import { paperPlane, rainy, thermometer, water } from 'ionicons/icons';
 import { HttpStatusCode } from '@angular/common/http';
-import {
-  AlertController,
-  ModalController,
-  LoadingController,
-} from '@ionic/angular';
 import { SettingsPage } from '../settings/settings.page';
 import { UnitService } from 'src/app/services/unit.service';
 import { SpeedUnit, TemperatureUnit } from 'src/app/models/settings';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
+import { LoadingWrapper } from 'src/app/wrappers/loading-wrapper';
 
 const FORECAST_API_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 
@@ -77,9 +75,9 @@ export class WeatherPage implements OnInit {
     private settings: SettingsService,
     private unit: UnitService,
     private translate: TranslateService,
-    private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
-    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertWrapper,
+    private modalCtrl: ModalWrapper,
+    private loadingCtrl: LoadingWrapper,
   ) {
     addIcons({ thermometer, water, rainy, paperPlane });
   }
@@ -108,7 +106,6 @@ export class WeatherPage implements OnInit {
     const messageText = this.translate.instant('weather.loading');
 
     const load = await this.loadingCtrl.create({
-      animated: true,
       message: messageText,
     });
 
@@ -129,7 +126,6 @@ export class WeatherPage implements OnInit {
 
     const alert = await this.alertCtrl.create({
       header: headerText,
-      animated: true,
       message: messageText,
       buttons: [
         {
@@ -144,7 +140,6 @@ export class WeatherPage implements OnInit {
           handler: async () => {
             const modal = await this.modalCtrl.create({
               component: SettingsPage,
-              animated: true,
             });
 
             modal.onWillDismiss().then(async () => {

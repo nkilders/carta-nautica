@@ -23,7 +23,7 @@ import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 import { SettingsService } from 'src/app/services/settings.service';
 import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
-import { DistanceUnit, SpeedUnit } from 'src/app/models/settings';
+import { DistanceUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
 import { LayerManager } from 'src/app/layer-manager';
 import { FabToggler } from 'src/app/fab-toggler';
@@ -37,7 +37,6 @@ import {
   sunny,
 } from 'ionicons/icons';
 import { LongClick } from 'src/app/longclick';
-import { ActionSheetController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { geoDistance } from 'src/app/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
@@ -49,6 +48,8 @@ import { APP_NAME } from 'src/app/app';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
 import { TrackLayerManager } from 'src/app/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
 
 @Component({
   selector: 'app-map',
@@ -90,8 +91,8 @@ export class MapPage implements OnInit {
     private markersSrv: MarkersService,
     private trackRecord: TrackRecorderService,
     private ref: ChangeDetectorRef,
-    private actionSheetCtrl: ActionSheetController,
-    private modalCtrl: ModalController,
+    private actionSheetCtrl: ActionSheetWrapper,
+    private modalCtrl: ModalWrapper,
     private translate: TranslateService,
   ) {
     this.receivedInitialPosition = false;
@@ -242,7 +243,6 @@ export class MapPage implements OnInit {
         longitude: coordinate[0],
         latitude: coordinate[1],
       },
-      animated: true,
     });
 
     await modal.present();
@@ -255,7 +255,6 @@ export class MapPage implements OnInit {
         longitude: coordinate[0],
         latitude: coordinate[1],
       },
-      animated: true,
     });
 
     await modal.present();

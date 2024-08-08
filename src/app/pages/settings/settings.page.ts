@@ -49,6 +49,7 @@ export class SettingsPage implements OnInit {
   public language = Language.GERMAN;
   public mapPreloading = false;
   public keepAwake = false;
+  public animations = false;
   public openWeatherMapApiKey = '';
 
   constructor(
@@ -68,6 +69,7 @@ export class SettingsPage implements OnInit {
       language,
       mapPreloading,
       keepAwake,
+      animations,
       openWeatherMapApiKey,
     } = await this.settings.getAllSettings();
 
@@ -77,6 +79,7 @@ export class SettingsPage implements OnInit {
     this.language = language;
     this.mapPreloading = mapPreloading;
     this.keepAwake = keepAwake;
+    this.animations = animations;
     this.openWeatherMapApiKey = openWeatherMapApiKey;
   }
 
@@ -107,6 +110,10 @@ export class SettingsPage implements OnInit {
 
   protected async updateKeepAwake() {
     await this.settings.setKeepAwake(this.keepAwake);
+  }
+
+  protected async updateAnimations() {
+    await this.settings.setAnimations(this.animations);
   }
 
   protected async updateOpenWeatherMapApiKey() {

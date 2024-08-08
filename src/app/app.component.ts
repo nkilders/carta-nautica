@@ -39,6 +39,7 @@ import { KeepAwake } from '@capacitor-community/keep-awake';
 import { SignsPage } from './pages/signs/signs.page';
 import { MarkersPage } from './pages/markers/markers.page';
 import { APP_NAME, APP_VERSION } from './app';
+import { ModalWrapper } from './wrappers/modal-wrapper';
 
 @Component({
   selector: 'app-root',
@@ -64,7 +65,7 @@ import { APP_NAME, APP_VERSION } from './app';
     IonRouterOutlet,
     TranslateModule,
   ],
-  providers: [ModalController],
+  providers: [ModalWrapper, ModalController],
 })
 export class AppComponent {
   public appPages = [
@@ -78,7 +79,7 @@ export class AppComponent {
   readonly appVersion = APP_VERSION;
 
   constructor(
-    private readonly modalCtrl: ModalController,
+    private readonly modalCtrl: ModalWrapper,
     private settings: SettingsService,
     private translate: TranslateService,
   ) {
@@ -105,7 +106,6 @@ export class AppComponent {
   public async openModal(page: any) {
     const modal = await this.modalCtrl.create({
       component: page,
-      animated: true,
     });
 
     await modal.present();

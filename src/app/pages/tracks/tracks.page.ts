@@ -20,10 +20,11 @@ import { Track, TrackWithoutId } from 'src/app/models/tracks';
 import { addIcons } from 'ionicons';
 import { ellipsisVertical, trash } from 'ionicons/icons';
 import { TracksService } from 'src/app/services/tracks.service';
-import { ActionSheetController, AlertController } from '@ionic/angular';
 import { geoDistance } from 'src/app/coordinates';
 import { UnitService } from 'src/app/services/unit.service';
 import { DistanceUnit, SpeedUnit } from 'src/app/models/settings';
+import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
+import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
 
 interface DisplayTrack extends Track {
   duration: string;
@@ -61,8 +62,8 @@ export class TracksPage implements OnInit {
     private tracksSrv: TracksService,
     private translate: TranslateService,
     private unit: UnitService,
-    private actionSheetCtrl: ActionSheetController,
-    private alertCtrl: AlertController,
+    private actionSheetCtrl: ActionSheetWrapper,
+    private alertCtrl: AlertWrapper,
   ) {
     addIcons({
       ellipsisVertical,
@@ -86,7 +87,6 @@ export class TracksPage implements OnInit {
           handler: () => this.confirmDeleteTrack(track),
         },
       ],
-      animated: true,
     });
 
     await actionSheet.present();
@@ -116,7 +116,6 @@ export class TracksPage implements OnInit {
           },
         },
       ],
-      animated: true,
     });
 
     await alert.present();
