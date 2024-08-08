@@ -5,6 +5,7 @@ import {
   Language,
   Settings,
   SpeedUnit,
+  TemperatureUnit,
 } from '../models/settings';
 import { EventEmitter } from 'events';
 
@@ -57,6 +58,21 @@ export class SettingsService {
     await this.save();
   }
 
+  public async getTemperatureUnit() {
+    await this.init();
+
+    return this.settings!.temperatureUnit;
+  }
+
+  public async setTemperatureUnit(unit: TemperatureUnit) {
+    await this.init();
+
+    this.settings!.temperatureUnit = unit;
+    this.eventEmitter.emit('temperatureUnit', unit);
+
+    await this.save();
+  }
+
   public async getLanguage() {
     await this.init();
 
@@ -102,11 +118,31 @@ export class SettingsService {
     await this.save();
   }
 
+  public async getOpenWeatherMapApiKey() {
+    await this.init();
+
+    return this.settings!.openWeatherMapApiKey;
+  }
+
+  public async setOpenWeatherMapApiKey(openWeatherMapApiKey: string) {
+    await this.init();
+
+    this.settings!.openWeatherMapApiKey = openWeatherMapApiKey;
+    this.eventEmitter.emit('openWeatherMapApiKey', openWeatherMapApiKey);
+
+    await this.save();
+  }
+
   on(event: 'speedUnit', listener: (newValue: SpeedUnit) => void): void;
   on(event: 'distanceUnit', listener: (newValue: DistanceUnit) => void): void;
+  on(
+    event: 'temperatureUnit',
+    listener: (newValue: TemperatureUnit) => void,
+  ): void;
   on(event: 'language', listener: (newValue: Language) => void): void;
   on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
   on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
+  on(event: 'openWeatherMapApiKey', listener: (newValue: string) => void): void;
 
   public on(event: string, listener: (...args: any) => void) {
     this.eventEmitter.on(event, listener);
@@ -117,7 +153,11 @@ export class SettingsService {
       return;
     }
 
-    this.settings = await this.storage.get(STORAGE_KEY);
+    const storedSettings = await this.storage.get(STORAGE_KEY);
+    this.settings = {
+      ...this.defaultSettings(),
+      ...storedSettings,
+    };
 
     if (!this.settings) {
       this.settings = this.defaultSettings();
@@ -129,9 +169,11 @@ export class SettingsService {
     return {
       speedUnit: SpeedUnit.KILOMETERS_PER_HOUR,
       distanceUnit: DistanceUnit.KILOMETERS,
+      temperatureUnit: TemperatureUnit.CELSIUS,
       language: Language.GERMAN,
       mapPreloading: true,
       keepAwake: true,
+      openWeatherMapApiKey: '',
     };
   }
 

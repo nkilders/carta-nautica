@@ -59,6 +59,11 @@ export const routes: Routes = [
       import('./pages/tracks/tracks.page').then((m) => m.TracksPage),
   },
   {
+    path: 'weather',
+    loadComponent: () =>
+      import('./pages/weather/weather.page').then((m) => m.WeatherPage),
+  },
+  {
     path: '**',
     redirectTo: 'map',
   },

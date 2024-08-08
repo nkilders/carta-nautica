@@ -1,0 +1,50 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>{{ 'longClick.weather' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @for (day of weatherData; track $index) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ day.dayName }}</ion-card-title>
+        <ion-card-subtitle>{{ day.date }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          @for (hour of day.hours; track $index) {
+            <ion-item>
+              <ion-col>
+                <ion-label>{{ hour.time }}</ion-label>
+                <ion-note>
+                  <ion-chip>
+                    <ion-icon name="thermometer"/>
+                    <ion-label>
+                      {{ hour.temperature}}
+                    </ion-label>
+                  </ion-chip>
+                   <ion-chip>
+                     <ion-icon name="paper-plane"/> 
+                     <ion-label>
+                       {{ hour.wind }}
+                     </ion-label>
+                   </ion-chip>
+                   <ion-chip>
+                     <ion-icon name="rainy"/>
+                     <ion-label>
+                      {{ hour.rainProbability }}
+                    </ion-label>
+                   </ion-chip>
+                </ion-note>
+              </ion-col>
+              <ion-thumbnail slot="end">
+                <img [src]="hour.iconUrl" alt="">
+              </ion-thumbnail>
+            </ion-item>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  }
+</ion-content>

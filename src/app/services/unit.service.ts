@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SettingsService } from './settings.service';
-import { DistanceUnit, SpeedUnit } from '../models/settings';
+import { DistanceUnit, SpeedUnit, TemperatureUnit } from '../models/settings';
 
 @Injectable({
   providedIn: 'root',
@@ -8,13 +8,17 @@ import { DistanceUnit, SpeedUnit } from '../models/settings';
 export class UnitService {
   constructor(private settings: SettingsService) {}
 
-  public async convertSpeed(speed: number, sourceUnit: SpeedUnit) {
+  public async convertSpeed(
+    speed: number,
+    sourceUnit: SpeedUnit,
+  ): Promise<ConversionResult<SpeedUnit>> {
     const targetUnit = await this.settings.getSpeedUnit();
 
     if (sourceUnit == targetUnit) {
       return {
         value: speed,
         unit: targetUnit,
+        unitText: this.speedUnitToText(targetUnit),
       };
     }
 
@@ -43,16 +47,21 @@ export class UnitService {
     return {
       value: targetSpeed,
       unit: targetUnit,
+      unitText: this.speedUnitToText(targetUnit),
     };
   }
 
-  public async convertDistance(distance: number, sourceUnit: DistanceUnit) {
+  public async convertDistance(
+    distance: number,
+    sourceUnit: DistanceUnit,
+  ): Promise<ConversionResult<DistanceUnit>> {
     const targetUnit = await this.settings.getDistanceUnit();
 
     if (sourceUnit == targetUnit) {
       return {
         value: distance,
         unit: targetUnit,
+        unitText: this.distanceUnitToText(targetUnit),
       };
     }
 
@@ -81,6 +90,46 @@ export class UnitService {
     return {
       value: targetDistance,
       unit: targetUnit,
+      unitText: this.distanceUnitToText(targetUnit),
+    };
+  }
+
+  public async convertTemperature(
+    temperature: number,
+    sourceUnit: TemperatureUnit,
+  ): Promise<ConversionResult<TemperatureUnit>> {
+    const targetUnit = await this.settings.getTemperatureUnit();
+
+    if (sourceUnit == targetUnit) {
+      return {
+        value: temperature,
+        unit: targetUnit,
+        unitText: this.temperatureUnitToText(targetUnit),
+      };
+    }
+
+    const celsius = (() => {
+      switch (sourceUnit) {
+        case TemperatureUnit.CELSIUS:
+          return temperature;
+        case TemperatureUnit.FAHRENHEIT:
+          return (temperature - 32) / 1.8;
+      }
+    })();
+
+    const targetTemperature = (() => {
+      switch (targetUnit) {
+        case TemperatureUnit.CELSIUS:
+          return celsius;
+        case TemperatureUnit.FAHRENHEIT:
+          return celsius * 1.8 + 32;
+      }
+    })();
+
+    return {
+      value: targetTemperature,
+      unit: targetUnit,
+      unitText: this.temperatureUnitToText(targetUnit),
     };
   }
 
@@ -105,4 +154,19 @@ export class UnitService {
         return 'sm';
     }
   }
+
+  public temperatureUnitToText(unit: TemperatureUnit) {
+    switch (unit) {
+      case TemperatureUnit.CELSIUS:
+        return '°C';
+      case TemperatureUnit.FAHRENHEIT:
+        return '°F';
+    }
+  }
+}
+
+export interface ConversionResult<Unit> {
+  value: number;
+  unit: Unit;
+  unitText: string;
 }

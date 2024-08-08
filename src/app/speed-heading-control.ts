@@ -85,7 +85,7 @@ export class SpeedHeadingControl extends Control {
     );
 
     const value = convertedSpeed.value.toFixed(1);
-    const unit = this.unitSrv.speedUnitToText(convertedSpeed.unit);
+    const unit = convertedSpeed.unitText;
 
     this.speedElement!.innerHTML = `${value} ${unit}`;
   }

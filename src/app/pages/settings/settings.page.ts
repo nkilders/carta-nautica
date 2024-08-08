@@ -13,6 +13,7 @@ import {
   IonItem,
   IonLabel,
   IonToggle,
+  IonInput,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -38,14 +39,17 @@ import { Language } from 'src/app/models/settings';
     IonItem,
     IonLabel,
     IonToggle,
+    IonInput,
   ],
 })
 export class SettingsPage implements OnInit {
   public speedUnit = '0';
   public distanceUnit = '0';
+  public temperatureUnit = '0';
   public language = Language.GERMAN;
   public mapPreloading = false;
   public keepAwake = false;
+  public openWeatherMapApiKey = '';
 
   constructor(
     private settings: SettingsService,
@@ -57,14 +61,23 @@ export class SettingsPage implements OnInit {
   }
 
   private async loadSettingsValues() {
-    const { speedUnit, distanceUnit, language, mapPreloading, keepAwake } =
-      await this.settings.getAllSettings();
+    const {
+      speedUnit,
+      distanceUnit,
+      temperatureUnit,
+      language,
+      mapPreloading,
+      keepAwake,
+      openWeatherMapApiKey,
+    } = await this.settings.getAllSettings();
 
     this.speedUnit = speedUnit.toString();
     this.distanceUnit = distanceUnit.toString();
+    this.temperatureUnit = temperatureUnit.toString();
     this.language = language;
     this.mapPreloading = mapPreloading;
     this.keepAwake = keepAwake;
+    this.openWeatherMapApiKey = openWeatherMapApiKey;
   }
 
   protected async updateSpeedUnit() {
@@ -75,6 +88,11 @@ export class SettingsPage implements OnInit {
   protected async updateDistanceUnit() {
     const value = Number.parseInt(this.distanceUnit);
     await this.settings.setDistanceUnit(value);
+  }
+
+  protected async updateTemperatureUnit() {
+    const value = Number.parseInt(this.temperatureUnit);
+    await this.settings.setTemperatureUnit(value);
   }
 
   protected async updateLanguage() {
@@ -89,5 +107,9 @@ export class SettingsPage implements OnInit {
 
   protected async updateKeepAwake() {
     await this.settings.setKeepAwake(this.keepAwake);
+  }
+
+  protected async updateOpenWeatherMapApiKey() {
+    await this.settings.setOpenWeatherMapApiKey(this.openWeatherMapApiKey);
   }
 }
