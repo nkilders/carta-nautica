@@ -118,6 +118,21 @@ export class SettingsService {
     await this.save();
   }
 
+  public async getAnimations() {
+    await this.init();
+
+    return this.settings!.animations;
+  }
+
+  public async setAnimations(animations: boolean) {
+    await this.init();
+
+    this.settings!.animations = animations;
+    this.eventEmitter.emit('animations', animations);
+
+    await this.save();
+  }
+
   public async getOpenWeatherMapApiKey() {
     await this.init();
 
@@ -142,6 +157,7 @@ export class SettingsService {
   on(event: 'language', listener: (newValue: Language) => void): void;
   on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
   on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
+  on(event: 'animations', listener: (newValue: boolean) => void): void;
   on(event: 'openWeatherMapApiKey', listener: (newValue: string) => void): void;
 
   public on(event: string, listener: (...args: any) => void) {
@@ -173,6 +189,7 @@ export class SettingsService {
       language: Language.GERMAN,
       mapPreloading: true,
       keepAwake: true,
+      animations: true,
       openWeatherMapApiKey: '',
     };
   }
