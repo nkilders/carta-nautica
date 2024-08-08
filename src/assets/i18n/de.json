@@ -73,6 +73,7 @@
     "title": "Aktionen an dieser Stelle",
     "distance": "Entfernung: {{distance}} {{unit}}",
     "createMarker": "Markierung hinzufügen",
+    "weather": "Wetter",
     "cancel": "Abbrechen"
   },
   "tracks": {
@@ -83,5 +84,24 @@
     "deleteConfirmHeader": "Route löschen",
     "deleteCancel": "Abbrechen",
     "deleteConfirm": "Löschen"
+  },
+  "weather": {
+    "invalidApiKey": {
+      "header": "Ungültiger API-Schlüssel",
+      "message": "In den Einstellungen wurde ein ungültiger API-Schlüssel eingetragen. Öffne die Einstellungen und trage einen gültigen Schlüssel ein.",
+      "close": "Schließen",
+      "settings": "Einstellungen"
+    },
+    "day": {
+      "today": "Heute",
+      "tomorrow": "Morgen",
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
+      "sunday": "Sonntag"
+    }
   }
 }

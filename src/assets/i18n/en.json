@@ -73,6 +73,7 @@
     "title": "Actions at this position",
     "distance": "Distance: {{distance}} {{unit}}",
     "createMarker": "Add Marker",
+    "weather": "Weather",
     "cancel": "Cancel"
   },
   "tracks": {
@@ -83,5 +84,24 @@
     "deleteConfirmHeader": "Delete track",
     "deleteCancel": "Cancel",
     "deleteConfirm": "Delete"
+  },
+  "weather": {
+    "invalidApiKey": {
+      "header": "Invalid API Key",
+      "message": "You've entered an invalid API key in the settings. Open the settings and enter a valid key.",
+      "close": "Close",
+      "settings": "Settings"
+    },
+    "day": {
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
   }
 }
