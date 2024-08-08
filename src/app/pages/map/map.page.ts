@@ -37,7 +37,6 @@ import {
   sunny,
 } from 'ionicons/icons';
 import { LongClick } from 'src/app/longclick';
-import { ActionSheetController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { geoDistance } from 'src/app/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
@@ -50,6 +49,7 @@ import { TrackRecorderService } from 'src/app/services/track-recorder.service';
 import { TrackLayerManager } from 'src/app/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
 
 @Component({
   selector: 'app-map',
@@ -91,7 +91,7 @@ export class MapPage implements OnInit {
     private markersSrv: MarkersService,
     private trackRecord: TrackRecorderService,
     private ref: ChangeDetectorRef,
-    private actionSheetCtrl: ActionSheetController,
+    private actionSheetCtrl: ActionSheetWrapper,
     private modalCtrl: ModalWrapper,
     private translate: TranslateService,
   ) {
