@@ -173,9 +173,8 @@ export class WeatherPage implements OnInit {
           forecast.main.temp,
           TemperatureUnit.CELSIUS,
         );
-        const unit = this.unit.temperatureUnitToText(temp.unit);
 
-        temperature = `${temp.value.toFixed(0)} ${unit}`;
+        temperature = `${temp.value.toFixed(0)} ${temp.unitText}`;
       } else {
         const tempMin = await this.unit.convertTemperature(
           forecast.main.temp_min,
@@ -185,9 +184,8 @@ export class WeatherPage implements OnInit {
           forecast.main.temp_max,
           TemperatureUnit.CELSIUS,
         );
-        const unit = this.unit.temperatureUnitToText(tempMin.unit);
 
-        temperature = `${tempMin.value.toFixed(0)} ${unit} - ${tempMax.value.toFixed(0)} ${unit}`;
+        temperature = `${tempMin.value.toFixed(0)} ${tempMin.unitText} - ${tempMax.value.toFixed(0)} ${tempMin.unitText}`;
       }
 
       const wind = await this.unit.convertSpeed(
@@ -203,7 +201,7 @@ export class WeatherPage implements OnInit {
         time,
         temperature,
         rainProbability: `${(forecast.pop * 100).toFixed(0)} %`,
-        wind: `${wind.value.toFixed(0)} ${this.unit.speedUnitToText(wind.unit)}`,
+        wind: `${wind.value.toFixed(0)} ${wind.unitText}`,
         iconUrl: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`,
       });
 

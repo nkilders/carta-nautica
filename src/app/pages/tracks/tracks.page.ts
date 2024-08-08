@@ -145,14 +145,14 @@ export class TracksPage implements OnInit {
         ...track,
         length: this.translate.instant('tracks.length', {
           length: length.value.toFixed(1),
-          unit: this.unit.distanceUnitToText(length.unit),
+          unit: length.unitText,
         }),
         duration: this.translate.instant('tracks.duration', {
           duration: this.formatDuration(durationMin),
         }),
         averageSpeed: this.translate.instant('tracks.avgSpeed', {
           speed: avgSpeed.value.toFixed(1),
-          unit: this.unit.speedUnitToText(avgSpeed.unit),
+          unit: avgSpeed.unitText,
         }),
       });
     }

@@ -227,7 +227,7 @@ export class MapPage implements OnInit {
     );
 
     const distanceText = distance.value.toFixed(2);
-    const unitText = this.unit.distanceUnitToText(distance.unit);
+    const unitText = distance.unitText;
 
     return this.translate.instant('longClick.distance', {
       distance: distanceText,
