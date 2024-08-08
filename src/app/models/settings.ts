@@ -1,6 +1,7 @@
 export interface Settings {
   speedUnit: SpeedUnit;
   distanceUnit: DistanceUnit;
+  temperatureUnit: TemperatureUnit;
   language: Language;
   mapPreloading: boolean;
   keepAwake: boolean;
@@ -17,6 +18,11 @@ export enum DistanceUnit {
   KILOMETERS = 0,
   METER = 1,
   SEA_MILES = 2,
+}
+
+export enum TemperatureUnit {
+  CELSIUS = 0,
+  FAHRENHEIT = 1,
 }
 
 export enum Language {

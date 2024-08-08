@@ -45,6 +45,7 @@ import { Language } from 'src/app/models/settings';
 export class SettingsPage implements OnInit {
   public speedUnit = '0';
   public distanceUnit = '0';
+  public temperatureUnit = '0';
   public language = Language.GERMAN;
   public mapPreloading = false;
   public keepAwake = false;
@@ -63,6 +64,7 @@ export class SettingsPage implements OnInit {
     const {
       speedUnit,
       distanceUnit,
+      temperatureUnit,
       language,
       mapPreloading,
       keepAwake,
@@ -71,6 +73,7 @@ export class SettingsPage implements OnInit {
 
     this.speedUnit = speedUnit.toString();
     this.distanceUnit = distanceUnit.toString();
+    this.temperatureUnit = temperatureUnit.toString();
     this.language = language;
     this.mapPreloading = mapPreloading;
     this.keepAwake = keepAwake;
@@ -85,6 +88,11 @@ export class SettingsPage implements OnInit {
   protected async updateDistanceUnit() {
     const value = Number.parseInt(this.distanceUnit);
     await this.settings.setDistanceUnit(value);
+  }
+
+  protected async updateTemperatureUnit() {
+    const value = Number.parseInt(this.temperatureUnit);
+    await this.settings.setTemperatureUnit(value);
   }
 
   protected async updateLanguage() {

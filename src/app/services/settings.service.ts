@@ -5,6 +5,7 @@ import {
   Language,
   Settings,
   SpeedUnit,
+  TemperatureUnit,
 } from '../models/settings';
 import { EventEmitter } from 'events';
 
@@ -53,6 +54,21 @@ export class SettingsService {
 
     this.settings!.distanceUnit = unit;
     this.eventEmitter.emit('distanceUnit', unit);
+
+    await this.save();
+  }
+
+  public async getTemperatureUnit() {
+    await this.init();
+
+    return this.settings!.temperatureUnit;
+  }
+
+  public async setTemperatureUnit(unit: TemperatureUnit) {
+    await this.init();
+
+    this.settings!.temperatureUnit = unit;
+    this.eventEmitter.emit('temperatureUnit', unit);
 
     await this.save();
   }
@@ -119,6 +135,10 @@ export class SettingsService {
 
   on(event: 'speedUnit', listener: (newValue: SpeedUnit) => void): void;
   on(event: 'distanceUnit', listener: (newValue: DistanceUnit) => void): void;
+  on(
+    event: 'temperatureUnit',
+    listener: (newValue: TemperatureUnit) => void,
+  ): void;
   on(event: 'language', listener: (newValue: Language) => void): void;
   on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
   on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
@@ -145,6 +165,7 @@ export class SettingsService {
     return {
       speedUnit: SpeedUnit.KILOMETERS_PER_HOUR,
       distanceUnit: DistanceUnit.KILOMETERS,
+      temperatureUnit: TemperatureUnit.CELSIUS,
       language: Language.GERMAN,
       mapPreloading: true,
       keepAwake: true,
