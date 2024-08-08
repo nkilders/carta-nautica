@@ -34,6 +34,7 @@ import {
   locate,
   location,
   recording,
+  sunny,
 } from 'ionicons/icons';
 import { LongClick } from 'src/app/longclick';
 import { ActionSheetController, ModalController } from '@ionic/angular';
@@ -47,6 +48,7 @@ import { SpeedHeadingControl } from 'src/app/speed-heading-control';
 import { APP_NAME } from 'src/app/app';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
 import { TrackLayerManager } from 'src/app/track-layer-manager';
+import { WeatherPage } from '../weather/weather.page';
 
 @Component({
   selector: 'app-map',
@@ -101,6 +103,7 @@ export class MapPage implements OnInit {
       location,
       closeCircle,
       informationCircle,
+      sunny,
     });
   }
 
@@ -165,6 +168,7 @@ export class MapPage implements OnInit {
       const titleText = this.translate.instant('longClick.title');
       const cancelText = this.translate.instant('longClick.cancel');
       const createMarkerText = this.translate.instant('longClick.createMarker');
+      const weatherText = this.translate.instant('longClick.weather');
       const distanceText = await this.buildLongClickDistanceText(
         coordinate[0],
         coordinate[1],
@@ -183,6 +187,13 @@ export class MapPage implements OnInit {
             icon: 'location',
             handler: async () => {
               await this.openCreateMarkerPopUp(coordinate);
+            },
+          },
+          {
+            text: weatherText,
+            icon: 'sunny',
+            handler: async () => {
+              await this.openWeatherPopUp(coordinate);
             },
           },
           {
@@ -227,6 +238,19 @@ export class MapPage implements OnInit {
   private async openCreateMarkerPopUp(coordinate: Coordinate) {
     const modal = await this.modalCtrl.create({
       component: MarkersCreatePage,
+      componentProps: {
+        longitude: coordinate[0],
+        latitude: coordinate[1],
+      },
+      animated: true,
+    });
+
+    await modal.present();
+  }
+
+  private async openWeatherPopUp(coordinate: Coordinate) {
+    const modal = await this.modalCtrl.create({
+      component: WeatherPage,
       componentProps: {
         longitude: coordinate[0],
         latitude: coordinate[1],
