@@ -9,6 +9,7 @@
   "settings": {
     "speedUnit": "Speed Unit",
     "distanceUnit": "Distance Unit",
+    "temperatureUnit": "Temperature Unit",
     "language": "Language",
     "mapPreloading": "Map Preloading",
     "keepScreenAwake": "Keep Screen Awake",
