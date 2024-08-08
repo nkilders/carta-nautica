@@ -87,6 +87,7 @@
     "deleteConfirm": "Löschen"
   },
   "weather": {
+    "loading": "Wetterdaten werden geladen",
     "invalidApiKey": {
       "header": "Ungültiger API-Schlüssel",
       "message": "In den Einstellungen wurde ein ungültiger API-Schlüssel eingetragen. Öffne die Einstellungen und trage einen gültigen Schlüssel ein.",

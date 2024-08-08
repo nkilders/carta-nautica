@@ -87,6 +87,7 @@
     "deleteConfirm": "Delete"
   },
   "weather": {
+    "loading": "Loading weather data",
     "invalidApiKey": {
       "header": "Invalid API Key",
       "message": "You've entered an invalid API key in the settings. Open the settings and enter a valid key.",

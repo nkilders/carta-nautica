@@ -26,7 +26,11 @@ import { WeatherResponse } from 'src/app/models/weather';
 import { addIcons } from 'ionicons';
 import { paperPlane, rainy, thermometer, water } from 'ionicons/icons';
 import { HttpStatusCode } from '@angular/common/http';
-import { AlertController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  ModalController,
+  LoadingController,
+} from '@ionic/angular';
 import { SettingsPage } from '../settings/settings.page';
 import { UnitService } from 'src/app/services/unit.service';
 import { SpeedUnit, TemperatureUnit } from 'src/app/models/settings';
@@ -75,6 +79,7 @@ export class WeatherPage implements OnInit {
     private translate: TranslateService,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController,
   ) {
     addIcons({ thermometer, water, rainy, paperPlane });
   }
@@ -84,15 +89,34 @@ export class WeatherPage implements OnInit {
   }
 
   private async loadWeatherData() {
+    await this.showLoadingIndicator();
+
     const apiKeyValid = await this.isApiKeyValid();
 
     if (!apiKeyValid) {
+      await this.hideLoadingIndicator();
       await this.showInvalidApiKeyPopUp();
       return;
     }
 
     const weather = await this.fetchWeatherForecast();
     this.weatherData = await this.prepareWeatherData(weather);
+    await this.hideLoadingIndicator();
+  }
+
+  private async showLoadingIndicator() {
+    const messageText = this.translate.instant('weather.loading');
+
+    const load = await this.loadingCtrl.create({
+      animated: true,
+      message: messageText,
+    });
+
+    await load.present();
+  }
+
+  private async hideLoadingIndicator() {
+    await this.loadingCtrl.dismiss();
   }
 
   private async showInvalidApiKeyPopUp() {
