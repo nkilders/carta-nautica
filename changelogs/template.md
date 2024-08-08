@@ -1,5 +1,5 @@
 ## Features
 
-## Bug Fixes
+## Improvements
 
 ## Other
