@@ -1,9 +1,9 @@
 import { Map as OLMap } from 'ol';
-import { LayersService } from './services/layers.service';
-import { Layer } from './models/layers';
+import { LayersService } from '../services/layers.service';
+import { Layer } from '../models/layers';
 import { XYZ } from 'ol/source';
 import TileLayer from 'ol/layer/Tile';
-import { SettingsService } from './services/settings.service';
+import { SettingsService } from '../services/settings.service';
 
 export class LayerManager {
   private layers: Map<string, TileLayer<any>>;

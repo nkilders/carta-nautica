@@ -17,7 +17,7 @@ import { useGeographic } from 'ol/proj';
 import { ScaleLine } from 'ol/control';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
-import { BoatMarker } from '../../boat';
+import { BoatMarker } from '../../utils/boat';
 import { countryCodeEmoji } from 'country-code-emoji';
 import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -25,8 +25,8 @@ import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
 import { DistanceUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
-import { LayerManager } from 'src/app/layer-manager';
-import { FabToggler } from 'src/app/fab-toggler';
+import { LayerManager } from 'src/app/utils/layer-manager';
+import { FabToggler } from 'src/app/utils/fab-toggler';
 import { addIcons } from 'ionicons';
 import {
   closeCircle,
@@ -36,17 +36,17 @@ import {
   recording,
   sunny,
 } from 'ionicons/icons';
-import { LongClick } from 'src/app/longclick';
+import { LongClick } from 'src/app/utils/longclick';
 import { TranslateService } from '@ngx-translate/core';
-import { geoDistance } from 'src/app/coordinates';
+import { geoDistance } from 'src/app/utils/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
 import { Coordinate } from 'ol/coordinate';
-import { MarkersLayerManager } from 'src/app/markers-layer-manager';
+import { MarkersLayerManager } from 'src/app/utils/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
-import { SpeedHeadingControl } from 'src/app/speed-heading-control';
+import { SpeedHeadingControl } from 'src/app/utils/speed-heading-control';
 import { APP_NAME } from 'src/app/app';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
-import { TrackLayerManager } from 'src/app/track-layer-manager';
+import { TrackLayerManager } from 'src/app/utils/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';

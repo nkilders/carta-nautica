@@ -1,8 +1,8 @@
 import { Feature, Map as OLMap } from 'ol';
-import { TrackRecorderService } from './services/track-recorder.service';
+import { TrackRecorderService } from '../services/track-recorder.service';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Point, Track, TrackWithoutId } from './models/tracks';
+import { Point, Track, TrackWithoutId } from '../models/tracks';
 import { Stroke, Style } from 'ol/style';
 import { ZIndex } from './z-indices';
 import { LineString } from 'ol/geom';

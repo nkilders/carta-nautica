@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import { StorageService } from './storage.service';
 import { Layer, LayerWithoutId } from '../models/layers';
 import { v4 as uuidv4 } from 'uuid';
-import { arrayMove } from '../array';
+import { arrayMove } from '../utils/array';
 
 const STORAGE_KEY = 'layers';
 

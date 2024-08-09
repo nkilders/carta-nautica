@@ -1,6 +1,6 @@
 import { Feature, Map as OLMap } from 'ol';
-import { MarkersService } from './services/markers.service';
-import { Marker } from './models/markers';
+import { MarkersService } from '../services/markers.service';
+import { Marker } from '../models/markers';
 import { Geometry, Point } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
