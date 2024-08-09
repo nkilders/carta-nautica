@@ -13,15 +13,30 @@ export interface MarkerWithoutId {
 }
 
 export class MarkerFeature extends Feature {
-  constructor(private readonly marker: Marker) {
-    super({
-      geometry: new Point([marker.longitude, marker.latitude]),
-    });
+  constructor(private marker: Marker) {
+    super();
 
-    this.initStyle();
+    this.updateCenter();
+    this.updateStyle();
   }
 
-  private initStyle() {
+  public onMarkerUpdated(marker: Marker) {
+    this.marker = marker;
+
+    this.updateCenter();
+    this.updateStyle();
+  }
+
+  public getMarker() {
+    return this.marker;
+  }
+
+  private updateCenter() {
+    const { longitude, latitude } = this.marker;
+    this.setGeometry(new Point([longitude, latitude]));
+  }
+
+  private updateStyle() {
     this.setStyle(
       new Style({
         image: new Circle({

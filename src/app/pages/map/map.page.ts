@@ -163,7 +163,7 @@ export class MapPage implements OnInit {
     });
 
     new LayerManager(this.map, this.layers, this.settings);
-    new MarkersLayerManager(this.map, this.markersSrv);
+    new MarkersLayerManager(this.map, this.markersSrv, this.actionSheetCtrl);
     new TrackLayerManager(this.map, this.trackRecord);
     new LongClick(this.map, async (coordinate) => {
       const titleText = this.translate.instant('longClick.title');

@@ -1,24 +1,28 @@
-import { Feature, Map as OLMap } from 'ol';
+import { MapBrowserEvent, Map as OLMap } from 'ol';
 import { MarkersService } from '../services/markers.service';
 import { Marker, MarkerFeature } from '../models/markers';
-import { Geometry, Point } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Text, Style, Circle } from 'ol/style';
-import Fill from 'ol/style/Fill';
-import Stroke from 'ol/style/Stroke';
 import { ZIndex } from './z-indices';
+import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
+import { addIcons } from 'ionicons';
+import { closeCircle } from 'ionicons/icons';
 
 export class MarkersLayerManager {
   private layer?: VectorLayer;
   private layerSource?: VectorSource;
-  private markers: Map<string, Feature<Geometry>>;
+  private markers: Map<string, MarkerFeature>;
 
   constructor(
     private map: OLMap,
     private markersSrv: MarkersService,
+    private actionSheetCtrl: ActionSheetWrapper,
   ) {
     this.markers = new Map();
+
+    addIcons({
+      closeCircle,
+    });
 
     this.createLayer();
     this.registerListeners();
@@ -37,6 +41,10 @@ export class MarkersLayerManager {
   }
 
   private registerListeners() {
+    this.map.on('click', async (event) => {
+      await this.onMapClick(event);
+    });
+
     this.markersSrv.on('create', (markerId, marker) =>
       this.onMarkerCreated(marker),
     );
@@ -46,6 +54,22 @@ export class MarkersLayerManager {
     this.markersSrv.on('delete', (markerId, marker) =>
       this.onMarkerDeleted(markerId),
     );
+  }
+
+  private async onMapClick(event: MapBrowserEvent<any>) {
+    const [markerFeature] = this.map
+      .getFeaturesAtPixel(event.pixel)
+      .filter((feature) => feature instanceof MarkerFeature);
+
+    if (!markerFeature) {
+      return;
+    }
+
+    if (await this.actionSheetCtrl.getTop()) {
+      return;
+    }
+
+    await this.showMarkerActionSheet(markerFeature.getMarker());
   }
 
   private onMarkerCreated(marker: Marker) {
@@ -58,10 +82,7 @@ export class MarkersLayerManager {
       return;
     }
 
-    markerFeature.setGeometry(new Point([marker.longitude, marker.latitude]));
-
-    const markerStyle = markerFeature.getStyle() as Style;
-    markerStyle.getText()?.setText(marker.name);
+    markerFeature.onMarkerUpdated(marker);
   }
 
   private onMarkerDeleted(markerId: string) {
@@ -72,6 +93,21 @@ export class MarkersLayerManager {
 
     this.layerSource?.removeFeature(marker);
     this.markers.delete(markerId);
+  }
+
+  private async showMarkerActionSheet(marker: Marker) {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: marker.name,
+      buttons: [
+        {
+          text: 'Abbrechen',
+          icon: 'close-circle',
+          role: 'cancel',
+        },
+      ],
+    });
+
+    await actionSheet.present();
   }
 
   private async reloadAllMarkers() {
