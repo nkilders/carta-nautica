@@ -1,6 +1,6 @@
 import { Feature, Map as OLMap } from 'ol';
 import { MarkersService } from '../services/markers.service';
-import { Marker } from '../models/markers';
+import { Marker, MarkerFeature } from '../models/markers';
 import { Geometry, Point } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
@@ -85,25 +85,7 @@ export class MarkersLayerManager {
   }
 
   private addMarker(marker: Marker) {
-    const feature = new Feature({
-      geometry: new Point([marker.longitude, marker.latitude]),
-    });
-
-    feature.setStyle(
-      new Style({
-        image: new Circle({
-          radius: 8,
-          fill: new Fill({ color: 'rgba(255, 0, 0, 0.2)' }),
-          stroke: new Stroke({ color: 'red', width: 2 }),
-        }),
-        text: new Text({
-          text: marker.name,
-          fill: new Fill({ color: 'black' }),
-          stroke: new Stroke({ color: 'white', width: 2 }),
-          font: 'bold 12px / 1 Arial',
-        }),
-      }),
-    );
+    const feature = new MarkerFeature(marker);
 
     this.layerSource?.addFeature(feature);
     this.markers.set(marker.id, feature);
