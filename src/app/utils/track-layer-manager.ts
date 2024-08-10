@@ -1,18 +1,19 @@
-import { Feature, Map as OLMap } from 'ol';
-import { TrackRecorderService } from './services/track-recorder.service';
+import { Feature } from 'ol';
+import { TrackRecorderService } from '../services/track-recorder.service';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Point, Track, TrackWithoutId } from './models/tracks';
+import { Point } from '../models/tracks';
 import { Stroke, Style } from 'ol/style';
 import { ZIndex } from './z-indices';
 import { LineString } from 'ol/geom';
+import { MapService } from '../services/map.service';
 
 export class TrackLayerManager {
   private layer?: VectorLayer;
   private line?: LineString;
 
   constructor(
-    private map: OLMap,
+    private mapSrv: MapService,
     private trackRecorder: TrackRecorderService,
   ) {
     this.registerListeners();
@@ -29,7 +30,7 @@ export class TrackLayerManager {
   }
 
   private onStopRecording() {
-    this.map.removeLayer(this.layer!);
+    this.mapSrv.getMap().removeLayer(this.layer!);
     delete this.layer;
     delete this.line;
   }
@@ -62,6 +63,6 @@ export class TrackLayerManager {
       zIndex: ZIndex.TRACK,
     });
 
-    this.map.addLayer(this.layer);
+    this.mapSrv.getMap().addLayer(this.layer);
   }
 }

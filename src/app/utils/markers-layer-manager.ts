@@ -1,24 +1,32 @@
-import { Feature, Map as OLMap } from 'ol';
-import { MarkersService } from './services/markers.service';
-import { Marker } from './models/markers';
-import { Geometry, Point } from 'ol/geom';
+import { MarkersService } from '../services/markers.service';
+import { Marker, MarkerFeature } from '../models/markers';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Text, Style, Circle } from 'ol/style';
-import Fill from 'ol/style/Fill';
-import Stroke from 'ol/style/Stroke';
 import { ZIndex } from './z-indices';
+import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
+import { addIcons } from 'ionicons';
+import { closeCircle, locate } from 'ionicons/icons';
+import { MapService } from '../services/map.service';
+import { FeatureLike } from 'ol/Feature';
+import { TranslateService } from '@ngx-translate/core';
 
 export class MarkersLayerManager {
   private layer?: VectorLayer;
   private layerSource?: VectorSource;
-  private markers: Map<string, Feature<Geometry>>;
+  private markers: Map<string, MarkerFeature>;
 
   constructor(
-    private map: OLMap,
+    private mapSrv: MapService,
     private markersSrv: MarkersService,
+    private actionSheetCtrl: ActionSheetWrapper,
+    private translate: TranslateService,
   ) {
     this.markers = new Map();
+
+    addIcons({
+      closeCircle,
+      locate,
+    });
 
     this.createLayer();
     this.registerListeners();
@@ -33,10 +41,14 @@ export class MarkersLayerManager {
       zIndex: ZIndex.MARKERS,
     });
 
-    this.map.addLayer(this.layer);
+    this.mapSrv.getMap().addLayer(this.layer);
   }
 
   private registerListeners() {
+    this.mapSrv.on('featureClicked', async (feature) => {
+      await this.onFeatureClicked(feature);
+    });
+
     this.markersSrv.on('create', (markerId, marker) =>
       this.onMarkerCreated(marker),
     );
@@ -46,6 +58,14 @@ export class MarkersLayerManager {
     this.markersSrv.on('delete', (markerId, marker) =>
       this.onMarkerDeleted(markerId),
     );
+  }
+
+  private async onFeatureClicked(feature: FeatureLike) {
+    if (!(feature instanceof MarkerFeature)) {
+      return;
+    }
+
+    await this.showMarkerActionSheet(feature.getMarker());
   }
 
   private onMarkerCreated(marker: Marker) {
@@ -58,10 +78,7 @@ export class MarkersLayerManager {
       return;
     }
 
-    markerFeature.setGeometry(new Point([marker.longitude, marker.latitude]));
-
-    const markerStyle = markerFeature.getStyle() as Style;
-    markerStyle.getText()?.setText(marker.name);
+    markerFeature.onMarkerUpdated(marker);
   }
 
   private onMarkerDeleted(markerId: string) {
@@ -72,6 +89,32 @@ export class MarkersLayerManager {
 
     this.layerSource?.removeFeature(marker);
     this.markers.delete(markerId);
+  }
+
+  private async showMarkerActionSheet(marker: Marker) {
+    const flyToText = this.translate.instant('markerClick.flyTo');
+    const cancelText = this.translate.instant('markerClick.cancel');
+
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: marker.name,
+      buttons: [
+        {
+          text: flyToText,
+          icon: 'locate',
+          handler: async () => {
+            const { longitude, latitude } = marker;
+            this.mapSrv.flyTo(longitude, latitude, 15, 1000);
+          },
+        },
+        {
+          text: cancelText,
+          icon: 'close-circle',
+          role: 'cancel',
+        },
+      ],
+    });
+
+    await actionSheet.present();
   }
 
   private async reloadAllMarkers() {
@@ -85,25 +128,7 @@ export class MarkersLayerManager {
   }
 
   private addMarker(marker: Marker) {
-    const feature = new Feature({
-      geometry: new Point([marker.longitude, marker.latitude]),
-    });
-
-    feature.setStyle(
-      new Style({
-        image: new Circle({
-          radius: 8,
-          fill: new Fill({ color: 'rgba(255, 0, 0, 0.2)' }),
-          stroke: new Stroke({ color: 'red', width: 2 }),
-        }),
-        text: new Text({
-          text: marker.name,
-          fill: new Fill({ color: 'black' }),
-          stroke: new Stroke({ color: 'white', width: 2 }),
-          font: 'bold 12px / 1 Arial',
-        }),
-      }),
-    );
+    const feature = new MarkerFeature(marker);
 
     this.layerSource?.addFeature(feature);
     this.markers.set(marker.id, feature);

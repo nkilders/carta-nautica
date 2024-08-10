@@ -71,6 +71,10 @@
     "errorHeader": "Invalid input",
     "errorOk": "Ok"
   },
+  "markerClick": {
+    "flyTo": "Fly to",
+    "cancel": "Cancel"
+  },
   "longClick": {
     "title": "Actions at this position",
     "distance": "Distance: {{distance}} {{unit}}",

@@ -1,8 +1,8 @@
 import { Control } from 'ol/control';
-import { SettingsService } from './services/settings.service';
-import { GeolocationService } from './services/geolocation.service';
-import { UnitService } from './services/unit.service';
-import { SpeedUnit } from './models/settings';
+import { SettingsService } from '../services/settings.service';
+import { GeolocationService } from '../services/geolocation.service';
+import { UnitService } from '../services/unit.service';
+import { SpeedUnit } from '../models/settings';
 
 export class SpeedHeadingControl extends Control {
   private speedElement?: HTMLButtonElement;

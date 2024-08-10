@@ -12,12 +12,10 @@ import {
   IonFabButton,
   IonIcon,
 } from '@ionic/angular/standalone';
-import { Map as OLMap, View } from 'ol';
-import { useGeographic } from 'ol/proj';
 import { ScaleLine } from 'ol/control';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
-import { BoatMarker } from '../../boat';
+import { BoatMarker } from '../../utils/boat';
 import { countryCodeEmoji } from 'country-code-emoji';
 import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -25,8 +23,8 @@ import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
 import { DistanceUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
-import { LayerManager } from 'src/app/layer-manager';
-import { FabToggler } from 'src/app/fab-toggler';
+import { LayerManager } from 'src/app/utils/layer-manager';
+import { FabToggler } from 'src/app/utils/fab-toggler';
 import { addIcons } from 'ionicons';
 import {
   closeCircle,
@@ -36,20 +34,21 @@ import {
   recording,
   sunny,
 } from 'ionicons/icons';
-import { LongClick } from 'src/app/longclick';
+import { LongClick } from 'src/app/utils/longclick';
 import { TranslateService } from '@ngx-translate/core';
-import { geoDistance } from 'src/app/coordinates';
+import { geoDistance } from 'src/app/utils/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
 import { Coordinate } from 'ol/coordinate';
-import { MarkersLayerManager } from 'src/app/markers-layer-manager';
+import { MarkersLayerManager } from 'src/app/utils/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
-import { SpeedHeadingControl } from 'src/app/speed-heading-control';
+import { SpeedHeadingControl } from 'src/app/utils/speed-heading-control';
 import { APP_NAME } from 'src/app/app';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
-import { TrackLayerManager } from 'src/app/track-layer-manager';
+import { TrackLayerManager } from 'src/app/utils/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
+import { MapService } from 'src/app/services/map.service';
 
 @Component({
   selector: 'app-map',
@@ -75,7 +74,6 @@ export class MapPage implements OnInit {
   public speed = '';
   public heading = '';
 
-  private map?: OLMap;
   private position?: Position;
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
@@ -84,6 +82,7 @@ export class MapPage implements OnInit {
   private fabRecordTrackToggler?: FabToggler;
 
   constructor(
+    private mapSrv: MapService,
     private geolocation: GeolocationService,
     private settings: SettingsService,
     private unit: UnitService,
@@ -134,79 +133,82 @@ export class MapPage implements OnInit {
   }
 
   private async initMap() {
-    useGeographic();
+    this.mapSrv.setTarget('map');
 
-    this.map = new OLMap({
-      target: 'map',
-      view: new View({
-        center: [0, 0],
-        zoom: 2,
-      }),
-    });
-
-    this.map.addControl(
+    this.mapSrv.getMap().addControl(
       new ScaleLine({
         bar: false,
         units: 'metric',
       }),
     );
 
-    this.map.addControl(
-      new SpeedHeadingControl(this.settings, this.geolocation, this.unit),
-    );
-
-    this.boat = new BoatMarker(this.map);
-
-    this.markersSrv.on('flyTo', (markerId, marker) => {
-      const { longitude, latitude } = marker;
-      this.flyTo(longitude, latitude, 15, 1_000);
-    });
-
-    new LayerManager(this.map, this.layers, this.settings);
-    new MarkersLayerManager(this.map, this.markersSrv);
-    new TrackLayerManager(this.map, this.trackRecord);
-    new LongClick(this.map, async (coordinate) => {
-      const titleText = this.translate.instant('longClick.title');
-      const cancelText = this.translate.instant('longClick.cancel');
-      const createMarkerText = this.translate.instant('longClick.createMarker');
-      const weatherText = this.translate.instant('longClick.weather');
-      const distanceText = await this.buildLongClickDistanceText(
-        coordinate[0],
-        coordinate[1],
+    this.mapSrv
+      .getMap()
+      .addControl(
+        new SpeedHeadingControl(this.settings, this.geolocation, this.unit),
       );
 
-      const actionSheet = await this.actionSheetCtrl.create({
-        header: titleText,
-        buttons: [
-          {
-            text: distanceText,
-            disabled: true,
-            icon: 'information-circle',
-          },
-          {
-            text: createMarkerText,
-            icon: 'location',
-            handler: async () => {
-              await this.openCreateMarkerPopUp(coordinate);
-            },
-          },
-          {
-            text: weatherText,
-            icon: 'sunny',
-            handler: async () => {
-              await this.openWeatherPopUp(coordinate);
-            },
-          },
-          {
-            text: cancelText,
-            role: 'cancel',
-            icon: 'close-circle',
-          },
-        ],
-      });
+    this.boat = new BoatMarker(this.mapSrv);
 
-      await actionSheet.present();
-    });
+    new LayerManager(this.mapSrv, this.layers, this.settings);
+    new MarkersLayerManager(
+      this.mapSrv,
+      this.markersSrv,
+      this.actionSheetCtrl,
+      this.translate,
+    );
+    new TrackLayerManager(this.mapSrv, this.trackRecord);
+    this.mapSrv.on(
+      'longClick',
+      async (longitude, latitude, completeLongClick) => {
+        const titleText = this.translate.instant('longClick.title');
+        const cancelText = this.translate.instant('longClick.cancel');
+        const createMarkerText = this.translate.instant(
+          'longClick.createMarker',
+        );
+        const weatherText = this.translate.instant('longClick.weather');
+        const distanceText = await this.buildLongClickDistanceText(
+          longitude,
+          latitude,
+        );
+
+        const actionSheet = await this.actionSheetCtrl.create({
+          header: titleText,
+          buttons: [
+            {
+              text: distanceText,
+              disabled: true,
+              icon: 'information-circle',
+            },
+            {
+              text: createMarkerText,
+              icon: 'location',
+              handler: async () => {
+                await this.openCreateMarkerPopUp(longitude, latitude);
+              },
+            },
+            {
+              text: weatherText,
+              icon: 'sunny',
+              handler: async () => {
+                await this.openWeatherPopUp(longitude, latitude);
+              },
+            },
+            {
+              text: cancelText,
+              role: 'cancel',
+              icon: 'close-circle',
+            },
+          ],
+        });
+
+        actionSheet.onDidDismiss().then(() => {
+          completeLongClick();
+        });
+
+        await actionSheet.present();
+      },
+    );
   }
 
   private async buildLongClickDistanceText(
@@ -236,24 +238,24 @@ export class MapPage implements OnInit {
     });
   }
 
-  private async openCreateMarkerPopUp(coordinate: Coordinate) {
+  private async openCreateMarkerPopUp(longitude: number, latitude: number) {
     const modal = await this.modalCtrl.create({
       component: MarkersCreatePage,
       componentProps: {
-        longitude: coordinate[0],
-        latitude: coordinate[1],
+        longitude,
+        latitude,
       },
     });
 
     await modal.present();
   }
 
-  private async openWeatherPopUp(coordinate: Coordinate) {
+  private async openWeatherPopUp(longitude: number, latitude: number) {
     const modal = await this.modalCtrl.create({
       component: WeatherPage,
       componentProps: {
-        longitude: coordinate[0],
-        latitude: coordinate[1],
+        longitude,
+        latitude,
       },
     });
 
@@ -268,7 +270,7 @@ export class MapPage implements OnInit {
 
   private initSettingsListeners() {
     this.settings.on('mapPreloading', (newValue) => {
-      const layers = this.map?.getAllLayers();
+      const layers = this.mapSrv.getMap().getAllLayers();
 
       if (!layers) {
         return;
@@ -316,20 +318,7 @@ export class MapPage implements OnInit {
 
     const { longitude, latitude } = this.position.coords;
 
-    this.flyTo(longitude, latitude, 15, 1_000);
-  }
-
-  private flyTo(
-    longitude: number,
-    latitude: number,
-    zoom: number,
-    durationMs: number,
-  ) {
-    this.map?.getView().animate({
-      center: [longitude, latitude],
-      zoom,
-      duration: durationMs,
-    });
+    this.mapSrv.flyTo(longitude, latitude, 15, 1_000);
   }
 
   private async updateToolbarTitle() {
@@ -384,7 +373,7 @@ export class MapPage implements OnInit {
   private initFabs() {
     this.fabFollowToggler = new FabToggler('fabFollow', 'dark', 'primary');
 
-    this.map?.on('pointerdrag', () => {
+    this.mapSrv.getMap().on('pointerdrag', () => {
       if (this.fabFollowToggler?.isActive()) {
         this.fabFollowToggler.toggle();
       }

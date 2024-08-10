@@ -20,7 +20,7 @@ import { Track, TrackWithoutId } from 'src/app/models/tracks';
 import { addIcons } from 'ionicons';
 import { ellipsisVertical, trash } from 'ionicons/icons';
 import { TracksService } from 'src/app/services/tracks.service';
-import { geoDistance } from 'src/app/coordinates';
+import { geoDistance } from 'src/app/utils/coordinates';
 import { UnitService } from 'src/app/services/unit.service';
 import { DistanceUnit, SpeedUnit } from 'src/app/models/settings';
 import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';

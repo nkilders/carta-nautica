@@ -1,11 +1,12 @@
 import { Position } from '@capacitor/geolocation';
-import { Feature, Map } from 'ol';
+import { Feature } from 'ol';
 import { Point } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import { ZIndex } from './z-indices';
+import { MapService } from '../services/map.service';
 
 const ICON_URL = '/assets/boat-marker.png';
 
@@ -14,7 +15,7 @@ export class BoatMarker {
   private boatLayer?: VectorLayer<VectorSource<Feature<Point>>, Feature<Point>>;
   private icon?: Icon;
 
-  constructor(private map: Map) {
+  constructor(private mapSrv: MapService) {
     this.init();
   }
 
@@ -25,7 +26,8 @@ export class BoatMarker {
     this.boat?.setGeometry(new Point([longitude, latitude]));
 
     const rotation =
-      (this.map.getView().getRotation() + heading / 57.29578) % (2 * Math.PI);
+      (this.mapSrv.getMap().getView().getRotation() + heading / 57.29578) %
+      (2 * Math.PI);
 
     this.icon?.setRotation(rotation);
   }
@@ -52,6 +54,6 @@ export class BoatMarker {
       zIndex: ZIndex.BOAT,
     });
 
-    this.map.addLayer(this.boatLayer);
+    this.mapSrv.getMap().addLayer(this.boatLayer);
   }
 }

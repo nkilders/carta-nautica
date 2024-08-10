@@ -1,15 +1,15 @@
-import { Map as OLMap } from 'ol';
-import { LayersService } from './services/layers.service';
-import { Layer } from './models/layers';
+import { LayersService } from '../services/layers.service';
+import { Layer } from '../models/layers';
 import { XYZ } from 'ol/source';
 import TileLayer from 'ol/layer/Tile';
-import { SettingsService } from './services/settings.service';
+import { SettingsService } from '../services/settings.service';
+import { MapService } from '../services/map.service';
 
 export class LayerManager {
   private layers: Map<string, TileLayer<any>>;
 
   constructor(
-    private map: OLMap,
+    private mapSrv: MapService,
     private layersSrv: LayersService,
     private settings: SettingsService,
   ) {
@@ -52,7 +52,7 @@ export class LayerManager {
       return;
     }
 
-    this.map?.removeLayer(tileLayer);
+    this.mapSrv.getMap().removeLayer(tileLayer);
     this.layers.delete(layerId);
   }
 
@@ -77,13 +77,13 @@ export class LayerManager {
       preload: preload ? Infinity : 0,
     });
 
-    this.map?.addLayer(tileLayer);
+    this.mapSrv.getMap().addLayer(tileLayer);
     this.layers.set(layer.id, tileLayer);
   }
 
   private removeAllLayers() {
     this.layers.forEach((layer) => {
-      this.map.removeLayer(layer);
+      this.mapSrv.getMap().removeLayer(layer);
     });
 
     this.layers.clear();
