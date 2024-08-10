@@ -27,6 +27,7 @@ import { MarkersEditPage } from '../markers-edit/markers-edit.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
+import { MapService } from 'src/app/services/map.service';
 
 @Component({
   selector: 'app-markers',
@@ -58,6 +59,7 @@ export class MarkersPage implements OnInit {
   protected markers: Marker[] = [];
 
   constructor(
+    private mapSrv: MapService,
     private markersSrv: MarkersService,
     private translate: TranslateService,
     private actionSheetCtrl: ActionSheetWrapper,
@@ -111,7 +113,8 @@ export class MarkersPage implements OnInit {
   }
 
   private async flyToMarker(marker: Marker) {
-    this.markersSrv.flyTo(marker);
+    const { longitude, latitude } = marker;
+    this.mapSrv.flyTo(longitude, latitude, 15, 1000);
 
     await this.modalCtrl.dismiss();
   }

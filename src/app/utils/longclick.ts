@@ -1,5 +1,5 @@
-import { Map as OLMap } from 'ol';
 import { Coordinate } from 'ol/coordinate';
+import { MapService } from '../services/map.service';
 
 const CLICK_DURATION_MS = 500;
 const MAX_DISTANCE_FROM_START_BEFORE_CANCEL = 10;
@@ -7,46 +7,59 @@ const MAX_DISTANCE_FROM_START_BEFORE_CANCEL = 10;
 type Listener = (coord: Coordinate) => void;
 
 export class LongClick {
-  private readonly map: OLMap;
   private readonly listener: Listener;
 
   private startX: number = 0;
   private startY: number = 0;
   private timeout?: NodeJS.Timeout;
 
-  constructor(map: OLMap, listener: Listener) {
-    this.map = map;
+  constructor(
+    private mapSrv: MapService,
+    listener: Listener,
+  ) {
     this.listener = listener;
 
     this.registerListeners();
   }
 
   private registerListeners() {
-    this.map.getTargetElement().addEventListener('touchstart', (event) => {
-      if (event.touches.length > 1) {
-        return;
-      }
+    this.mapSrv
+      .getMap()
+      .getTargetElement()
+      .addEventListener('touchstart', (event) => {
+        if (event.touches.length > 1) {
+          return;
+        }
 
-      const { clientX, clientY } = event.touches[0];
+        const { clientX, clientY } = event.touches[0];
 
-      this.startClick(clientX, clientY);
-    });
+        this.startClick(clientX, clientY);
+      });
 
-    this.map.getTargetElement().addEventListener('mousedown', (event) => {
-      const { layerX, layerY } = event;
+    this.mapSrv
+      .getMap()
+      .getTargetElement()
+      .addEventListener('mousedown', (event) => {
+        const { layerX, layerY } = event;
 
-      this.startClick(layerX, layerY);
-    });
+        this.startClick(layerX, layerY);
+      });
 
-    this.map.getTargetElement().addEventListener('touchend', () => {
-      this.clearTimeout();
-    });
+    this.mapSrv
+      .getMap()
+      .getTargetElement()
+      .addEventListener('touchend', () => {
+        this.clearTimeout();
+      });
 
-    this.map.getTargetElement().addEventListener('mouseup', () => {
-      this.clearTimeout();
-    });
+    this.mapSrv
+      .getMap()
+      .getTargetElement()
+      .addEventListener('mouseup', () => {
+        this.clearTimeout();
+      });
 
-    this.map.on('pointerdrag', (e) => {
+    this.mapSrv.getMap().on('pointerdrag', (e) => {
       if (!this.timeout) {
         return;
       }
@@ -63,7 +76,7 @@ export class LongClick {
     this.startX = x;
     this.startY = y;
 
-    const coord = this.map.getCoordinateFromPixel([x, y]);
+    const coord = this.mapSrv.getMap().getCoordinateFromPixel([x, y]);
 
     this.timeout = setTimeout(() => this.listener(coord), CLICK_DURATION_MS);
   }

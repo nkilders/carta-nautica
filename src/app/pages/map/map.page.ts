@@ -12,8 +12,6 @@ import {
   IonFabButton,
   IonIcon,
 } from '@ionic/angular/standalone';
-import { Map as OLMap, View } from 'ol';
-import { useGeographic } from 'ol/proj';
 import { ScaleLine } from 'ol/control';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
@@ -50,6 +48,7 @@ import { TrackLayerManager } from 'src/app/utils/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
+import { MapService } from 'src/app/services/map.service';
 
 @Component({
   selector: 'app-map',
@@ -75,7 +74,6 @@ export class MapPage implements OnInit {
   public speed = '';
   public heading = '';
 
-  private map?: OLMap;
   private position?: Position;
   private boat?: BoatMarker;
   private receivedInitialPosition: boolean;
@@ -84,6 +82,7 @@ export class MapPage implements OnInit {
   private fabRecordTrackToggler?: FabToggler;
 
   constructor(
+    private mapSrv: MapService,
     private geolocation: GeolocationService,
     private settings: SettingsService,
     private unit: UnitService,
@@ -134,38 +133,27 @@ export class MapPage implements OnInit {
   }
 
   private async initMap() {
-    useGeographic();
+    this.mapSrv.setTarget('map');
 
-    this.map = new OLMap({
-      target: 'map',
-      view: new View({
-        center: [0, 0],
-        zoom: 2,
-      }),
-    });
-
-    this.map.addControl(
+    this.mapSrv.getMap().addControl(
       new ScaleLine({
         bar: false,
         units: 'metric',
       }),
     );
 
-    this.map.addControl(
-      new SpeedHeadingControl(this.settings, this.geolocation, this.unit),
-    );
+    this.mapSrv
+      .getMap()
+      .addControl(
+        new SpeedHeadingControl(this.settings, this.geolocation, this.unit),
+      );
 
-    this.boat = new BoatMarker(this.map);
+    this.boat = new BoatMarker(this.mapSrv);
 
-    this.markersSrv.on('flyTo', (markerId, marker) => {
-      const { longitude, latitude } = marker;
-      this.flyTo(longitude, latitude, 15, 1_000);
-    });
-
-    new LayerManager(this.map, this.layers, this.settings);
-    new MarkersLayerManager(this.map, this.markersSrv, this.actionSheetCtrl);
-    new TrackLayerManager(this.map, this.trackRecord);
-    new LongClick(this.map, async (coordinate) => {
+    new LayerManager(this.mapSrv, this.layers, this.settings);
+    new MarkersLayerManager(this.mapSrv, this.markersSrv, this.actionSheetCtrl);
+    new TrackLayerManager(this.mapSrv, this.trackRecord);
+    new LongClick(this.mapSrv, async (coordinate) => {
       const titleText = this.translate.instant('longClick.title');
       const cancelText = this.translate.instant('longClick.cancel');
       const createMarkerText = this.translate.instant('longClick.createMarker');
@@ -268,7 +256,7 @@ export class MapPage implements OnInit {
 
   private initSettingsListeners() {
     this.settings.on('mapPreloading', (newValue) => {
-      const layers = this.map?.getAllLayers();
+      const layers = this.mapSrv.getMap().getAllLayers();
 
       if (!layers) {
         return;
@@ -316,20 +304,7 @@ export class MapPage implements OnInit {
 
     const { longitude, latitude } = this.position.coords;
 
-    this.flyTo(longitude, latitude, 15, 1_000);
-  }
-
-  private flyTo(
-    longitude: number,
-    latitude: number,
-    zoom: number,
-    durationMs: number,
-  ) {
-    this.map?.getView().animate({
-      center: [longitude, latitude],
-      zoom,
-      duration: durationMs,
-    });
+    this.mapSrv.flyTo(longitude, latitude, 15, 1_000);
   }
 
   private async updateToolbarTitle() {
@@ -384,7 +359,7 @@ export class MapPage implements OnInit {
   private initFabs() {
     this.fabFollowToggler = new FabToggler('fabFollow', 'dark', 'primary');
 
-    this.map?.on('pointerdrag', () => {
+    this.mapSrv.getMap().on('pointerdrag', () => {
       if (this.fabFollowToggler?.isActive()) {
         this.fabFollowToggler.toggle();
       }

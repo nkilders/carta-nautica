@@ -1,4 +1,4 @@
-import { MapBrowserEvent, Map as OLMap } from 'ol';
+import { MapBrowserEvent } from 'ol';
 import { MarkersService } from '../services/markers.service';
 import { Marker, MarkerFeature } from '../models/markers';
 import VectorLayer from 'ol/layer/Vector';
@@ -7,6 +7,7 @@ import { ZIndex } from './z-indices';
 import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
 import { addIcons } from 'ionicons';
 import { closeCircle } from 'ionicons/icons';
+import { MapService } from '../services/map.service';
 
 export class MarkersLayerManager {
   private layer?: VectorLayer;
@@ -14,7 +15,7 @@ export class MarkersLayerManager {
   private markers: Map<string, MarkerFeature>;
 
   constructor(
-    private map: OLMap,
+    private mapSrv: MapService,
     private markersSrv: MarkersService,
     private actionSheetCtrl: ActionSheetWrapper,
   ) {
@@ -37,11 +38,11 @@ export class MarkersLayerManager {
       zIndex: ZIndex.MARKERS,
     });
 
-    this.map.addLayer(this.layer);
+    this.mapSrv.getMap().addLayer(this.layer);
   }
 
   private registerListeners() {
-    this.map.on('click', async (event) => {
+    this.mapSrv.getMap().on('click', async (event) => {
       await this.onMapClick(event);
     });
 
@@ -57,7 +58,8 @@ export class MarkersLayerManager {
   }
 
   private async onMapClick(event: MapBrowserEvent<any>) {
-    const [markerFeature] = this.map
+    const [markerFeature] = this.mapSrv
+      .getMap()
       .getFeaturesAtPixel(event.pixel)
       .filter((feature) => feature instanceof MarkerFeature);
 
