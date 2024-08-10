@@ -5,9 +5,10 @@ import VectorSource from 'ol/source/Vector';
 import { ZIndex } from './z-indices';
 import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
 import { addIcons } from 'ionicons';
-import { closeCircle } from 'ionicons/icons';
+import { closeCircle, locate } from 'ionicons/icons';
 import { MapService } from '../services/map.service';
 import { FeatureLike } from 'ol/Feature';
+import { TranslateService } from '@ngx-translate/core';
 
 export class MarkersLayerManager {
   private layer?: VectorLayer;
@@ -18,11 +19,13 @@ export class MarkersLayerManager {
     private mapSrv: MapService,
     private markersSrv: MarkersService,
     private actionSheetCtrl: ActionSheetWrapper,
+    private translate: TranslateService,
   ) {
     this.markers = new Map();
 
     addIcons({
       closeCircle,
+      locate,
     });
 
     this.createLayer();
@@ -89,11 +92,22 @@ export class MarkersLayerManager {
   }
 
   private async showMarkerActionSheet(marker: Marker) {
+    const flyToText = this.translate.instant('markerClick.flyTo');
+    const cancelText = this.translate.instant('markerClick.cancel');
+
     const actionSheet = await this.actionSheetCtrl.create({
       header: marker.name,
       buttons: [
         {
-          text: 'Abbrechen',
+          text: flyToText,
+          icon: 'locate',
+          handler: async () => {
+            const { longitude, latitude } = marker;
+            this.mapSrv.flyTo(longitude, latitude, 15, 1000);
+          },
+        },
+        {
+          text: cancelText,
           icon: 'close-circle',
           role: 'cancel',
         },

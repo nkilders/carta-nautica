@@ -151,7 +151,12 @@ export class MapPage implements OnInit {
     this.boat = new BoatMarker(this.mapSrv);
 
     new LayerManager(this.mapSrv, this.layers, this.settings);
-    new MarkersLayerManager(this.mapSrv, this.markersSrv, this.actionSheetCtrl);
+    new MarkersLayerManager(
+      this.mapSrv,
+      this.markersSrv,
+      this.actionSheetCtrl,
+      this.translate,
+    );
     new TrackLayerManager(this.mapSrv, this.trackRecord);
     this.mapSrv.on(
       'longClick',
