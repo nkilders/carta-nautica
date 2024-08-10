@@ -1,26 +1,32 @@
 import { Injectable } from '@angular/core';
+import { EventEmitter } from 'events';
 import { Map as OLMap, View } from 'ol';
-import TileLayer from 'ol/layer/Tile';
-import VectorLayer from 'ol/layer/Vector';
-import VectorTileLayer from 'ol/layer/VectorTile';
 import { useGeographic } from 'ol/proj';
-import { OSM, XYZ } from 'ol/source';
+import { LongClick } from '../utils/longclick';
+import { FeatureLike } from 'ol/Feature';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MapService {
   private map: OLMap;
+  private eventEmitter: EventEmitter;
+
+  /**
+   * When the mouse is released after a long click, the
+   * map's click event gets fired as well. This boolean
+   * is used to track if a long click is in progress.
+   * As long as it is true, all click events will be
+   * ignored.
+   */
+  private longClickActive = false;
 
   constructor() {
-    useGeographic();
+    this.map = new OLMap();
+    this.eventEmitter = new EventEmitter();
 
-    this.map = new OLMap({
-      view: new View({
-        center: [0, 0],
-        zoom: 2,
-      }),
-    });
+    this.initMap();
+    this.initFeatureClick();
   }
 
   public getMap() {
@@ -29,6 +35,7 @@ export class MapService {
 
   public setTarget(target: string | HTMLElement) {
     this.map.setTarget(target);
+    this.initLongClick();
   }
 
   public flyTo(
@@ -41,6 +48,59 @@ export class MapService {
       center: [longitude, latitude],
       zoom,
       duration: durationMs,
+    });
+  }
+
+  on(
+    event: 'longClick',
+    listener: (
+      longitude: number,
+      latitude: number,
+      complete: () => void,
+    ) => void,
+  ): void;
+  on(event: 'featureClicked', listener: (feature: FeatureLike) => void): void;
+
+  public on(event: string, listener: (...args: any) => void) {
+    this.eventEmitter.on(event, listener);
+  }
+
+  private initMap() {
+    useGeographic();
+
+    this.map.setView(
+      new View({
+        center: [0, 0],
+        zoom: 2,
+      }),
+    );
+  }
+
+  private initLongClick() {
+    new LongClick(this.map, (coordinate) => {
+      const [longitude, latitude] = coordinate;
+
+      this.longClickActive = true;
+
+      this.eventEmitter.emit('longClick', longitude, latitude, () => {
+        this.longClickActive = false;
+      });
+    });
+  }
+
+  private initFeatureClick() {
+    this.map.on('click', (event) => {
+      if (this.longClickActive) {
+        return;
+      }
+
+      const [feature] = this.map.getFeaturesAtPixel(event.pixel);
+
+      if (!feature) {
+        return;
+      }
+
+      this.eventEmitter.emit('featureClicked', feature);
     });
   }
 }

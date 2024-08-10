@@ -153,48 +153,57 @@ export class MapPage implements OnInit {
     new LayerManager(this.mapSrv, this.layers, this.settings);
     new MarkersLayerManager(this.mapSrv, this.markersSrv, this.actionSheetCtrl);
     new TrackLayerManager(this.mapSrv, this.trackRecord);
-    new LongClick(this.mapSrv, async (coordinate) => {
-      const titleText = this.translate.instant('longClick.title');
-      const cancelText = this.translate.instant('longClick.cancel');
-      const createMarkerText = this.translate.instant('longClick.createMarker');
-      const weatherText = this.translate.instant('longClick.weather');
-      const distanceText = await this.buildLongClickDistanceText(
-        coordinate[0],
-        coordinate[1],
-      );
+    this.mapSrv.on(
+      'longClick',
+      async (longitude, latitude, completeLongClick) => {
+        const titleText = this.translate.instant('longClick.title');
+        const cancelText = this.translate.instant('longClick.cancel');
+        const createMarkerText = this.translate.instant(
+          'longClick.createMarker',
+        );
+        const weatherText = this.translate.instant('longClick.weather');
+        const distanceText = await this.buildLongClickDistanceText(
+          longitude,
+          latitude,
+        );
 
-      const actionSheet = await this.actionSheetCtrl.create({
-        header: titleText,
-        buttons: [
-          {
-            text: distanceText,
-            disabled: true,
-            icon: 'information-circle',
-          },
-          {
-            text: createMarkerText,
-            icon: 'location',
-            handler: async () => {
-              await this.openCreateMarkerPopUp(coordinate);
+        const actionSheet = await this.actionSheetCtrl.create({
+          header: titleText,
+          buttons: [
+            {
+              text: distanceText,
+              disabled: true,
+              icon: 'information-circle',
             },
-          },
-          {
-            text: weatherText,
-            icon: 'sunny',
-            handler: async () => {
-              await this.openWeatherPopUp(coordinate);
+            {
+              text: createMarkerText,
+              icon: 'location',
+              handler: async () => {
+                await this.openCreateMarkerPopUp(longitude, latitude);
+              },
             },
-          },
-          {
-            text: cancelText,
-            role: 'cancel',
-            icon: 'close-circle',
-          },
-        ],
-      });
+            {
+              text: weatherText,
+              icon: 'sunny',
+              handler: async () => {
+                await this.openWeatherPopUp(longitude, latitude);
+              },
+            },
+            {
+              text: cancelText,
+              role: 'cancel',
+              icon: 'close-circle',
+            },
+          ],
+        });
 
-      await actionSheet.present();
-    });
+        actionSheet.onDidDismiss().then(() => {
+          completeLongClick();
+        });
+
+        await actionSheet.present();
+      },
+    );
   }
 
   private async buildLongClickDistanceText(
@@ -224,24 +233,24 @@ export class MapPage implements OnInit {
     });
   }
 
-  private async openCreateMarkerPopUp(coordinate: Coordinate) {
+  private async openCreateMarkerPopUp(longitude: number, latitude: number) {
     const modal = await this.modalCtrl.create({
       component: MarkersCreatePage,
       componentProps: {
-        longitude: coordinate[0],
-        latitude: coordinate[1],
+        longitude,
+        latitude,
       },
     });
 
     await modal.present();
   }
 
-  private async openWeatherPopUp(coordinate: Coordinate) {
+  private async openWeatherPopUp(longitude: number, latitude: number) {
     const modal = await this.modalCtrl.create({
       component: WeatherPage,
       componentProps: {
-        longitude: coordinate[0],
-        latitude: coordinate[1],
+        longitude,
+        latitude,
       },
     });
 

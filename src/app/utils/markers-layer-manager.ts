@@ -1,4 +1,3 @@
-import { MapBrowserEvent } from 'ol';
 import { MarkersService } from '../services/markers.service';
 import { Marker, MarkerFeature } from '../models/markers';
 import VectorLayer from 'ol/layer/Vector';
@@ -8,6 +7,7 @@ import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
 import { addIcons } from 'ionicons';
 import { closeCircle } from 'ionicons/icons';
 import { MapService } from '../services/map.service';
+import { FeatureLike } from 'ol/Feature';
 
 export class MarkersLayerManager {
   private layer?: VectorLayer;
@@ -42,8 +42,8 @@ export class MarkersLayerManager {
   }
 
   private registerListeners() {
-    this.mapSrv.getMap().on('click', async (event) => {
-      await this.onMapClick(event);
+    this.mapSrv.on('featureClicked', async (feature) => {
+      await this.onFeatureClicked(feature);
     });
 
     this.markersSrv.on('create', (markerId, marker) =>
@@ -57,21 +57,12 @@ export class MarkersLayerManager {
     );
   }
 
-  private async onMapClick(event: MapBrowserEvent<any>) {
-    const [markerFeature] = this.mapSrv
-      .getMap()
-      .getFeaturesAtPixel(event.pixel)
-      .filter((feature) => feature instanceof MarkerFeature);
-
-    if (!markerFeature) {
+  private async onFeatureClicked(feature: FeatureLike) {
+    if (!(feature instanceof MarkerFeature)) {
       return;
     }
 
-    if (await this.actionSheetCtrl.getTop()) {
-      return;
-    }
-
-    await this.showMarkerActionSheet(markerFeature.getMarker());
+    await this.showMarkerActionSheet(feature.getMarker());
   }
 
   private onMarkerCreated(marker: Marker) {
