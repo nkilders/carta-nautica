@@ -51,6 +51,7 @@ import { MapService } from 'src/app/services/map.service';
 import { createPositionAccuracyLayerManager } from 'src/app/layer-managers/position-accuracy-layer-manager';
 import { createRoutePlanningLayerManager } from 'src/app/layer-managers/route-planning-layer-manager';
 import { RoutePlanningService } from 'src/app/services/route-planning.service';
+import { SeamarkLayerManager } from 'src/app/utils/seamark-layer-manager';
 
 @Component({
   selector: 'app-map',
@@ -189,6 +190,7 @@ export class MapPage implements OnInit {
       this.routePlanningService,
       this.translateService,
     );
+    new SeamarkLayerManager(this.mapSrv);
   }
 
   private async onLongClick(

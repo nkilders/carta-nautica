@@ -1,0 +1,15 @@
+light_minor >=14
+light_major >=9
+
+Die Tiles für Zoom 14 werden schon ab map.layer.getZoom() ~= 13.4 geladen
+
+
+Ab Zoom-Stufe 8 werden Objekte geladen und angezeigt
+Wird herausgezoomt, wird die Layer versteckt
+bei jeder Abfrage werden die Center-Koordinaten gespeichert
+Sobald das Center mehr als x km vom vorherigen abweicht, werden neue Daten geladen
+
+
+
+Verbesserung:
+- alte Daten bei Fetch nicht wegwerfen
