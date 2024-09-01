@@ -74,7 +74,7 @@ export class LayerManager {
       }),
       zIndex: -zIndex,
       visible: layer.visible,
-      preload: preload ? Infinity : 0,
+      preload,
     });
 
     this.mapSrv.getMap().addLayer(tileLayer);
