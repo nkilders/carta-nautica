@@ -34,10 +34,14 @@
 
     <ion-item>
       <ion-label>{{ 'settings.mapPreloading' | translate }}</ion-label>
-      <ion-toggle
+      <ion-range
+        snaps="true"
+        pin="true"
+        min="0"
+        max="10"
         [(ngModel)]="mapPreloading"
         (ionChange)="updateMapPreloading()"
-      ></ion-toggle>
+      />
     </ion-item>
 
     <ion-item>

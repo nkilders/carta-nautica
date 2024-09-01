@@ -269,14 +269,12 @@ export class MapPage implements OnInit {
   }
 
   private initSettingsListeners() {
-    this.settings.on('mapPreloading', (newValue) => {
+    this.settings.on('mapPreloading', (preload) => {
       const layers = this.mapSrv.getMap().getAllLayers();
 
       if (!layers) {
         return;
       }
-
-      const preload = newValue ? Infinity : 0;
 
       for (const layer of layers) {
         if (layer instanceof BaseTileLayer) {

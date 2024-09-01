@@ -14,6 +14,7 @@ import {
   IonLabel,
   IonToggle,
   IonInput,
+  IonRange,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -40,6 +41,7 @@ import { Language } from 'src/app/models/settings';
     IonLabel,
     IonToggle,
     IonInput,
+    IonRange,
   ],
 })
 export class SettingsPage implements OnInit {
@@ -47,7 +49,7 @@ export class SettingsPage implements OnInit {
   public distanceUnit = '0';
   public temperatureUnit = '0';
   public language = Language.GERMAN;
-  public mapPreloading = false;
+  public mapPreloading = 1;
   public keepAwake = false;
   public animations = false;
   public openWeatherMapApiKey = '';

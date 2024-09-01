@@ -94,7 +94,7 @@ export class SettingsService {
     return this.settings!.mapPreloading;
   }
 
-  public async setMapPreloading(preloading: boolean) {
+  public async setMapPreloading(preloading: number) {
     await this.init();
 
     this.settings!.mapPreloading = preloading;
@@ -155,7 +155,7 @@ export class SettingsService {
     listener: (newValue: TemperatureUnit) => void,
   ): void;
   on(event: 'language', listener: (newValue: Language) => void): void;
-  on(event: 'mapPreloading', listener: (newValue: boolean) => void): void;
+  on(event: 'mapPreloading', listener: (newValue: number) => void): void;
   on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
   on(event: 'animations', listener: (newValue: boolean) => void): void;
   on(event: 'openWeatherMapApiKey', listener: (newValue: string) => void): void;
@@ -187,7 +187,7 @@ export class SettingsService {
       distanceUnit: DistanceUnit.KILOMETERS,
       temperatureUnit: TemperatureUnit.CELSIUS,
       language: Language.GERMAN,
-      mapPreloading: true,
+      mapPreloading: 1,
       keepAwake: true,
       animations: true,
       openWeatherMapApiKey: '',

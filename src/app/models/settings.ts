@@ -3,7 +3,7 @@ export interface Settings {
   distanceUnit: DistanceUnit;
   temperatureUnit: TemperatureUnit;
   language: Language;
-  mapPreloading: boolean;
+  mapPreloading: number;
   keepAwake: boolean;
   animations: boolean;
   openWeatherMapApiKey: string;
