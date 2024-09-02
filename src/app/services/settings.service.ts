@@ -133,6 +133,21 @@ export class SettingsService {
     await this.save();
   }
 
+  public async getPositionAccuracy() {
+    await this.init();
+
+    return this.settings!.positionAccuracy;
+  }
+
+  public async setPositionAccuracy(positionAccuracy: boolean) {
+    await this.init();
+
+    this.settings!.positionAccuracy = positionAccuracy;
+    this.eventEmitter.emit('positionAccuracy', positionAccuracy);
+
+    await this.save();
+  }
+
   public async getOpenWeatherMapApiKey() {
     await this.init();
 
@@ -158,6 +173,7 @@ export class SettingsService {
   on(event: 'mapPreloading', listener: (newValue: number) => void): void;
   on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
   on(event: 'animations', listener: (newValue: boolean) => void): void;
+  on(event: 'positionAccuracy', listener: (newValue: boolean) => void): void;
   on(event: 'openWeatherMapApiKey', listener: (newValue: string) => void): void;
 
   public on(event: string, listener: (...args: any) => void) {
@@ -190,6 +206,7 @@ export class SettingsService {
       mapPreloading: 1,
       keepAwake: true,
       animations: true,
+      positionAccuracy: false,
       openWeatherMapApiKey: '',
     };
   }

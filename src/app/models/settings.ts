@@ -6,6 +6,7 @@ export interface Settings {
   mapPreloading: number;
   keepAwake: boolean;
   animations: boolean;
+  positionAccuracy: boolean;
   openWeatherMapApiKey: string;
 }
 
