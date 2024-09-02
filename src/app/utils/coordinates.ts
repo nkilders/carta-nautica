@@ -1,3 +1,5 @@
+import { getUserProjection } from 'ol/proj';
+
 function degreesToRadians(degrees: number) {
   return (degrees * Math.PI) / 180;
 }
@@ -22,4 +24,13 @@ export function geoDistance(
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   return earthRadiusKm * c;
+}
+
+// https://stackoverflow.com/a/67582451/19471211
+export function toProjectedDistance(distanceMeters: number, latitude: number) {
+  const latitudeRadians = degreesToRadians(latitude);
+  const factor = Math.cos(latitudeRadians);
+  const metersPeterUnit = getUserProjection()!.getMetersPerUnit()!;
+
+  return (distanceMeters / metersPeterUnit) * factor;
 }

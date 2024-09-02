@@ -52,6 +52,7 @@ export class SettingsPage implements OnInit {
   public mapPreloading = 1;
   public keepAwake = false;
   public animations = false;
+  public positionAccuracy = false;
   public openWeatherMapApiKey = '';
 
   constructor(
@@ -72,6 +73,7 @@ export class SettingsPage implements OnInit {
       mapPreloading,
       keepAwake,
       animations,
+      positionAccuracy,
       openWeatherMapApiKey,
     } = await this.settings.getAllSettings();
 
@@ -82,6 +84,7 @@ export class SettingsPage implements OnInit {
     this.mapPreloading = mapPreloading;
     this.keepAwake = keepAwake;
     this.animations = animations;
+    this.positionAccuracy = positionAccuracy;
     this.openWeatherMapApiKey = openWeatherMapApiKey;
   }
 
@@ -116,6 +119,10 @@ export class SettingsPage implements OnInit {
 
   protected async updateAnimations() {
     await this.settings.setAnimations(this.animations);
+  }
+
+  protected async updatePositionAccuracy() {
+    await this.settings.setPositionAccuracy(this.positionAccuracy);
   }
 
   protected async updateOpenWeatherMapApiKey() {

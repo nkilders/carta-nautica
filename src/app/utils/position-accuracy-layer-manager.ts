@@ -1,0 +1,76 @@
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import { ZIndex } from './z-indices';
+import { MapService } from '../services/map.service';
+import { SettingsService } from '../services/settings.service';
+import { GeolocationService } from '../services/geolocation.service';
+import { Feature } from 'ol';
+import { Circle } from 'ol/geom';
+import { Fill, Stroke, Style } from 'ol/style';
+import { toProjectedDistance } from './coordinates';
+
+export class PositionAccuracyLayerManager {
+  private layer?: VectorLayer;
+  private layerSource?: VectorSource;
+  private feature?: Feature;
+
+  constructor(
+    private mapSrv: MapService,
+    private settingsSrv: SettingsService,
+    private geolocationSrv: GeolocationService,
+  ) {
+    this.createLayer();
+    this.registerListeners();
+  }
+
+  private async createLayer() {
+    const showPositionAccuracy = await this.settingsSrv.getPositionAccuracy();
+    this.layerSource = new VectorSource();
+
+    this.layer = new VectorLayer({
+      source: this.layerSource,
+      zIndex: ZIndex.POSITION_ACCURACY,
+      visible: showPositionAccuracy,
+    });
+
+    this.mapSrv.getMap().addLayer(this.layer);
+  }
+
+  private registerListeners() {
+    this.settingsSrv.on('positionAccuracy', (positionAccuracy) => {
+      this.layer?.setVisible(positionAccuracy);
+    });
+
+    this.geolocationSrv.watchPosition((position) => {
+      if (!position) {
+        return;
+      }
+
+      if (!this.feature) {
+        this.initFeature();
+      }
+
+      const { longitude, latitude, accuracy } = position.coords;
+      console.log(accuracy);
+
+      const projectedRadius = toProjectedDistance(accuracy, latitude);
+
+      this.feature?.setGeometry(
+        new Circle([longitude, latitude], projectedRadius),
+      );
+    });
+  }
+
+  private initFeature() {
+    this.feature = new Feature();
+
+    this.feature.setStyle(
+      new Style({
+        fill: new Fill({ color: 'rgba(1, 1, 1, 0.15)' }),
+        stroke: new Stroke({ color: 'red', width: 2, lineDash: [5, 5] }),
+      }),
+    );
+
+    this.layerSource?.addFeature(this.feature);
+  }
+}

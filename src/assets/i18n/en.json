@@ -14,6 +14,7 @@
     "mapPreloading": "Map Preloading",
     "keepScreenAwake": "Keep Screen Awake",
     "animations": "Animations",
+    "positionAccuracy": "Show position accuracy",
     "openWeatherMapApiKey": "OpenWeatherMap API Key"
   },
   "layers": {

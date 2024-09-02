@@ -61,6 +61,14 @@
     </ion-item>
 
     <ion-item>
+      <ion-label>{{ 'settings.positionAccuracy' | translate }}</ion-label>
+      <ion-toggle
+        [(ngModel)]="positionAccuracy"
+        (ionChange)="updatePositionAccuracy()"
+      ></ion-toggle>
+    </ion-item>
+
+    <ion-item>
       <ion-label>{{ 'settings.openWeatherMapApiKey' | translate }}</ion-label>
       <ion-input
         [(ngModel)]="openWeatherMapApiKey"
