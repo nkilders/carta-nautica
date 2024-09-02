@@ -49,6 +49,7 @@ import { WeatherPage } from '../weather/weather.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
 import { MapService } from 'src/app/services/map.service';
+import { PositionAccuracyLayerManager } from 'src/app/utils/position-accuracy-layer-manager';
 
 @Component({
   selector: 'app-map',
@@ -208,6 +209,11 @@ export class MapPage implements OnInit {
 
         await actionSheet.present();
       },
+    );
+    new PositionAccuracyLayerManager(
+      this.mapSrv,
+      this.settings,
+      this.geolocation,
     );
   }
 
