@@ -55,7 +55,7 @@
     "@angular/compiler-cli": "^18.2.3",
     "@angular/language-service": "^18.2.3",
     "@capacitor/cli": "6.1.2",
-    "@ionic/angular-toolkit": "^11.0.1",
+    "@ionic/angular-toolkit": "^12.1.1",
     "@types/events": "^3.0.3",
     "@types/jasmine": "~5.1.0",
     "@types/uuid": "^10.0.0",
