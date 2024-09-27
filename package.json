@@ -38,7 +38,7 @@
     "cordova-plugin-nativegeocoder": "^3.5.1",
     "country-code-emoji": "^2.3.0",
     "ionicons": "^7.2.1",
-    "ol": "^10.2.0",
+    "ol": "^10.2.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.7.0",
     "uuid": "^10.0.0",
