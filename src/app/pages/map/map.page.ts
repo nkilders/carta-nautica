@@ -34,11 +34,9 @@ import {
   recording,
   sunny,
 } from 'ionicons/icons';
-import { LongClick } from 'src/app/utils/longclick';
 import { TranslateService } from '@ngx-translate/core';
 import { geoDistance } from 'src/app/utils/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
-import { Coordinate } from 'ol/coordinate';
 import { MarkersLayerManager } from 'src/app/utils/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
 import { SpeedHeadingControl } from 'src/app/utils/speed-heading-control';
