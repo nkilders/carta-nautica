@@ -51,6 +51,11 @@ export class MapService {
     });
   }
 
+  public focus(longitude: number, latitude: number, zoom: number) {
+    this.map.getView().setCenter([longitude, latitude]);
+    this.map.getView().setZoom(zoom);
+  }
+
   on(
     event: 'longClick',
     listener: (

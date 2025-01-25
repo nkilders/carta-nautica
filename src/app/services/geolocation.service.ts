@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder';
-import {
-  Geolocation,
-  PositionOptions,
-  WatchPositionCallback,
-} from '@capacitor/geolocation';
+import { Geolocation, Position, PositionOptions } from '@capacitor/geolocation';
 import { v4 as uuidv4 } from 'uuid';
+import { StorageService } from './storage.service';
+
+const STORAGE_KEY = 'position';
 
 @Injectable({
   providedIn: 'root',
@@ -15,13 +14,23 @@ export class GeolocationService {
     enableHighAccuracy: true,
   };
 
-  private positionWatchCallbacks: Map<string, WatchPositionCallback> =
+  private position: Position;
+
+  private readonly positionWatchCallbacks: Map<string, WatchPositionCallback> =
     new Map();
 
-  constructor() {}
+  constructor(private storage: StorageService) {
+    this.position = this.defaultPosition();
+  }
+
+  public async fetchPosition() {
+    const position = await Geolocation.getCurrentPosition(this.options);
+    await this.updatePosition(position);
+    return position;
+  }
 
   public getPosition() {
-    return Geolocation.getCurrentPosition(this.options);
+    return this.position;
   }
 
   public async watchPosition(callback: WatchPositionCallback) {
@@ -29,11 +38,11 @@ export class GeolocationService {
 
     this.positionWatchCallbacks.set(watchId, callback);
 
-    if (this.positionWatchCallbacks.size === 1) {
-      Geolocation.watchPosition(this.options, (position, err) => {
-        this.positionWatchCallbacks.forEach((cb) => cb(position, err));
-      });
-    }
+    Geolocation.watchPosition(this.options, (position) => {
+      if (position == null) return;
+      this.updatePosition(position);
+      this.positionWatchCallbacks.forEach((cb) => cb(position));
+    });
 
     return watchId;
   }
@@ -50,4 +59,40 @@ export class GeolocationService {
 
     return result && result[0];
   }
+
+  public async loadLastKnownPosition() {
+    const position = await this.storage.get(STORAGE_KEY);
+
+    if (position) {
+      this.position = position;
+    }
+
+    return this.position;
+  }
+
+  private async updatePosition(position: Position) {
+    this.position = position;
+
+    await this.storage.set(
+      STORAGE_KEY,
+      JSON.parse(JSON.stringify(this.position)),
+    );
+  }
+
+  private defaultPosition(): Position {
+    return {
+      timestamp: -1,
+      coords: {
+        latitude: 0,
+        longitude: 0,
+        altitude: null,
+        accuracy: -1,
+        altitudeAccuracy: null,
+        heading: null,
+        speed: null,
+      },
+    };
+  }
 }
+
+export type WatchPositionCallback = (position: Position) => void;

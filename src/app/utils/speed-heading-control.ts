@@ -46,11 +46,7 @@ export class SpeedHeadingControl extends Control {
   }
 
   private async initPositionWatch() {
-    await this.geolocationSrv.watchPosition((position, err) => {
-      if (!position) {
-        return;
-      }
-
+    await this.geolocationSrv.watchPosition((position) => {
       this.updateSpeedText(position.coords.speed);
       this.updateHeadingText(position.coords.heading);
       this.changed();

@@ -73,9 +73,7 @@ export class MapPage implements OnInit {
   public speed = '';
   public heading = '';
 
-  private position?: Position;
   private boat?: BoatMarker;
-  private receivedInitialPosition: boolean;
   private lastToolbarTitleUpdate: number;
   private fabFollowToggler?: FabToggler;
   private fabRecordTrackToggler?: FabToggler;
@@ -93,7 +91,6 @@ export class MapPage implements OnInit {
     private modalCtrl: ModalWrapper,
     private translate: TranslateService,
   ) {
-    this.receivedInitialPosition = false;
     this.lastToolbarTitleUpdate = 0;
 
     addIcons({
@@ -219,7 +216,7 @@ export class MapPage implements OnInit {
     clickLongitude: number,
     clickLatitude: number,
   ) {
-    const { longitude, latitude } = this.position!.coords;
+    const { longitude, latitude } = this.geolocation.getPosition().coords;
 
     const distanceKm = geoDistance(
       clickLatitude,
@@ -267,9 +264,18 @@ export class MapPage implements OnInit {
   }
 
   private async initPositionWatch() {
-    await this.geolocation.watchPosition((pos, err) => {
-      this.onPositionChanged(pos, err);
+    await this.focusLastKnownPosition();
+    await this.geolocation.watchPosition((pos) => {
+      this.onPositionChanged(pos);
     });
+  }
+
+  private async focusLastKnownPosition() {
+    const pos = await this.geolocation.loadLastKnownPosition();
+    if (pos.timestamp !== -1) {
+      this.mapSrv.focus(pos.coords.longitude, pos.coords.latitude, 15);
+    }
+    this.boat?.updatePosition(pos);
   }
 
   private initSettingsListeners() {
@@ -288,19 +294,7 @@ export class MapPage implements OnInit {
     });
   }
 
-  private onPositionChanged(position: Position | null, err: unknown) {
-    if (!position) {
-      return;
-    }
-
-    this.position = position;
-
-    if (!this.receivedInitialPosition) {
-      this.receivedInitialPosition = true;
-
-      this.onInitialPositionReceived(position);
-    }
-
+  private onPositionChanged(position: Position) {
     this.boat?.updatePosition(position);
     this.updateToolbarTitle();
 
@@ -309,16 +303,8 @@ export class MapPage implements OnInit {
     }
   }
 
-  private onInitialPositionReceived(position: Position) {
-    this.flyToCurrentPosition();
-  }
-
   private flyToCurrentPosition() {
-    if (!this.position) {
-      return;
-    }
-
-    const { longitude, latitude } = this.position.coords;
+    const { longitude, latitude } = this.geolocation.getPosition().coords;
 
     this.mapSrv.flyTo(longitude, latitude, 15, 1_000);
   }
@@ -328,13 +314,9 @@ export class MapPage implements OnInit {
       return;
     }
 
-    if (this.position == null) {
-      return;
-    }
-
     this.lastToolbarTitleUpdate = Date.now();
 
-    const { longitude, latitude } = this.position.coords;
+    const { longitude, latitude } = this.geolocation.getPosition().coords;
     const result = await this.geolocation.reverseGeocode(longitude, latitude);
 
     this.toolbarTitle = this.formatToolbarTitle(result);
@@ -374,6 +356,7 @@ export class MapPage implements OnInit {
 
   private initFabs() {
     this.fabFollowToggler = new FabToggler('fabFollow', 'dark', 'primary');
+    this.fabFollowToggler.toggle();
 
     this.mapSrv.getMap().on('pointerdrag', () => {
       if (this.fabFollowToggler?.isActive()) {
