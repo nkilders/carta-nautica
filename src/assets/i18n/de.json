@@ -80,6 +80,8 @@
     "title": "Aktionen an dieser Stelle",
     "distance": "Entfernung: {{distance}} {{unit}}",
     "createMarker": "Markierung hinzufügen",
+    "setDestination": "Ziel setzen",
+    "addStop": "Zwischenstopp hinzufügen",
     "weather": "Wetter",
     "cancel": "Abbrechen"
   },
@@ -111,5 +113,12 @@
       "saturday": "Samstag",
       "sunday": "Sonntag"
     }
+  },
+  "routeStop": {
+    "addStopTitle": "Zwischenstopp hinzufügen",
+    "addStopBefore1": "Vor Stopp 1",
+    "addStopAfter": "Nach Stopp {{sequence}}",
+    "delete": "Löschen",
+    "cancel": "Abbrechen"
   }
 }
