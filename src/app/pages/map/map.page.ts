@@ -23,7 +23,7 @@ import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
 import { DistanceUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
-import { LayerManager } from 'src/app/utils/layer-manager';
+import { createLayerManager } from 'src/app/utils/layer-manager';
 import { FabToggler } from 'src/app/utils/fab-toggler';
 import { addIcons } from 'ionicons';
 import {
@@ -37,17 +37,17 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { geoDistance } from 'src/app/utils/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
-import { MarkersLayerManager } from 'src/app/utils/markers-layer-manager';
+import { createMarkersLayerManager } from 'src/app/utils/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
 import { SpeedHeadingControl } from 'src/app/utils/speed-heading-control';
 import { APP_NAME } from 'src/app/app';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
-import { TrackLayerManager } from 'src/app/utils/track-layer-manager';
+import { createTrackLayerManager } from 'src/app/utils/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
 import { MapService } from 'src/app/services/map.service';
-import { PositionAccuracyLayerManager } from 'src/app/utils/position-accuracy-layer-manager';
+import { createPositionAccuracyLayerManager } from 'src/app/utils/position-accuracy-layer-manager';
 
 @Component({
   selector: 'app-map',
@@ -146,14 +146,14 @@ export class MapPage implements OnInit {
 
     this.boat = new BoatMarker(this.mapSrv);
 
-    new LayerManager(this.mapSrv, this.layers, this.settings);
-    new MarkersLayerManager(
+    createLayerManager(this.mapSrv, this.layers, this.settings);
+    createMarkersLayerManager(
       this.mapSrv,
       this.markersSrv,
       this.actionSheetCtrl,
       this.translate,
     );
-    new TrackLayerManager(this.mapSrv, this.trackRecord);
+    createTrackLayerManager(this.mapSrv, this.trackRecord);
     this.mapSrv.on(
       'longClick',
       async (longitude, latitude, completeLongClick) => {
@@ -205,7 +205,7 @@ export class MapPage implements OnInit {
         await actionSheet.present();
       },
     );
-    new PositionAccuracyLayerManager(
+    createPositionAccuracyLayerManager(
       this.mapSrv,
       this.settings,
       this.geolocation,

@@ -9,7 +9,15 @@ import { Circle } from 'ol/geom';
 import { Fill, Stroke, Style } from 'ol/style';
 import { toProjectedDistance } from './coordinates';
 
-export class PositionAccuracyLayerManager {
+export function createPositionAccuracyLayerManager(
+  mapSrv: MapService,
+  settingsSrv: SettingsService,
+  geolocationSrv: GeolocationService,
+) {
+  return new PositionAccuracyLayerManager(mapSrv, settingsSrv, geolocationSrv);
+}
+
+class PositionAccuracyLayerManager {
   private layer?: VectorLayer;
   private layerSource?: VectorSource;
   private feature?: Feature;

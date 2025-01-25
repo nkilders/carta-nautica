@@ -8,7 +8,14 @@ import { ZIndex } from './z-indices';
 import { LineString } from 'ol/geom';
 import { MapService } from '../services/map.service';
 
-export class TrackLayerManager {
+export function createTrackLayerManager(
+  mapSrv: MapService,
+  trackRecorder: TrackRecorderService,
+) {
+  return new TrackLayerManager(mapSrv, trackRecorder);
+}
+
+class TrackLayerManager {
   private layer?: VectorLayer;
   private line?: LineString;
 
