@@ -264,15 +264,18 @@ export class MapPage implements OnInit {
   }
 
   private async initPositionWatch() {
+    await this.focusLastKnownPosition();
+    await this.geolocation.watchPosition((pos) => {
+      this.onPositionChanged(pos);
+    });
+  }
+
+  private async focusLastKnownPosition() {
     const pos = await this.geolocation.loadLastKnownPosition();
     if (pos.timestamp !== -1) {
       this.mapSrv.focus(pos.coords.longitude, pos.coords.latitude, 15);
     }
     this.boat?.updatePosition(pos);
-
-    await this.geolocation.watchPosition((pos) => {
-      this.onPositionChanged(pos);
-    });
   }
 
   private initSettingsListeners() {
