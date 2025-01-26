@@ -84,7 +84,7 @@ export class LayersCreatePage {
   private async errorToast(textKey: string) {
     const headerText = await this.translate.instant('layersCreate.errorHeader');
     const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('layersCreate.errorOk');
+    const okText = await this.translate.instant('general.ok');
 
     const alert = await this.alertCtrl.create({
       header: headerText,

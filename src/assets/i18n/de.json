@@ -1,4 +1,12 @@
 {
+  "general": {
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "ok": "Ok",
+    "save": "Speichern",
+    "create": "Hinzufügen"
+  },
   "sidebar": {
     "layers": "Ebenen",
     "tracks": "Routen",
@@ -18,63 +26,42 @@
     "openWeatherMapApiKey": "OpenWeatherMap API-Schlüssel"
   },
   "layers": {
-    "edit": "Bearbeiten",
-    "delete": "Löschen",
-    "deleteConfirmHeader": "Ebene löschen",
-    "deleteCancel": "Abbrechen",
-    "deleteConfirm": "Löschen"
+    "deleteConfirmHeader": "Ebene löschen"
   },
   "layersEdit": {
     "title": "Kartenebene bearbeiten",
     "name": "Name",
     "url": "URL",
-    "save": "Speichern",
-    "cancel": "Abbrechen",
     "errorNameEmpty": "Name darf nicht leer sein",
     "errorUrlEmpty": "URL darf nicht leer sein",
-    "errorHeader": "Ungültige Eingabe",
-    "errorOk": "Ok"
+    "errorHeader": "Ungültige Eingabe"
   },
   "layersCreate": {
     "title": "Kartenebene hinzufügen",
     "name": "Name",
     "url": "URL",
-    "create": "Hinzufügen",
-    "cancel": "Abbrechen",
     "errorNameEmpty": "Name darf nicht leer sein",
     "errorUrlEmpty": "URL darf nicht leer sein",
-    "errorHeader": "Ungültige Eingabe",
-    "errorOk": "Ok"
+    "errorHeader": "Ungültige Eingabe"
   },
   "markers": {
     "flyTo": "Auf Karte zeigen",
-    "edit": "Bearbeiten",
-    "delete": "Löschen",
-    "deleteConfirmHeader": "Markierung löschen",
-    "deleteCancel": "Abbrechen",
-    "deleteConfirm": "Löschen"
+    "deleteConfirmHeader": "Markierung löschen"
   },
   "markersEdit": {
     "title": "Markierung bearbeiten",
     "name": "Name",
-    "save": "Speichern",
-    "cancel": "Abbrechen",
     "errorNameEmpty": "Name darf nicht leer sein",
-    "errorHeader": "Ungültige Eingabe",
-    "errorOk": "Ok"
+    "errorHeader": "Ungültige Eingabe"
   },
   "markersCreate": {
     "title": "Markierung hinzufügen",
     "name": "Name",
-    "create": "Hinzufügen",
-    "cancel": "Abbrechen",
     "errorNameEmpty": "Name darf nicht leer sein",
-    "errorHeader": "Ungültige Eingabe",
-    "errorOk": "Ok"
+    "errorHeader": "Ungültige Eingabe"
   },
   "markerClick": {
-    "flyTo": "Heranfliegen",
-    "cancel": "Abbrechen"
+    "flyTo": "Heranfliegen"
   },
   "longClick": {
     "title": "Aktionen an dieser Stelle",
@@ -82,17 +69,13 @@
     "createMarker": "Markierung hinzufügen",
     "setDestination": "Ziel setzen",
     "addStop": "Zwischenstopp hinzufügen",
-    "weather": "Wetter",
-    "cancel": "Abbrechen"
+    "weather": "Wetter"
   },
   "tracks": {
     "duration": "Dauer: {{duration}}",
     "length": "Länge: {{length}} {{unit}}",
     "avgSpeed": "⌀ Geschwindigkeit: {{speed}} {{unit}}",
-    "delete": "Löschen",
-    "deleteConfirmHeader": "Route löschen",
-    "deleteCancel": "Abbrechen",
-    "deleteConfirm": "Löschen"
+    "deleteConfirmHeader": "Route löschen"
   },
   "weather": {
     "loading": "Wetterdaten werden geladen",
@@ -117,8 +100,6 @@
   "routeStop": {
     "addStopTitle": "Zwischenstopp hinzufügen",
     "addStopBefore1": "Vor Stopp 1",
-    "addStopAfter": "Nach Stopp {{sequence}}",
-    "delete": "Löschen",
-    "cancel": "Abbrechen"
+    "addStopAfter": "Nach Stopp {{sequence}}"
   }
 }

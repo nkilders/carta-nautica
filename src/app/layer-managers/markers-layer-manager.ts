@@ -107,7 +107,7 @@ class MarkersLayerManager {
 
   private async showMarkerActionSheet(marker: Marker) {
     const flyToText = this.translate.instant('markerClick.flyTo');
-    const cancelText = this.translate.instant('markerClick.cancel');
+    const cancelText = this.translate.instant('general.cancel');
 
     const actionSheet = await this.actionSheetCtrl.create({
       header: marker.name,

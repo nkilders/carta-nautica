@@ -91,8 +91,8 @@ export class LayersPage implements OnInit {
   }
 
   protected async showLayerOptions(layer: Layer) {
-    const editText = this.translate.instant('layers.edit');
-    const deleteText = this.translate.instant('layers.delete');
+    const editText = this.translate.instant('general.edit');
+    const deleteText = this.translate.instant('general.delete');
 
     const actionSheet = await this.actionSheetCtrl.create({
       header: layer.name,
@@ -148,8 +148,8 @@ export class LayersPage implements OnInit {
     const deleteTitleText = this.translate.instant(
       'layers.deleteConfirmHeader',
     );
-    const cancelText = this.translate.instant('layers.deleteCancel');
-    const deleteText = this.translate.instant('layers.deleteConfirm');
+    const cancelText = this.translate.instant('general.cancel');
+    const deleteText = this.translate.instant('general.delete');
 
     const alert = await this.alertCtrl.create({
       header: deleteTitleText,

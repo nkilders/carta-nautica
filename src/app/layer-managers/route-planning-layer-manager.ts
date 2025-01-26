@@ -94,8 +94,8 @@ class RoutePlanningLayerManager {
   }
 
   private async showStopActionSheet(sequence: number) {
-    const deleteText = this.translate.instant('routeStop.delete');
-    const cancelText = this.translate.instant('routeStop.cancel');
+    const deleteText = this.translate.instant('general.delete');
+    const cancelText = this.translate.instant('general.cancel');
 
     const actionSheet = await this.actionSheetCtrl.create({
       buttons: [

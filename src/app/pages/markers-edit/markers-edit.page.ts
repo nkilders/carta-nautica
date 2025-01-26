@@ -84,7 +84,7 @@ export class MarkersEditPage implements OnInit {
   private async errorToast(textKey: string) {
     const headerText = await this.translate.instant('markersEdit.errorHeader');
     const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('markersEdit.errorOk');
+    const okText = await this.translate.instant('general.ok');
 
     const toast = await this.alertCtrl.create({
       header: headerText,

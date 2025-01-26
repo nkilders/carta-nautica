@@ -1,4 +1,12 @@
 {
+  "general": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "ok": "Ok",
+    "save": "Save",
+    "create": "Create"
+  },
   "sidebar": {
     "layers": "Layers",
     "tracks": "Tracks",
@@ -18,63 +26,42 @@
     "openWeatherMapApiKey": "OpenWeatherMap API Key"
   },
   "layers": {
-    "edit": "Edit",
-    "delete": "Delete",
-    "deleteConfirmHeader": "Delete Map Layer",
-    "deleteCancel": "Cancel",
-    "deleteConfirm": "Delete"
+    "deleteConfirmHeader": "Delete Map Layer"
   },
   "layersEdit": {
     "title": "Edit Map Layer",
     "name": "Name",
     "url": "URL",
-    "save": "Save",
-    "cancel": "Cancel",
     "errorNameEmpty": "Name must not be empty",
     "errorUrlEmpty": "URL must not be empty",
-    "errorHeader": "Invalid input",
-    "errorOk": "Ok"
+    "errorHeader": "Invalid input"
   },
   "layersCreate": {
     "title": "Create Map Layer",
     "name": "Name",
     "url": "URL",
-    "create": "Create",
-    "cancel": "Cancel",
     "errorNameEmpty": "Name must not be empty",
     "errorUrlEmpty": "URL must not be empty",
-    "errorHeader": "Invalid input",
-    "errorOk": "Ok"
+    "errorHeader": "Invalid input"
   },
   "markers": {
     "flyTo": "Show on map",
-    "edit": "Edit",
-    "delete": "Delete",
-    "deleteConfirmHeader": "Delete Marker",
-    "deleteCancel": "Cancel",
-    "deleteConfirm": "Delete"
+    "deleteConfirmHeader": "Delete Marker"
   },
   "markersEdit": {
     "title": "Edit Marker",
     "name": "Name",
-    "save": "Save",
-    "cancel": "Cancel",
     "errorNameEmpty": "Name must not be empty",
-    "errorHeader": "Invalid input",
-    "errorOk": "Ok"
+    "errorHeader": "Invalid input"
   },
   "markersCreate": {
     "title": "Create Marker",
     "name": "Name",
-    "create": "Create",
-    "cancel": "Cancel",
     "errorNameEmpty": "Name must not be empty",
-    "errorHeader": "Invalid input",
-    "errorOk": "Ok"
+    "errorHeader": "Invalid input"
   },
   "markerClick": {
-    "flyTo": "Fly to",
-    "cancel": "Cancel"
+    "flyTo": "Fly to"
   },
   "longClick": {
     "title": "Actions at this position",
@@ -82,17 +69,13 @@
     "createMarker": "Add Marker",
     "setDestination": "Set Destination",
     "addStop": "Add Stop",
-    "weather": "Weather",
-    "cancel": "Cancel"
+    "weather": "Weather"
   },
   "tracks": {
     "duration": "Duration: {{duration}}",
     "length": "Length: {{length}} {{unit}}",
     "avgSpeed": "⌀ Speed: {{speed}} {{unit}}",
-    "delete": "Delete",
-    "deleteConfirmHeader": "Delete track",
-    "deleteCancel": "Cancel",
-    "deleteConfirm": "Delete"
+    "deleteConfirmHeader": "Delete track"
   },
   "weather": {
     "loading": "Loading weather data",
@@ -116,9 +99,7 @@
     "routeStop": {
       "addStopTitle": "Add Stop",
       "addStopBefore1": "Before Stop 1",
-      "addStopAfter": "After Stop {{sequence}}",
-      "delete": "Delete",
-      "cancel": "Cancel"
+      "addStopAfter": "After Stop {{sequence}}"
     }
   }
 }

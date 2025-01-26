@@ -211,7 +211,7 @@ export class MapPage implements OnInit {
           },
         },
         {
-          text: this.translate.instant('longClick.cancel'),
+          text: this.translate.instant('general.cancel'),
           role: 'cancel',
           icon: 'close-circle',
         },
