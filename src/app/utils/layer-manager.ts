@@ -5,7 +5,15 @@ import TileLayer from 'ol/layer/Tile';
 import { SettingsService } from '../services/settings.service';
 import { MapService } from '../services/map.service';
 
-export class LayerManager {
+export function createLayerManager(
+  mapSrv: MapService,
+  layersSrv: LayersService,
+  settings: SettingsService,
+) {
+  return new LayerManager(mapSrv, layersSrv, settings);
+}
+
+class LayerManager {
   private layers: Map<string, TileLayer<any>>;
 
   constructor(

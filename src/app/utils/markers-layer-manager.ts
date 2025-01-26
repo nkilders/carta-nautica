@@ -10,7 +10,21 @@ import { MapService } from '../services/map.service';
 import { FeatureLike } from 'ol/Feature';
 import { TranslateService } from '@ngx-translate/core';
 
-export class MarkersLayerManager {
+export function createMarkersLayerManager(
+  mapSrv: MapService,
+  markersSrv: MarkersService,
+  actionSheetCtrl: ActionSheetWrapper,
+  translate: TranslateService,
+) {
+  return new MarkersLayerManager(
+    mapSrv,
+    markersSrv,
+    actionSheetCtrl,
+    translate,
+  );
+}
+
+class MarkersLayerManager {
   private layer?: VectorLayer;
   private layerSource?: VectorSource;
   private markers: Map<string, MarkerFeature>;

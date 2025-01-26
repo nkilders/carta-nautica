@@ -23,11 +23,12 @@ import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
 import { DistanceUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
-import { LayerManager } from 'src/app/utils/layer-manager';
+import { createLayerManager } from 'src/app/utils/layer-manager';
 import { FabToggler } from 'src/app/utils/fab-toggler';
 import { addIcons } from 'ionicons';
 import {
   closeCircle,
+  flag,
   informationCircle,
   locate,
   location,
@@ -37,17 +38,19 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { geoDistance } from 'src/app/utils/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
-import { MarkersLayerManager } from 'src/app/utils/markers-layer-manager';
+import { createMarkersLayerManager } from 'src/app/utils/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
 import { SpeedHeadingControl } from 'src/app/utils/speed-heading-control';
 import { APP_NAME } from 'src/app/app';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
-import { TrackLayerManager } from 'src/app/utils/track-layer-manager';
+import { createTrackLayerManager } from 'src/app/utils/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
 import { MapService } from 'src/app/services/map.service';
-import { PositionAccuracyLayerManager } from 'src/app/utils/position-accuracy-layer-manager';
+import { createPositionAccuracyLayerManager } from 'src/app/utils/position-accuracy-layer-manager';
+import { createRoutePlanningLayerManager } from 'src/app/utils/route-planning-layer-manager';
+import { RoutePlanningService } from 'src/app/services/route-planning.service';
 
 @Component({
   selector: 'app-map',
@@ -86,6 +89,7 @@ export class MapPage implements OnInit {
     private layers: LayersService,
     private markersSrv: MarkersService,
     private trackRecord: TrackRecorderService,
+    private routePlanningSrv: RoutePlanningService,
     private ref: ChangeDetectorRef,
     private actionSheetCtrl: ActionSheetWrapper,
     private modalCtrl: ModalWrapper,
@@ -100,12 +104,14 @@ export class MapPage implements OnInit {
       closeCircle,
       informationCircle,
       sunny,
+      flag,
     });
   }
 
-  ngOnInit() {
-    this.initMap();
-    this.initPositionWatch();
+  async ngOnInit() {
+    await this.initMap();
+    this.initMapLayerManagers();
+    await this.initPositionWatch();
     this.initSettingsListeners();
     this.initFabs();
   }
@@ -146,70 +152,75 @@ export class MapPage implements OnInit {
 
     this.boat = new BoatMarker(this.mapSrv);
 
-    new LayerManager(this.mapSrv, this.layers, this.settings);
-    new MarkersLayerManager(
+    this.mapSrv.on(
+      'longClick',
+      async (longitude, latitude, completeLongClick) =>
+        this.onLongClick(longitude, latitude, completeLongClick),
+    );
+  }
+
+  private initMapLayerManagers() {
+    createLayerManager(this.mapSrv, this.layers, this.settings);
+    createMarkersLayerManager(
       this.mapSrv,
       this.markersSrv,
       this.actionSheetCtrl,
       this.translate,
     );
-    new TrackLayerManager(this.mapSrv, this.trackRecord);
-    this.mapSrv.on(
-      'longClick',
-      async (longitude, latitude, completeLongClick) => {
-        const titleText = this.translate.instant('longClick.title');
-        const cancelText = this.translate.instant('longClick.cancel');
-        const createMarkerText = this.translate.instant(
-          'longClick.createMarker',
-        );
-        const weatherText = this.translate.instant('longClick.weather');
-        const distanceText = await this.buildLongClickDistanceText(
-          longitude,
-          latitude,
-        );
-
-        const actionSheet = await this.actionSheetCtrl.create({
-          header: titleText,
-          buttons: [
-            {
-              text: distanceText,
-              disabled: true,
-              icon: 'information-circle',
-            },
-            {
-              text: createMarkerText,
-              icon: 'location',
-              handler: async () => {
-                await this.openCreateMarkerPopUp(longitude, latitude);
-              },
-            },
-            {
-              text: weatherText,
-              icon: 'sunny',
-              handler: async () => {
-                await this.openWeatherPopUp(longitude, latitude);
-              },
-            },
-            {
-              text: cancelText,
-              role: 'cancel',
-              icon: 'close-circle',
-            },
-          ],
-        });
-
-        actionSheet.onDidDismiss().then(() => {
-          completeLongClick();
-        });
-
-        await actionSheet.present();
-      },
-    );
-    new PositionAccuracyLayerManager(
+    createTrackLayerManager(this.mapSrv, this.trackRecord);
+    createPositionAccuracyLayerManager(
       this.mapSrv,
       this.settings,
       this.geolocation,
     );
+    createRoutePlanningLayerManager(
+      this.mapSrv,
+      this.routePlanningSrv,
+      this.geolocation,
+      this.actionSheetCtrl,
+      this.translate,
+    );
+  }
+
+  private async onLongClick(
+    longitude: number,
+    latitude: number,
+    completeLongClick: () => void,
+  ) {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: this.translate.instant('longClick.title'),
+      buttons: [
+        {
+          text: await this.buildLongClickDistanceText(longitude, latitude),
+          disabled: true,
+          icon: 'information-circle',
+        },
+        {
+          text: this.translate.instant('longClick.createMarker'),
+          icon: 'location',
+          handler: async () => {
+            await this.openCreateMarkerPopUp(longitude, latitude);
+          },
+        },
+        this.longClickRoutePlanningButton(longitude, latitude),
+        {
+          text: this.translate.instant('longClick.weather'),
+          icon: 'sunny',
+          handler: async () => {
+            await this.openWeatherPopUp(longitude, latitude);
+          },
+        },
+        {
+          text: this.translate.instant('longClick.cancel'),
+          role: 'cancel',
+          icon: 'close-circle',
+        },
+      ],
+    });
+
+    actionSheet.onDidDismiss().then(() => completeLongClick());
+
+    await actionSheet.present();
   }
 
   private async buildLongClickDistanceText(
@@ -237,6 +248,54 @@ export class MapPage implements OnInit {
       distance: distanceText,
       unit: unitText,
     });
+  }
+
+  private longClickRoutePlanningButton(longitude: number, latitude: number) {
+    if (this.routePlanningSrv.get().length === 0) {
+      return {
+        text: this.translate.instant('longClick.setDestination'),
+        icon: 'flag',
+        handler: async () =>
+          this.routePlanningSrv.addStop({ latitude, longitude }, 0),
+      };
+    } else {
+      return {
+        text: this.translate.instant('longClick.addStop'),
+        icon: 'flag',
+        handler: async () =>
+          await this.showRoutePlanningAddStopActionSheet(longitude, latitude),
+      };
+    }
+  }
+
+  private async showRoutePlanningAddStopActionSheet(
+    longitude: number,
+    latitude: number,
+  ) {
+    const buttons = [
+      {
+        text: this.translate.instant('routeStop.addStopBefore1'),
+        handler: async () =>
+          this.routePlanningSrv.addStop({ latitude, longitude }, 0),
+      },
+    ];
+
+    this.routePlanningSrv.get().forEach((stop, i) => {
+      buttons.push({
+        text: this.translate.instant('routeStop.addStopAfter', {
+          sequence: i + 1,
+        }),
+        handler: async () =>
+          this.routePlanningSrv.addStop({ latitude, longitude }, i + 1),
+      });
+    });
+
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: this.translate.instant('routeStop.addStopTitle'),
+      buttons,
+    });
+
+    await actionSheet.present();
   }
 
   private async openCreateMarkerPopUp(longitude: number, latitude: number) {

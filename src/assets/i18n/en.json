@@ -80,6 +80,8 @@
     "title": "Actions at this position",
     "distance": "Distance: {{distance}} {{unit}}",
     "createMarker": "Add Marker",
+    "setDestination": "Set Destination",
+    "addStop": "Add Stop",
     "weather": "Weather",
     "cancel": "Cancel"
   },
@@ -110,6 +112,13 @@
       "friday": "Friday",
       "saturday": "Saturday",
       "sunday": "Sunday"
+    },
+    "routeStop": {
+      "addStopTitle": "Add Stop",
+      "addStopBefore1": "Before Stop 1",
+      "addStopAfter": "After Stop {{sequence}}",
+      "delete": "Delete",
+      "cancel": "Cancel"
     }
   }
 }
