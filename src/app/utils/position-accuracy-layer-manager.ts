@@ -59,7 +59,6 @@ class PositionAccuracyLayerManager {
       }
 
       const { longitude, latitude, accuracy } = position.coords;
-      console.log(accuracy);
 
       const projectedRadius = toProjectedDistance(accuracy, latitude);
 

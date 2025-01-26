@@ -117,7 +117,7 @@ class RoutePlanningLayerManager {
     await actionSheet.present();
   }
 
-  private async updateRoute(route: Route) {
+  private updateRoute(route: Route) {
     this.layerSource.clear();
     this.stopFeatures = [];
 
