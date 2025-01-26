@@ -1,13 +1,13 @@
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { ZIndex } from './z-indices';
+import { ZIndex } from '../utils/z-indices';
 import { MapService } from '../services/map.service';
 import { SettingsService } from '../services/settings.service';
 import { GeolocationService } from '../services/geolocation.service';
 import { Feature } from 'ol';
 import { Circle } from 'ol/geom';
 import { Fill, Stroke, Style } from 'ol/style';
-import { toProjectedDistance } from './coordinates';
+import { toProjectedDistance } from '../utils/coordinates';
 
 export function createPositionAccuracyLayerManager(
   mapSrv: MapService,

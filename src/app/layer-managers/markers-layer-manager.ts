@@ -2,7 +2,7 @@ import { MarkersService } from '../services/markers.service';
 import { Marker, MarkerFeature } from '../models/markers';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { ZIndex } from './z-indices';
+import { ZIndex } from '../utils/z-indices';
 import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
 import { addIcons } from 'ionicons';
 import { closeCircle, locate } from 'ionicons/icons';
