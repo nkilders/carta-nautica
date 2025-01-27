@@ -23,7 +23,7 @@ import BaseTileLayer from 'ol/layer/BaseTile';
 import { UnitService } from 'src/app/services/unit.service';
 import { DistanceUnit } from 'src/app/models/settings';
 import { LayersService } from 'src/app/services/layers.service';
-import { createLayerManager } from 'src/app/utils/layer-manager';
+import { createLayerManager } from 'src/app/layer-managers/layer-manager';
 import { FabToggler } from 'src/app/utils/fab-toggler';
 import { addIcons } from 'ionicons';
 import {
@@ -38,18 +38,18 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { geoDistance } from 'src/app/utils/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
-import { createMarkersLayerManager } from 'src/app/utils/markers-layer-manager';
+import { createMarkersLayerManager } from 'src/app/layer-managers/markers-layer-manager';
 import { MarkersService } from 'src/app/services/markers.service';
 import { SpeedHeadingControl } from 'src/app/utils/speed-heading-control';
 import { APP_NAME } from 'src/app/app';
 import { TrackRecorderService } from 'src/app/services/track-recorder.service';
-import { createTrackLayerManager } from 'src/app/utils/track-layer-manager';
+import { createTrackLayerManager } from 'src/app/layer-managers/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
 import { MapService } from 'src/app/services/map.service';
-import { createPositionAccuracyLayerManager } from 'src/app/utils/position-accuracy-layer-manager';
-import { createRoutePlanningLayerManager } from 'src/app/utils/route-planning-layer-manager';
+import { createPositionAccuracyLayerManager } from 'src/app/layer-managers/position-accuracy-layer-manager';
+import { createRoutePlanningLayerManager } from 'src/app/layer-managers/route-planning-layer-manager';
 import { RoutePlanningService } from 'src/app/services/route-planning.service';
 
 @Component({
@@ -211,7 +211,7 @@ export class MapPage implements OnInit {
           },
         },
         {
-          text: this.translate.instant('longClick.cancel'),
+          text: this.translate.instant('general.cancel'),
           role: 'cancel',
           icon: 'close-circle',
         },

@@ -2,7 +2,7 @@ import { MarkersService } from '../services/markers.service';
 import { Marker, MarkerFeature } from '../models/markers';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { ZIndex } from './z-indices';
+import { ZIndex } from '../utils/z-indices';
 import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
 import { addIcons } from 'ionicons';
 import { closeCircle, locate } from 'ionicons/icons';
@@ -25,8 +25,7 @@ export function createMarkersLayerManager(
 }
 
 class MarkersLayerManager {
-  private layer?: VectorLayer;
-  private layerSource?: VectorSource;
+  private layerSource: VectorSource;
   private markers: Map<string, MarkerFeature>;
 
   constructor(
@@ -35,6 +34,7 @@ class MarkersLayerManager {
     private actionSheetCtrl: ActionSheetWrapper,
     private translate: TranslateService,
   ) {
+    this.layerSource = new VectorSource();
     this.markers = new Map();
 
     addIcons({
@@ -42,20 +42,18 @@ class MarkersLayerManager {
       locate,
     });
 
-    this.createLayer();
+    this.createLayer(this.layerSource);
     this.registerListeners();
     this.reloadAllMarkers();
   }
 
-  private createLayer() {
-    this.layerSource = new VectorSource();
-
-    this.layer = new VectorLayer({
-      source: this.layerSource,
+  private createLayer(source: VectorSource) {
+    const layer = new VectorLayer({
+      source,
       zIndex: ZIndex.MARKERS,
     });
 
-    this.mapSrv.getMap().addLayer(this.layer);
+    this.mapSrv.getMap().addLayer(layer);
   }
 
   private registerListeners() {
@@ -101,13 +99,13 @@ class MarkersLayerManager {
       return;
     }
 
-    this.layerSource?.removeFeature(marker);
+    this.layerSource.removeFeature(marker);
     this.markers.delete(markerId);
   }
 
   private async showMarkerActionSheet(marker: Marker) {
     const flyToText = this.translate.instant('markerClick.flyTo');
-    const cancelText = this.translate.instant('markerClick.cancel');
+    const cancelText = this.translate.instant('general.cancel');
 
     const actionSheet = await this.actionSheetCtrl.create({
       header: marker.name,
@@ -144,13 +142,13 @@ class MarkersLayerManager {
   private addMarker(marker: Marker) {
     const feature = new MarkerFeature(marker);
 
-    this.layerSource?.addFeature(feature);
+    this.layerSource.addFeature(feature);
     this.markers.set(marker.id, feature);
   }
 
   private removeAllMarkers() {
     this.markers.forEach((marker) => {
-      this.layerSource?.removeFeature(marker);
+      this.layerSource.removeFeature(marker);
     });
 
     this.markers.clear();

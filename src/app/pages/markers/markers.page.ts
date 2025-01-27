@@ -81,8 +81,8 @@ export class MarkersPage implements OnInit {
 
   protected async showMarkerOptions(marker: Marker) {
     const flyToText = this.translate.instant('markers.flyTo');
-    const editText = this.translate.instant('markers.edit');
-    const deleteText = this.translate.instant('markers.delete');
+    const editText = this.translate.instant('general.edit');
+    const deleteText = this.translate.instant('general.delete');
 
     const actionSheet = await this.actionSheetCtrl.create({
       header: marker.name,
@@ -138,8 +138,8 @@ export class MarkersPage implements OnInit {
     const deleteTitleText = this.translate.instant(
       'markers.deleteConfirmHeader',
     );
-    const cancelText = this.translate.instant('markers.deleteCancel');
-    const deleteText = this.translate.instant('markers.deleteConfirm');
+    const cancelText = this.translate.instant('general.cancel');
+    const deleteText = this.translate.instant('general.delete');
 
     const alert = await this.alertCtrl.create({
       header: deleteTitleText,

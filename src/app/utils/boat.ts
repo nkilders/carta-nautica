@@ -11,12 +11,13 @@ import { MapService } from '../services/map.service';
 const ICON_URL = '/assets/boat-marker.png';
 
 export class BoatMarker {
-  private boat?: Feature<Point>;
-  private boatLayer?: VectorLayer<VectorSource<Feature<Point>>, Feature<Point>>;
-  private icon?: Icon;
+  private readonly boat: Feature<Point>;
+  private readonly icon: Icon;
 
   constructor(private mapSrv: MapService) {
-    this.init();
+    this.icon = this.createIcon();
+    this.boat = this.createBoatFeature();
+    this.createBoatLayer();
   }
 
   public updatePosition(position: Position) {
@@ -29,31 +30,38 @@ export class BoatMarker {
       (this.mapSrv.getMap().getView().getRotation() + heading / 57.29578) %
       (2 * Math.PI);
 
-    this.icon?.setRotation(rotation);
+    this.icon.setRotation(rotation);
   }
 
-  private init() {
-    this.icon = new Icon({
+  private createIcon() {
+    return new Icon({
       anchor: [0.5, 0.5],
       src: ICON_URL,
       scale: 0.04,
       rotateWithView: true,
     });
+  }
 
-    this.boat = new Feature();
-    this.boat.setStyle(
+  private createBoatFeature() {
+    const boat = new Feature<Point>();
+    boat.setStyle(
       new Style({
         image: this.icon,
       }),
     );
+    return boat;
+  }
 
-    this.boatLayer = new VectorLayer({
+  private createBoatLayer() {
+    const boatLayer = new VectorLayer({
       source: new VectorSource({
         features: [this.boat],
       }),
       zIndex: ZIndex.BOAT,
     });
 
-    this.mapSrv.getMap().addLayer(this.boatLayer);
+    this.mapSrv.getMap().addLayer(boatLayer);
+
+    return boatLayer;
   }
 }

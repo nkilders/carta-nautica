@@ -92,7 +92,7 @@ export class LayersEditPage implements OnInit {
   private async errorToast(textKey: string) {
     const headerText = await this.translate.instant('layersEdit.errorHeader');
     const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('layersEdit.errorOk');
+    const okText = await this.translate.instant('general.ok');
 
     const toast = await this.alertCtrl.create({
       header: headerText,

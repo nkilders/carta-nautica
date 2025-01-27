@@ -85,7 +85,7 @@ export class MarkersCreatePage {
       'markersCreate.errorHeader',
     );
     const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('markersCreate.errorOk');
+    const okText = await this.translate.instant('general.ok');
 
     const toast = await this.alertCtrl.create({
       header: headerText,

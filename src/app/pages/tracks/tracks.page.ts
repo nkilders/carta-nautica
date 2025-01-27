@@ -76,7 +76,7 @@ export class TracksPage implements OnInit {
   }
 
   async showTrackOptions(track: Track) {
-    const deleteText = this.translate.instant('tracks.delete');
+    const deleteText = this.translate.instant('general.delete');
 
     const actionSheet = await this.actionSheetCtrl.create({
       header: track.name,
@@ -96,8 +96,8 @@ export class TracksPage implements OnInit {
     const deleteTitleText = this.translate.instant(
       'tracks.deleteConfirmHeader',
     );
-    const cancelText = this.translate.instant('tracks.deleteCancel');
-    const deleteText = this.translate.instant('tracks.deleteConfirm');
+    const cancelText = this.translate.instant('general.cancel');
+    const deleteText = this.translate.instant('general.delete');
 
     const alert = await this.alertCtrl.create({
       header: deleteTitleText,

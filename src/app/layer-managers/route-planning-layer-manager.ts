@@ -1,6 +1,6 @@
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { ZIndex } from './z-indices';
+import { ZIndex } from '../utils/z-indices';
 import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
 import { addIcons } from 'ionicons';
 import { closeCircle, trash } from 'ionicons/icons';
@@ -94,8 +94,8 @@ class RoutePlanningLayerManager {
   }
 
   private async showStopActionSheet(sequence: number) {
-    const deleteText = this.translate.instant('routeStop.delete');
-    const cancelText = this.translate.instant('routeStop.cancel');
+    const deleteText = this.translate.instant('general.delete');
+    const cancelText = this.translate.instant('general.cancel');
 
     const actionSheet = await this.actionSheetCtrl.create({
       buttons: [

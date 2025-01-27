@@ -4,7 +4,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Point } from '../models/tracks';
 import { Stroke, Style } from 'ol/style';
-import { ZIndex } from './z-indices';
+import { ZIndex } from '../utils/z-indices';
 import { LineString } from 'ol/geom';
 import { MapService } from '../services/map.service';
 

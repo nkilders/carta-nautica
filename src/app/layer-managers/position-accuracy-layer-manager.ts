@@ -1,13 +1,13 @@
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { ZIndex } from './z-indices';
+import { ZIndex } from '../utils/z-indices';
 import { MapService } from '../services/map.service';
 import { SettingsService } from '../services/settings.service';
 import { GeolocationService } from '../services/geolocation.service';
 import { Feature } from 'ol';
 import { Circle } from 'ol/geom';
 import { Fill, Stroke, Style } from 'ol/style';
-import { toProjectedDistance } from './coordinates';
+import { toProjectedDistance } from '../utils/coordinates';
 
 export function createPositionAccuracyLayerManager(
   mapSrv: MapService,
@@ -18,8 +18,8 @@ export function createPositionAccuracyLayerManager(
 }
 
 class PositionAccuracyLayerManager {
-  private layer?: VectorLayer;
-  private layerSource?: VectorSource;
+  private layer: VectorLayer;
+  private layerSource: VectorSource;
   private feature?: Feature;
 
   constructor(
@@ -27,33 +27,33 @@ class PositionAccuracyLayerManager {
     private settingsSrv: SettingsService,
     private geolocationSrv: GeolocationService,
   ) {
-    this.createLayer();
+    this.layerSource = new VectorSource();
+    this.layer = this.createLayer(this.layerSource);
     this.registerListeners();
   }
 
-  private async createLayer() {
-    const showPositionAccuracy = await this.settingsSrv.getPositionAccuracy();
-    this.layerSource = new VectorSource();
-
-    this.layer = new VectorLayer({
-      source: this.layerSource,
+  private createLayer(source: VectorSource) {
+    const layer = new VectorLayer({
+      source,
       zIndex: ZIndex.POSITION_ACCURACY,
-      visible: showPositionAccuracy,
+      visible: false,
     });
 
-    this.mapSrv.getMap().addLayer(this.layer);
+    this.settingsSrv.getPositionAccuracy().then((positionAccuracy) => {
+      layer.setVisible(positionAccuracy);
+    });
+
+    this.mapSrv.getMap().addLayer(layer);
+
+    return layer;
   }
 
   private registerListeners() {
     this.settingsSrv.on('positionAccuracy', (positionAccuracy) => {
-      this.layer?.setVisible(positionAccuracy);
+      this.layer.setVisible(positionAccuracy);
     });
 
     this.geolocationSrv.watchPosition((position) => {
-      if (!position) {
-        return;
-      }
-
       if (!this.feature) {
         this.initFeature();
       }
@@ -78,6 +78,6 @@ class PositionAccuracyLayerManager {
       }),
     );
 
-    this.layerSource?.addFeature(this.feature);
+    this.layerSource.addFeature(this.feature);
   }
 }
