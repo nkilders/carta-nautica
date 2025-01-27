@@ -32,18 +32,14 @@ export class TrackRecorderService {
 
     this.eventEmitter.emit('startRecording');
 
-    this.positionWatchId = await this.geolocation.watchPosition((position) => {
-      if (!position) {
-        return;
-      }
-
-      this.positionHandler(position);
-    });
+    this.positionWatchId = await this.geolocation.watchPosition((position) =>
+      this.positionHandler(position),
+    );
   }
 
   public async stopRecording() {
     this.recording = false;
-    this.geolocation.cleanPositionWatch(this.positionWatchId!);
+    this.geolocation.cleanPositionWatch(this.positionWatchId);
 
     const track = await this.tracks.create(this.track!);
 

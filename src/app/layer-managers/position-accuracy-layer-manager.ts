@@ -18,8 +18,8 @@ export function createPositionAccuracyLayerManager(
 }
 
 class PositionAccuracyLayerManager {
-  private layer?: VectorLayer;
-  private layerSource?: VectorSource;
+  private layer: VectorLayer;
+  private layerSource: VectorSource;
   private feature?: Feature;
 
   constructor(
@@ -27,33 +27,33 @@ class PositionAccuracyLayerManager {
     private settingsSrv: SettingsService,
     private geolocationSrv: GeolocationService,
   ) {
-    this.createLayer();
+    this.layerSource = new VectorSource();
+    this.layer = this.createLayer(this.layerSource);
     this.registerListeners();
   }
 
-  private async createLayer() {
-    const showPositionAccuracy = await this.settingsSrv.getPositionAccuracy();
-    this.layerSource = new VectorSource();
-
-    this.layer = new VectorLayer({
-      source: this.layerSource,
+  private createLayer(source: VectorSource) {
+    const layer = new VectorLayer({
+      source,
       zIndex: ZIndex.POSITION_ACCURACY,
-      visible: showPositionAccuracy,
+      visible: false,
     });
 
-    this.mapSrv.getMap().addLayer(this.layer);
+    this.settingsSrv.getPositionAccuracy().then((positionAccuracy) => {
+      layer.setVisible(positionAccuracy);
+    });
+
+    this.mapSrv.getMap().addLayer(layer);
+
+    return layer;
   }
 
   private registerListeners() {
     this.settingsSrv.on('positionAccuracy', (positionAccuracy) => {
-      this.layer?.setVisible(positionAccuracy);
+      this.layer.setVisible(positionAccuracy);
     });
 
     this.geolocationSrv.watchPosition((position) => {
-      if (!position) {
-        return;
-      }
-
       if (!this.feature) {
         this.initFeature();
       }
@@ -78,6 +78,6 @@ class PositionAccuracyLayerManager {
       }),
     );
 
-    this.layerSource?.addFeature(this.feature);
+    this.layerSource.addFeature(this.feature);
   }
 }
