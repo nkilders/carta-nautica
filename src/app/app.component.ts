@@ -47,8 +47,6 @@ import { ModalWrapper } from './wrappers/modal-wrapper';
   styleUrls: ['app.component.scss'],
   standalone: true,
   imports: [
-    RouterLink,
-    RouterLinkActive,
     CommonModule,
     IonApp,
     IonSplitPane,
@@ -61,7 +59,6 @@ import { ModalWrapper } from './wrappers/modal-wrapper';
     IonItem,
     IonIcon,
     IonLabel,
-    IonRouterLink,
     IonRouterOutlet,
     TranslateModule,
   ],

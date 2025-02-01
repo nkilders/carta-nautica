@@ -26,7 +26,6 @@ import { SignGroup } from 'src/app/models/signs';
     IonNote,
     IonListHeader,
     IonCol,
-    IonText,
     IonItem,
     IonList,
     IonContent,
@@ -35,7 +34,6 @@ import { SignGroup } from 'src/app/models/signs';
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonThumbnail,
     TranslateModule,
   ],
 })
