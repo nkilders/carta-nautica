@@ -22,6 +22,7 @@ updates:
       capacitor-packages:
         patterns:
           - "@capacitor/*"
+          - "@capacitor-community/*"
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
