@@ -19,6 +19,9 @@ updates:
       typescript-eslint-packages:
         patterns:
           - "@typescript-eslint/*"
+      capacitor-packages:
+        patterns:
+          - "@capacitor/*"
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
