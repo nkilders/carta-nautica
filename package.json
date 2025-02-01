@@ -24,7 +24,7 @@
     "@angular/router": "^18.2.8",
     "@awesome-cordova-plugins/native-geocoder": "^6.9.0",
     "@capacitor-community/keep-awake": "^5.0.1",
-    "@capacitor/android": "^6.1.2",
+    "@capacitor/android": "^7.0.1",
     "@capacitor/app": "6.0.1",
     "@capacitor/core": "6.1.2",
     "@capacitor/geolocation": "^6.1.0",
