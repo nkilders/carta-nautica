@@ -57,7 +57,7 @@
     "@capacitor/cli": "7.3.0",
     "@ionic/angular-toolkit": "^12.1.1",
     "@types/events": "^3.0.3",
-    "@types/jasmine": "~5.1.7",
+    "@types/jasmine": "~5.1.8",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.34.0",
     "@typescript-eslint/parser": "^8.31.1",
