@@ -50,6 +50,10 @@ export class LongClick {
         return;
       }
 
+      if (!(event.originalEvent instanceof PointerEvent)) {
+        return;
+      }
+
       const { layerX, layerY } = event.originalEvent;
 
       if (this.tooFarFromStartPos(layerX, layerY)) {
