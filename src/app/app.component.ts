@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   IonApp,
   IonSplitPane,
@@ -14,7 +13,6 @@ import {
   IonIcon,
   IonLabel,
   IonRouterOutlet,
-  IonRouterLink,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
@@ -77,8 +75,8 @@ export class AppComponent {
 
   constructor(
     private readonly modalCtrl: ModalWrapper,
-    private settings: SettingsService,
-    private translate: TranslateService,
+    private readonly settings: SettingsService,
+    private readonly translate: TranslateService,
   ) {
     this.settings.getLanguage().then((language) => {
       this.translate.setDefaultLang(language);

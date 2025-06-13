@@ -18,14 +18,14 @@ export function createPositionAccuracyLayerManager(
 }
 
 class PositionAccuracyLayerManager {
-  private layer: VectorLayer;
-  private layerSource: VectorSource;
+  private readonly layer: VectorLayer;
+  private readonly layerSource: VectorSource;
   private feature?: Feature;
 
   constructor(
-    private mapSrv: MapService,
-    private settingsSrv: SettingsService,
-    private geolocationSrv: GeolocationService,
+    private readonly mapSrv: MapService,
+    private readonly settingsSrv: SettingsService,
+    private readonly geolocationSrv: GeolocationService,
   ) {
     this.layerSource = new VectorSource();
     this.layer = this.createLayer(this.layerSource);

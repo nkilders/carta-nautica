@@ -82,18 +82,18 @@ export class MapPage implements OnInit {
   private fabRecordTrackToggler?: FabToggler;
 
   constructor(
-    private mapSrv: MapService,
-    private geolocation: GeolocationService,
-    private settings: SettingsService,
-    private unit: UnitService,
-    private layers: LayersService,
-    private markersSrv: MarkersService,
-    private trackRecord: TrackRecorderService,
-    private routePlanningSrv: RoutePlanningService,
-    private ref: ChangeDetectorRef,
-    private actionSheetCtrl: ActionSheetWrapper,
-    private modalCtrl: ModalWrapper,
-    private translate: TranslateService,
+    private readonly mapSrv: MapService,
+    private readonly geolocation: GeolocationService,
+    private readonly settings: SettingsService,
+    private readonly unit: UnitService,
+    private readonly layers: LayersService,
+    private readonly markersSrv: MarkersService,
+    private readonly trackRecord: TrackRecorderService,
+    private readonly routePlanningSrv: RoutePlanningService,
+    private readonly ref: ChangeDetectorRef,
+    private readonly actionSheetCtrl: ActionSheetWrapper,
+    private readonly modalCtrl: ModalWrapper,
+    private readonly translate: TranslateService,
   ) {
     this.lastToolbarTitleUpdate = 0;
 
@@ -108,12 +108,15 @@ export class MapPage implements OnInit {
     });
   }
 
-  async ngOnInit() {
-    await this.initMap();
-    this.initMapLayerManagers();
-    await this.initPositionWatch();
-    this.initSettingsListeners();
-    this.initFabs();
+  ngOnInit() {
+    // TODO: check if awaits are required here
+    (async () => {
+      await this.initMap();
+      this.initMapLayerManagers();
+      await this.initPositionWatch();
+      this.initSettingsListeners();
+      this.initFabs();
+    })();
   }
 
   public fabRecordTrack() {
@@ -386,8 +389,8 @@ export class MapPage implements OnInit {
     this.ref.markForCheck();
   }
 
-  private formatToolbarTitle(result: NativeGeocoderResult | null) {
-    if (result == null) {
+  private formatToolbarTitle(result: NativeGeocoderResult | undefined) {
+    if (!result) {
       return `🌍 ${APP_NAME}`;
     }
 

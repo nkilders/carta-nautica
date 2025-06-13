@@ -12,7 +12,7 @@ export class RoutePlanningService {
   private route: Route;
   private readonly eventEmitter: EventEmitter;
 
-  constructor(private storage: StorageService) {
+  constructor(private readonly storage: StorageService) {
     this.route = [];
     this.eventEmitter = new EventEmitter();
 

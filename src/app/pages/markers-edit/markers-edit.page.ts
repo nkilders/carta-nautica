@@ -40,19 +40,19 @@ import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 })
 export class MarkersEditPage implements OnInit {
   @Input({ required: true })
-  private marker?: Marker;
+  private readonly marker!: Marker;
 
   protected name: string = '';
 
   constructor(
-    private modalCtrl: ModalWrapper,
-    private alertCtrl: AlertWrapper,
-    private translate: TranslateService,
-    private markers: MarkersService,
+    private readonly modalCtrl: ModalWrapper,
+    private readonly alertCtrl: AlertWrapper,
+    private readonly translate: TranslateService,
+    private readonly markers: MarkersService,
   ) {}
 
   ngOnInit() {
-    this.name = this.marker!.name;
+    this.name = this.marker.name;
   }
 
   protected async saveChanges() {
@@ -62,11 +62,11 @@ export class MarkersEditPage implements OnInit {
     }
 
     const updatedMarker: Marker = {
-      ...this.marker!,
+      ...this.marker,
       name: this.name,
     };
 
-    await this.markers.update(this.marker!.id, updatedMarker);
+    await this.markers.update(this.marker.id, updatedMarker);
 
     await this.closeModal();
   }

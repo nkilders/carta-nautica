@@ -7,8 +7,8 @@ import { SettingsService } from '../services/settings.service';
 })
 export class ModalWrapper {
   constructor(
-    private modalCtrl: ModalController,
-    private settings: SettingsService,
+    private readonly modalCtrl: ModalController,
+    private readonly settings: SettingsService,
   ) {}
 
   public async create(opts: ModalOptions) {

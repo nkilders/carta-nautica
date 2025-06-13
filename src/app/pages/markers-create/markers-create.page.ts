@@ -40,17 +40,17 @@ import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 })
 export class MarkersCreatePage {
   @Input({ required: true })
-  private longitude!: number;
+  private readonly longitude!: number;
   @Input({ required: true })
-  private latitude!: number;
+  private readonly latitude!: number;
 
   protected name: string = '';
 
   constructor(
-    private markersSrv: MarkersService,
-    private translate: TranslateService,
-    private modalCtrl: ModalWrapper,
-    private alertCtrl: AlertWrapper,
+    private readonly markersSrv: MarkersService,
+    private readonly translate: TranslateService,
+    private readonly modalCtrl: ModalWrapper,
+    private readonly alertCtrl: AlertWrapper,
   ) {}
 
   protected async createMarker() {
@@ -61,8 +61,8 @@ export class MarkersCreatePage {
 
     const newMarker: MarkerWithoutId = {
       name: this.name,
-      longitude: this.longitude!,
-      latitude: this.latitude!,
+      longitude: this.longitude,
+      latitude: this.latitude,
     };
 
     await this.markersSrv.create(newMarker);

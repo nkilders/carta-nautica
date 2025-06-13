@@ -7,14 +7,9 @@ import {
   IonTitle,
   IonToolbar,
   IonList,
-  IonReorderGroup,
   IonItem,
   IonLabel,
-  IonReorder,
-  IonToggle,
   IonButtons,
-  IonFab,
-  IonFabButton,
   IonIcon,
   IonButton,
 } from '@ionic/angular/standalone';
@@ -54,12 +49,12 @@ export class MarkersPage implements OnInit {
   protected markers: Marker[] = [];
 
   constructor(
-    private mapSrv: MapService,
-    private markersSrv: MarkersService,
-    private translate: TranslateService,
-    private actionSheetCtrl: ActionSheetWrapper,
-    private alertCtrl: AlertWrapper,
-    private modalCtrl: ModalWrapper,
+    private readonly mapSrv: MapService,
+    private readonly markersSrv: MarkersService,
+    private readonly translate: TranslateService,
+    private readonly actionSheetCtrl: ActionSheetWrapper,
+    private readonly alertCtrl: AlertWrapper,
+    private readonly modalCtrl: ModalWrapper,
   ) {
     addIcons({
       add,
@@ -70,8 +65,8 @@ export class MarkersPage implements OnInit {
     });
   }
 
-  async ngOnInit() {
-    await this.loadMarkers();
+  ngOnInit() {
+    this.loadMarkers();
   }
 
   protected async showMarkerOptions(marker: Marker) {

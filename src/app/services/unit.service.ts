@@ -6,7 +6,7 @@ import { DistanceUnit, SpeedUnit, TemperatureUnit } from '../models/settings';
   providedIn: 'root',
 })
 export class UnitService {
-  constructor(private settings: SettingsService) {}
+  constructor(private readonly settings: SettingsService) {}
 
   public async convertSpeed(
     speed: number,

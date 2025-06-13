@@ -35,11 +35,11 @@ class RoutePlanningLayerManager {
   private lineFeature?: Feature;
 
   constructor(
-    private mapSrv: MapService,
-    private routePlanningSrv: RoutePlanningService,
-    private geolocationSrv: GeolocationService,
-    private actionSheetCtrl: ActionSheetWrapper,
-    private translate: TranslateService,
+    private readonly mapSrv: MapService,
+    private readonly routePlanningSrv: RoutePlanningService,
+    private readonly geolocationSrv: GeolocationService,
+    private readonly actionSheetCtrl: ActionSheetWrapper,
+    private readonly translate: TranslateService,
   ) {
     this.stopFeatures = [];
 

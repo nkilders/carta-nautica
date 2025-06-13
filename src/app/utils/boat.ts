@@ -14,7 +14,7 @@ export class BoatMarker {
   private readonly boat: Feature<Point>;
   private readonly icon: Icon;
 
-  constructor(private mapSrv: MapService) {
+  constructor(private readonly mapSrv: MapService) {
     this.icon = this.createIcon();
     this.boat = this.createBoatFeature();
     this.createBoatLayer();

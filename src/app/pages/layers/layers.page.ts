@@ -59,17 +59,17 @@ export class LayersPage implements OnInit {
   protected layers: Layer[] = [];
 
   constructor(
-    private layerSrv: LayersService,
-    private translate: TranslateService,
-    private actionSheetCtrl: ActionSheetWrapper,
-    private alertCtrl: AlertWrapper,
-    private modalCtrl: ModalWrapper,
+    private readonly layerSrv: LayersService,
+    private readonly translate: TranslateService,
+    private readonly actionSheetCtrl: ActionSheetWrapper,
+    private readonly alertCtrl: AlertWrapper,
+    private readonly modalCtrl: ModalWrapper,
   ) {
     addIcons({ ellipsisVertical, add, pencil, trash });
   }
 
-  async ngOnInit() {
-    await this.loadLayers();
+  ngOnInit() {
+    this.loadLayers();
   }
 
   protected async onReorder(event: CustomEvent) {
