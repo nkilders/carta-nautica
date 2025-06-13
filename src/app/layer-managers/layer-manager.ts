@@ -14,12 +14,12 @@ export function createLayerManager(
 }
 
 class LayerManager {
-  private layers: Map<string, TileLayer<any>>;
+  private readonly layers: Map<string, TileLayer<any>>;
 
   constructor(
-    private mapSrv: MapService,
-    private layersSrv: LayersService,
-    private settings: SettingsService,
+    private readonly mapSrv: MapService,
+    private readonly layersSrv: LayersService,
+    private readonly settings: SettingsService,
   ) {
     this.layers = new Map();
 

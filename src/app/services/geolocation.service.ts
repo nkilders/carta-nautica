@@ -19,7 +19,7 @@ export class GeolocationService {
   private readonly positionWatchCallbacks: Map<string, WatchPositionCallback> =
     new Map();
 
-  constructor(private storage: StorageService) {
+  constructor(private readonly storage: StorageService) {
     this.position = this.defaultPosition();
   }
 
@@ -57,7 +57,7 @@ export class GeolocationService {
       useLocale: true,
     }).catch(() => null);
 
-    return result && result[0];
+    return result?.[0];
   }
 
   public async loadLastKnownPosition() {

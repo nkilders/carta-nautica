@@ -9,8 +9,8 @@ import { FeatureLike } from 'ol/Feature';
   providedIn: 'root',
 })
 export class MapService {
-  private map: OLMap;
-  private eventEmitter: EventEmitter;
+  private readonly map: OLMap;
+  private readonly eventEmitter: EventEmitter;
 
   /**
    * When the mouse is released after a long click, the

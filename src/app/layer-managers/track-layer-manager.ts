@@ -20,8 +20,8 @@ class TrackLayerManager {
   private line?: LineString;
 
   constructor(
-    private mapSrv: MapService,
-    private trackRecorder: TrackRecorderService,
+    private readonly mapSrv: MapService,
+    private readonly trackRecorder: TrackRecorderService,
   ) {
     this.registerListeners();
   }

@@ -11,9 +11,9 @@ export class SpeedHeadingControl extends Control {
   private speed: number = 0;
 
   constructor(
-    private settingsSrv: SettingsService,
-    private geolocationSrv: GeolocationService,
-    private unitSrv: UnitService,
+    private readonly settingsSrv: SettingsService,
+    private readonly geolocationSrv: GeolocationService,
+    private readonly unitSrv: UnitService,
   ) {
     const element = document.createElement('div');
     element.className = 'ol-control';
@@ -69,9 +69,7 @@ export class SpeedHeadingControl extends Control {
   }
 
   private async updateSpeedText(speed: number | null) {
-    if (!speed) {
-      speed = 0;
-    }
+    speed ??= 0;
 
     this.speed = speed;
 
@@ -87,9 +85,7 @@ export class SpeedHeadingControl extends Control {
   }
 
   private updateHeadingText(heading: number | null) {
-    if (!heading) {
-      heading = 0;
-    }
+    heading ??= 0;
 
     this.headingElement!.innerHTML = `${heading.toFixed(0)}°`;
   }

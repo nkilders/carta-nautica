@@ -11,14 +11,14 @@ const STORAGE_KEY = 'layers';
   providedIn: 'root',
 })
 export class LayersService {
+  private readonly eventEmitter: EventEmitter;
   /**
    * The order of layers on the UI is equivalent to the order in this array.
    * Index 0 represents the topmost layer
    */
   private layers?: Layer[];
-  private eventEmitter: EventEmitter;
 
-  constructor(private storage: StorageService) {
+  constructor(private readonly storage: StorageService) {
     this.eventEmitter = new EventEmitter();
   }
 

@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage-angular';
 export class StorageService {
   private storage?: Storage;
 
-  constructor(private storageApi: Storage) {}
+  constructor(private readonly storageApi: Storage) {}
 
   public async set(key: string, value: any) {
     await this.init();

@@ -9,15 +9,15 @@ import { EventEmitter } from 'events';
   providedIn: 'root',
 })
 export class TrackRecorderService {
-  private eventEmitter;
+  private readonly eventEmitter;
 
   private recording = false;
   private positionWatchId = '';
   private track?: TrackWithoutId;
 
   constructor(
-    private geolocation: GeolocationService,
-    private tracks: TracksService,
+    private readonly geolocation: GeolocationService,
+    private readonly tracks: TracksService,
   ) {
     this.eventEmitter = new EventEmitter();
   }

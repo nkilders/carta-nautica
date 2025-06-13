@@ -56,12 +56,12 @@ export class SettingsPage implements OnInit {
   public openWeatherMapApiKey = '';
 
   constructor(
-    private settings: SettingsService,
-    private translate: TranslateService,
+    private readonly settings: SettingsService,
+    private readonly translate: TranslateService,
   ) {}
 
-  async ngOnInit() {
-    await this.loadSettingsValues();
+  ngOnInit() {
+    this.loadSettingsValues();
   }
 
   private async loadSettingsValues() {

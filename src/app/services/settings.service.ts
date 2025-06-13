@@ -15,10 +15,10 @@ const STORAGE_KEY = 'settings';
   providedIn: 'root',
 })
 export class SettingsService {
+  private readonly eventEmitter: EventEmitter;
   private settings?: Settings;
-  private eventEmitter: EventEmitter;
 
-  constructor(private storage: StorageService) {
+  constructor(private readonly storage: StorageService) {
     this.eventEmitter = new EventEmitter();
   }
 

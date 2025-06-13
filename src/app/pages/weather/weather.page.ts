@@ -65,25 +65,25 @@ const FORECAST_API_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 })
 export class WeatherPage implements OnInit {
   @Input({ required: true })
-  private longitude: number = 13.404653508454397;
+  private readonly longitude: number = 13.404653508454397;
   @Input({ required: true })
-  private latitude: number = 52.51907918910106;
+  private readonly latitude: number = 52.51907918910106;
 
   weatherData: WeatherDay[] = [];
 
   constructor(
-    private settings: SettingsService,
-    private unit: UnitService,
-    private translate: TranslateService,
-    private alertCtrl: AlertWrapper,
-    private modalCtrl: ModalWrapper,
-    private loadingCtrl: LoadingWrapper,
+    private readonly settings: SettingsService,
+    private readonly unit: UnitService,
+    private readonly translate: TranslateService,
+    private readonly alertCtrl: AlertWrapper,
+    private readonly modalCtrl: ModalWrapper,
+    private readonly loadingCtrl: LoadingWrapper,
   ) {
     addIcons({ thermometer, water, rainy, paperPlane });
   }
 
-  async ngOnInit() {
-    await this.loadWeatherData();
+  ngOnInit() {
+    this.loadWeatherData();
   }
 
   private async loadWeatherData() {
