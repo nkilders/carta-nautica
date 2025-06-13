@@ -40,21 +40,21 @@ import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 })
 export class LayersEditPage implements OnInit {
   @Input({ required: true })
-  private layer?: Layer;
+  private readonly layer!: Layer;
 
   protected name: string = '';
   protected url: string = '';
 
   constructor(
-    private layers: LayersService,
-    private modalCtrl: ModalWrapper,
-    private alertCtrl: AlertWrapper,
-    private translate: TranslateService,
+    private readonly layers: LayersService,
+    private readonly modalCtrl: ModalWrapper,
+    private readonly alertCtrl: AlertWrapper,
+    private readonly translate: TranslateService,
   ) {}
 
   ngOnInit() {
-    this.name = this.layer!.name;
-    this.url = this.layer!.source;
+    this.name = this.layer.name;
+    this.url = this.layer.source;
   }
 
   protected async saveChanges() {
@@ -69,12 +69,12 @@ export class LayersEditPage implements OnInit {
     }
 
     const updatedLayer: Layer = {
-      ...this.layer!,
+      ...this.layer,
       name: this.name,
       source: this.url,
     };
 
-    await this.layers.update(this.layer!.id, updatedLayer);
+    await this.layers.update(this.layer.id, updatedLayer);
 
     await this.closeModal();
   }

@@ -59,11 +59,11 @@ export class TracksPage implements OnInit {
   tracks: DisplayTrack[] = [];
 
   constructor(
-    private tracksSrv: TracksService,
-    private translate: TranslateService,
-    private unit: UnitService,
-    private actionSheetCtrl: ActionSheetWrapper,
-    private alertCtrl: AlertWrapper,
+    private readonly tracksSrv: TracksService,
+    private readonly translate: TranslateService,
+    private readonly unit: UnitService,
+    private readonly actionSheetCtrl: ActionSheetWrapper,
+    private readonly alertCtrl: AlertWrapper,
   ) {
     addIcons({
       ellipsisVertical,
@@ -71,8 +71,8 @@ export class TracksPage implements OnInit {
     });
   }
 
-  async ngOnInit() {
-    await this.loadTracks();
+  ngOnInit() {
+    this.loadTracks();
   }
 
   async showTrackOptions(track: Track) {

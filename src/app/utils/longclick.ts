@@ -12,8 +12,8 @@ export class LongClick {
   private timeout?: NodeJS.Timeout;
 
   constructor(
-    private map: OLMap,
-    private listener: Listener,
+    private readonly map: OLMap,
+    private readonly listener: Listener,
   ) {
     this.registerListeners();
   }

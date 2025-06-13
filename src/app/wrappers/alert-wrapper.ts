@@ -7,8 +7,8 @@ import { SettingsService } from '../services/settings.service';
 })
 export class AlertWrapper {
   constructor(
-    private alertCtrl: AlertController,
-    private settings: SettingsService,
+    private readonly alertCtrl: AlertController,
+    private readonly settings: SettingsService,
   ) {}
 
   public async create(opts: AlertOptions) {

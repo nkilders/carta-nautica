@@ -43,10 +43,10 @@ export class LayersCreatePage {
   protected url: string = '';
 
   constructor(
-    private modalCtrl: ModalWrapper,
-    private layers: LayersService,
-    private alertCtrl: AlertWrapper,
-    private translate: TranslateService,
+    private readonly modalCtrl: ModalWrapper,
+    private readonly layers: LayersService,
+    private readonly alertCtrl: AlertWrapper,
+    private readonly translate: TranslateService,
   ) {}
 
   protected async createLayer() {

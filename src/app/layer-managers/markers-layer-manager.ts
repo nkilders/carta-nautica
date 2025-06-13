@@ -25,14 +25,14 @@ export function createMarkersLayerManager(
 }
 
 class MarkersLayerManager {
-  private layerSource: VectorSource;
-  private markers: Map<string, MarkerFeature>;
+  private readonly layerSource: VectorSource;
+  private readonly markers: Map<string, MarkerFeature>;
 
   constructor(
-    private mapSrv: MapService,
-    private markersSrv: MarkersService,
-    private actionSheetCtrl: ActionSheetWrapper,
-    private translate: TranslateService,
+    private readonly mapSrv: MapService,
+    private readonly markersSrv: MarkersService,
+    private readonly actionSheetCtrl: ActionSheetWrapper,
+    private readonly translate: TranslateService,
   ) {
     this.layerSource = new VectorSource();
     this.markers = new Map();

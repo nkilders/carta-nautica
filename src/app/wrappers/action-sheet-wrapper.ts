@@ -7,8 +7,8 @@ import { SettingsService } from '../services/settings.service';
 })
 export class ActionSheetWrapper {
   constructor(
-    private actionSheetCtrl: ActionSheetController,
-    private settings: SettingsService,
+    private readonly actionSheetCtrl: ActionSheetController,
+    private readonly settings: SettingsService,
   ) {}
 
   public async create(opts: ActionSheetOptions) {

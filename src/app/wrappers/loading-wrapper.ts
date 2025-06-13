@@ -7,8 +7,8 @@ import { SettingsService } from '../services/settings.service';
 })
 export class LoadingWrapper {
   constructor(
-    private loadingCtrl: LoadingController,
-    private settings: SettingsService,
+    private readonly loadingCtrl: LoadingController,
+    private readonly settings: SettingsService,
   ) {}
 
   public async create(opts: LoadingOptions) {

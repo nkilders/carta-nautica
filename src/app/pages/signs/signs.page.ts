@@ -8,8 +8,6 @@ import {
   IonToolbar,
   IonList,
   IonItem,
-  IonText,
-  IonThumbnail,
   IonCol,
   IonListHeader,
   IonNote,

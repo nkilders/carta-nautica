@@ -10,10 +10,10 @@ const STORAGE_KEY = 'tracks';
   providedIn: 'root',
 })
 export class TracksService {
+  private readonly eventEmitter: EventEmitter;
   private tracks?: Track[];
-  private eventEmitter: EventEmitter;
 
-  constructor(private storage: StorageService) {
+  constructor(private readonly storage: StorageService) {
     this.eventEmitter = new EventEmitter();
   }
 

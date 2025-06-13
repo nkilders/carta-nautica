@@ -11,8 +11,8 @@ export type Route = Stop[];
 
 export class StopFeature extends Feature {
   constructor(
-    private stop: Stop,
-    private sequence: number,
+    private readonly stop: Stop,
+    private readonly sequence: number,
   ) {
     super();
 
