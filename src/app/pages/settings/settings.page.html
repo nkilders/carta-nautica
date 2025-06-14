@@ -6,31 +6,40 @@
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    <ion-list-header>{{ 'settings.speedUnit' | translate }}</ion-list-header>
-    <ion-select [(ngModel)]="speedUnit" (ionChange)="updateSpeedUnit()">
-      <ion-select-option value="0">km/h</ion-select-option>
-      <ion-select-option value="1">m/s</ion-select-option>
-      <ion-select-option value="2">knt</ion-select-option>
-    </ion-select>
+    <ion-item>
+      <ion-label>{{ 'settings.speedUnit' | translate }}</ion-label>
+      <ion-select [(ngModel)]="speedUnit" (ionChange)="updateSpeedUnit()" slot="end">
+        <ion-select-option value="0">km/h</ion-select-option>
+        <ion-select-option value="1">m/s</ion-select-option>
+        <ion-select-option value="2">knt</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-    <ion-list-header>{{ 'settings.distanceUnit' | translate }}</ion-list-header>
-    <ion-select [(ngModel)]="distanceUnit" (ionChange)="updateDistanceUnit()">
-      <ion-select-option value="0">Kilometer</ion-select-option>
-      <ion-select-option value="1">Meter</ion-select-option>
-      <ion-select-option value="2">Sea Miles</ion-select-option>
-    </ion-select>
+    <ion-item>
+      <ion-label>{{ 'settings.distanceUnit' | translate }}</ion-label>
+      <ion-select [(ngModel)]="distanceUnit" (ionChange)="updateDistanceUnit()" slot="end">
+        <ion-select-option value="0">Kilometer</ion-select-option>
+        <ion-select-option value="1">Meter</ion-select-option>
+        <ion-select-option value="2">Sea Miles</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-    <ion-list-header>{{ 'settings.temperatureUnit' | translate }}</ion-list-header>
-    <ion-select [(ngModel)]="temperatureUnit" (ionChange)="updateTemperatureUnit()">
-      <ion-select-option value="0">Celsius</ion-select-option>
-      <ion-select-option value="1">Fahrenheit</ion-select-option>
-    </ion-select>
 
-    <ion-list-header>{{ 'settings.language' | translate }}</ion-list-header>
-    <ion-select [(ngModel)]="language" (ionChange)="updateLanguage()">
-      <ion-select-option value="de">Deutsch</ion-select-option>
-      <ion-select-option value="en">English</ion-select-option>
-    </ion-select>
+    <ion-item>
+      <ion-label>{{ 'settings.temperatureUnit' | translate }}</ion-label>
+      <ion-select [(ngModel)]="temperatureUnit" (ionChange)="updateTemperatureUnit()" slot="end">
+        <ion-select-option value="0">Celsius</ion-select-option>
+        <ion-select-option value="1">Fahrenheit</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{ 'settings.language' | translate }}</ion-label>
+      <ion-select [(ngModel)]="language" (ionChange)="updateLanguage()" slot="end">
+        <ion-select-option value="de">Deutsch</ion-select-option>
+        <ion-select-option value="en">English</ion-select-option>
+      </ion-select>
+    </ion-item>
 
     <ion-item>
       <ion-label>{{ 'settings.mapPreloading' | translate }}</ion-label>
@@ -41,31 +50,29 @@
         max="10"
         [(ngModel)]="mapPreloading"
         (ionChange)="updateMapPreloading()"
+        slot="end"
       />
     </ion-item>
 
     <ion-item>
-      <ion-label>{{ 'settings.keepScreenAwake' | translate }}</ion-label>
       <ion-toggle
         [(ngModel)]="keepAwake"
         (ionChange)="updateKeepAwake()"
-      ></ion-toggle>
+      > {{ 'settings.keepScreenAwake' | translate }}</ion-toggle>
     </ion-item>
 
     <ion-item>
-      <ion-label>{{ 'settings.animations' | translate }}</ion-label>
       <ion-toggle
         [(ngModel)]="animations"
         (ionChange)="updateAnimations()"
-      ></ion-toggle>
+      > {{ 'settings.animations' | translate }}</ion-toggle>
     </ion-item>
 
     <ion-item>
-      <ion-label>{{ 'settings.positionAccuracy' | translate }}</ion-label>
       <ion-toggle
         [(ngModel)]="positionAccuracy"
         (ionChange)="updatePositionAccuracy()"
-      ></ion-toggle>
+      > {{ 'settings.positionAccuracy' | translate }}</ion-toggle>
     </ion-item>
 
     <ion-item>
@@ -73,6 +80,7 @@
       <ion-input
         [(ngModel)]="openWeatherMapApiKey"
         (ionChange)="updateOpenWeatherMapApiKey()"
+        slot="end"
       ></ion-input>
     </ion-item>
   </ion-list>
