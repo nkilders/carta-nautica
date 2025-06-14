@@ -9,12 +9,12 @@ const STORAGE_KEY = 'route-planning';
   providedIn: 'root',
 })
 export class RoutePlanningService {
-  private route: Route;
   private readonly eventEmitter: EventEmitter;
+  private route: Route;
 
   constructor(private readonly storage: StorageService) {
-    this.route = [];
     this.eventEmitter = new EventEmitter();
+    this.route = [];
 
     this.loadRoute();
   }

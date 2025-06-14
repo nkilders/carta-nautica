@@ -5,8 +5,8 @@ import { UnitService } from '../services/unit.service';
 import { SpeedUnit } from '../models/settings';
 
 export class SpeedHeadingControl extends Control {
-  private speedElement?: HTMLButtonElement;
-  private headingElement?: HTMLButtonElement;
+  private readonly speedElement: HTMLButtonElement;
+  private readonly headingElement: HTMLButtonElement;
 
   private speed: number = 0;
 
@@ -21,32 +21,42 @@ export class SpeedHeadingControl extends Control {
 
     super({ element });
 
-    this.initElements();
+    this.speedElement = this.initSpeedElement();
+    this.headingElement = this.initHeadingElement();
+
     this.updateSpeedText(null);
     this.updateHeadingText(null);
     this.initPositionWatch();
     this.initSettingsListeners();
   }
 
-  private initElements() {
-    this.speedElement = document.createElement('button');
-    this.speedElement.setAttribute(
+  private initSpeedElement() {
+    const speedElement = document.createElement('button');
+
+    speedElement.setAttribute(
       'style',
       'height: 2.75em; width: auto; float: left; margin-right: 0.25em; padding: 0 10px;',
     );
-    this.speedElement.addEventListener('click', () => this.handleSpeedClick());
-    this.element.appendChild(this.speedElement);
+    speedElement.addEventListener('click', () => this.handleSpeedClick());
+    this.element.appendChild(speedElement);
 
-    this.headingElement = document.createElement('button');
-    this.headingElement.setAttribute(
+    return speedElement;
+  }
+
+  private initHeadingElement() {
+    const headingElement = document.createElement('button');
+
+    headingElement.setAttribute(
       'style',
       'height: 2.75em; width: auto; float: left; padding: 0 10px;',
     );
-    this.element.appendChild(this.headingElement);
+    this.element.appendChild(headingElement);
+
+    return headingElement;
   }
 
-  private async initPositionWatch() {
-    await this.geolocationSrv.watchPosition((position) => {
+  private initPositionWatch() {
+    this.geolocationSrv.watchPosition((position) => {
       this.updateSpeedText(position.coords.speed);
       this.updateHeadingText(position.coords.heading);
       this.changed();
@@ -81,12 +91,12 @@ export class SpeedHeadingControl extends Control {
     const value = convertedSpeed.value.toFixed(1);
     const unit = convertedSpeed.unitText;
 
-    this.speedElement!.innerHTML = `${value} ${unit}`;
+    this.speedElement.innerHTML = `${value} ${unit}`;
   }
 
   private updateHeadingText(heading: number | null) {
     heading ??= 0;
 
-    this.headingElement!.innerHTML = `${heading.toFixed(0)}°`;
+    this.headingElement.innerHTML = `${heading.toFixed(0)}°`;
   }
 }

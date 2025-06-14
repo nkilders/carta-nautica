@@ -24,7 +24,7 @@ export class BoatMarker {
     const { longitude, latitude } = position.coords;
     const heading = position.coords.heading ?? 0;
 
-    this.boat?.setGeometry(new Point([longitude, latitude]));
+    this.boat.setGeometry(new Point([longitude, latitude]));
 
     const rotation =
       (this.mapSrv.getMap().getView().getRotation() + heading / 57.29578) %
