@@ -80,7 +80,6 @@ class RoutePlanningLayerManager {
         return;
       }
 
-      // TODO: check if stops are reached and can be removed
       this.updateLineStringGeometry();
     });
   }
