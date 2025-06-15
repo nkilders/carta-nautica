@@ -4,6 +4,7 @@ import { GeolocationService } from './geolocation.service';
 import { TracksService } from './tracks.service';
 import { Position } from '@capacitor/geolocation';
 import { EventEmitter } from 'events';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class TrackRecorderService {
 
   constructor(
     private readonly geolocation: GeolocationService,
+    private readonly settings: SettingsService,
     private readonly tracks: TracksService,
   ) {
     this.eventEmitter = new EventEmitter();
@@ -25,8 +27,10 @@ export class TrackRecorderService {
   public async startRecording() {
     this.recording = true;
 
+    const language = await this.settings.getLanguage();
+
     this.track = {
-      name: 'New track',
+      name: new Date().toLocaleString(language),
       points: [],
     };
 
