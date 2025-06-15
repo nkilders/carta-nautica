@@ -50,33 +50,32 @@ export class RoutePlanningService {
   }
 
   private handlePosition(position: Position) {
-    /*
-      - nächster Punkt liegt hinter aktuellem Punkt (~90° Bogen)
-      - übernächster Punkt liegt vor aktuellem Punkt (~45° Bogen)
-
-      Wenn es nur (noch) einen Punkt gibt:
-      - keine Ahnung
-    */
-
-    if (this.route.length <= 1) return;
+    if (this.route.length <= 1) {
+      return;
+    }
 
     const { longitude, latitude, heading } = position.coords;
 
-    if (!heading) return;
+    if (!heading) {
+      return;
+    }
 
     const [nextHeading, nextNextHeading] = this.calculateHeadings(
       latitude,
       longitude,
       heading,
     );
-    console.log('####', heading, nextHeading, nextNextHeading);
 
-    const nextHeadingMatches = nextHeading > 135 && nextHeading < 225;
+    const frontAngle = 45;
+    const backAngle = 90;
+
+    const nextHeadingMatches =
+      nextHeading > 180 - backAngle / 2 && nextHeading < 180 + backAngle / 2;
     const nextNextHeadingMatches =
-      nextNextHeading > 360 - 22.5 || nextNextHeading < 22.5;
+      nextNextHeading > 360 - frontAngle / 2 ||
+      nextNextHeading < frontAngle / 2;
 
     if (nextHeadingMatches && nextNextHeadingMatches) {
-      console.log('####', 'Next stop passed');
       this.removeStop(0);
     }
   }
