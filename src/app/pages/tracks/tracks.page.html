@@ -8,7 +8,7 @@
   <ion-list>
     @for (track of tracks; track track.id) {
     <ion-item>
-      <ion-col>
+      <ion-col (click)="showTrackDetails(track)">
         <ion-label>{{track.name}}</ion-label>
   
         <ion-note>

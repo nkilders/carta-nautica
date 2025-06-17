@@ -77,6 +77,9 @@
     "avgSpeed": "⌀ Speed: {{speed}} {{unit}}",
     "deleteConfirmHeader": "Delete track"
   },
+  "tracksEdit": {
+    "title": "Edit Track"
+  },
   "weather": {
     "loading": "Loading weather data",
     "invalidApiKey": {
