@@ -78,7 +78,10 @@
     "deleteConfirmHeader": "Route löschen"
   },
   "tracksEdit": {
-    "title": "Route bearbeiten"
+    "title": "Route bearbeiten",
+    "name": "Name",
+    "errorNameEmpty": "Name darf nicht leer sein",
+    "errorHeader": "Ungültige Eingabe"
   },
   "weather": {
     "loading": "Wetterdaten werden geladen",
