@@ -77,6 +77,12 @@
     "avgSpeed": "⌀ Speed: {{speed}} {{unit}}",
     "deleteConfirmHeader": "Delete track"
   },
+  "tracksEdit": {
+    "title": "Edit Track",
+    "name": "Name",
+    "errorNameEmpty": "Name must not be empty",
+    "errorHeader": "Invalid input"
+  },
   "weather": {
     "loading": "Loading weather data",
     "invalidApiKey": {

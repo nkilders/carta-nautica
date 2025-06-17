@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>{{ 'tracksEdit.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating"
+        >{{ 'tracksEdit.name' | translate }}</ion-label
+      >
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button color="dark" (click)="closeModal()"
+    >{{ 'general.cancel' | translate }}</ion-button
+  >
+  <ion-button color="primary" (click)="saveChanges()"
+    >{{ 'general.save' | translate }}</ion-button
+  >
+</ion-content>

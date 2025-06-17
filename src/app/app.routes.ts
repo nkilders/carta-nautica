@@ -59,6 +59,20 @@ export const routes: Routes = [
       import('./pages/tracks/tracks.page').then((m) => m.TracksPage),
   },
   {
+    path: 'tracks-edit',
+    loadComponent: () =>
+      import('./pages/tracks-edit/tracks-edit.page').then(
+        (m) => m.TracksEditPage,
+      ),
+  },
+  {
+    path: 'tracks-view',
+    loadComponent: () =>
+      import('./pages/tracks-view/tracks-view.page').then(
+        (m) => m.TracksViewPage,
+      ),
+  },
+  {
     path: 'weather',
     loadComponent: () =>
       import('./pages/weather/weather.page').then((m) => m.WeatherPage),

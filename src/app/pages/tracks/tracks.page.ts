@@ -18,13 +18,16 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Track, TrackWithoutId } from 'src/app/models/tracks';
 import { addIcons } from 'ionicons';
-import { ellipsisVertical, trash } from 'ionicons/icons';
+import { ellipsisVertical, pencil, trash } from 'ionicons/icons';
 import { TracksService } from 'src/app/services/tracks.service';
 import { geoDistance } from 'src/app/utils/coordinates';
 import { UnitService } from 'src/app/services/unit.service';
 import { DistanceUnit, SpeedUnit } from 'src/app/models/settings';
 import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
+import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { TracksViewPage } from '../tracks-view/tracks-view.page';
+import { TracksEditPage } from '../tracks-edit/tracks-edit.page';
 
 interface DisplayTrack extends Track {
   duration: string;
@@ -64,9 +67,11 @@ export class TracksPage implements OnInit {
     private readonly unit: UnitService,
     private readonly actionSheetCtrl: ActionSheetWrapper,
     private readonly alertCtrl: AlertWrapper,
+    private readonly modalCtrl: ModalWrapper,
   ) {
     addIcons({
       ellipsisVertical,
+      pencil,
       trash,
     });
   }
@@ -75,12 +80,29 @@ export class TracksPage implements OnInit {
     this.loadTracks();
   }
 
+  async showTrackDetails(track: Track) {
+    const modal = await this.modalCtrl.create({
+      component: TracksViewPage,
+      componentProps: {
+        track,
+      },
+    });
+
+    await modal.present();
+  }
+
   async showTrackOptions(track: Track) {
+    const editText = this.translate.instant('general.edit');
     const deleteText = this.translate.instant('general.delete');
 
     const actionSheet = await this.actionSheetCtrl.create({
       header: track.name,
       buttons: [
+        {
+          text: editText,
+          icon: 'pencil',
+          handler: () => this.editTrack(track),
+        },
         {
           text: deleteText,
           icon: 'trash',
@@ -90,6 +112,17 @@ export class TracksPage implements OnInit {
     });
 
     await actionSheet.present();
+  }
+
+  private async editTrack(track: Track) {
+    const modal = await this.modalCtrl.create({
+      component: TracksEditPage,
+      componentProps: {
+        track,
+      },
+    });
+
+    await modal.present();
   }
 
   private async confirmDeleteTrack(track: Track) {

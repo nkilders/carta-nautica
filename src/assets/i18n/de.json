@@ -77,6 +77,12 @@
     "avgSpeed": "⌀ Geschwindigkeit: {{speed}} {{unit}}",
     "deleteConfirmHeader": "Route löschen"
   },
+  "tracksEdit": {
+    "title": "Route bearbeiten",
+    "name": "Name",
+    "errorNameEmpty": "Name darf nicht leer sein",
+    "errorHeader": "Ungültige Eingabe"
+  },
   "weather": {
     "loading": "Wetterdaten werden geladen",
     "invalidApiKey": {
