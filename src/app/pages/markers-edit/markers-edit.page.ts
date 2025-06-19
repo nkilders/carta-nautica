@@ -72,13 +72,7 @@ export class MarkersEditPage implements OnInit {
   }
 
   protected async closeModal() {
-    const modal = await this.modalCtrl.getTop();
-
-    if (!modal) {
-      return;
-    }
-
-    await modal.dismiss();
+    await this.modalCtrl.dismissTop();
   }
 
   private async errorToast(textKey: string) {

@@ -27,4 +27,11 @@ export class ModalWrapper {
   public getTop() {
     return this.modalCtrl.getTop();
   }
+
+  public async dismissTop() {
+    const modal = await this.modalCtrl.getTop();
+    if (modal) {
+      await modal.dismiss();
+    }
+  }
 }
