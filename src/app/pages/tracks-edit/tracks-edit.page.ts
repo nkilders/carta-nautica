@@ -13,7 +13,7 @@ import {
   IonButton,
 } from '@ionic/angular/standalone';
 import { Track } from 'src/app/models/tracks';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { TracksService } from 'src/app/services/tracks.service';
 import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
@@ -47,7 +47,6 @@ export class TracksEditPage implements OnInit {
   constructor(
     private readonly modalCtrl: ModalWrapper,
     private readonly alertCtrl: AlertWrapper,
-    private readonly translate: TranslateService,
     private readonly tracks: TracksService,
   ) {}
 
@@ -76,20 +75,6 @@ export class TracksEditPage implements OnInit {
   }
 
   private async errorToast(textKey: string) {
-    const headerText = await this.translate.instant('tracksEdit.errorHeader');
-    const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('general.ok');
-
-    const toast = await this.alertCtrl.create({
-      header: headerText,
-      message: messageText,
-      buttons: [
-        {
-          text: okText,
-        },
-      ],
-    });
-
-    await toast.present();
+    await this.alertCtrl.show('tracksEdit.errorHeader', textKey);
   }
 }
