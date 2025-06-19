@@ -12,7 +12,7 @@ import {
   IonList,
   IonInput,
 } from '@ionic/angular/standalone';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Marker } from 'src/app/models/markers';
 import { MarkersService } from 'src/app/services/markers.service';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
@@ -47,7 +47,6 @@ export class MarkersEditPage implements OnInit {
   constructor(
     private readonly modalCtrl: ModalWrapper,
     private readonly alertCtrl: AlertWrapper,
-    private readonly translate: TranslateService,
     private readonly markers: MarkersService,
   ) {}
 
@@ -72,30 +71,10 @@ export class MarkersEditPage implements OnInit {
   }
 
   protected async closeModal() {
-    const modal = await this.modalCtrl.getTop();
-
-    if (!modal) {
-      return;
-    }
-
-    await modal.dismiss();
+    await this.modalCtrl.dismissTop();
   }
 
   private async errorToast(textKey: string) {
-    const headerText = await this.translate.instant('markersEdit.errorHeader');
-    const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('general.ok');
-
-    const toast = await this.alertCtrl.create({
-      header: headerText,
-      message: messageText,
-      buttons: [
-        {
-          text: okText,
-        },
-      ],
-    });
-
-    await toast.present();
+    await this.alertCtrl.show('markersEdit.errorHeader', textKey);
   }
 }

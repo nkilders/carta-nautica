@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AlertController, AlertOptions } from '@ionic/angular';
 import { SettingsService } from '../services/settings.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ export class AlertWrapper {
   constructor(
     private readonly alertCtrl: AlertController,
     private readonly settings: SettingsService,
+    private readonly translate: TranslateService,
   ) {}
 
   public async create(opts: AlertOptions) {
@@ -26,5 +28,23 @@ export class AlertWrapper {
 
   public getTop() {
     return this.alertCtrl.getTop();
+  }
+
+  public async show(headerTextKey: string, messageTextKey: string) {
+    const headerText = await this.translate.instant(headerTextKey);
+    const messageText = await this.translate.instant(messageTextKey);
+    const okText = await this.translate.instant('general.ok');
+
+    const toast = await this.create({
+      header: headerText,
+      message: messageText,
+      buttons: [
+        {
+          text: okText,
+        },
+      ],
+    });
+
+    await toast.present();
   }
 }

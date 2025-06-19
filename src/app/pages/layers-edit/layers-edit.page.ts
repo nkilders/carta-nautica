@@ -14,7 +14,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Layer } from 'src/app/models/layers';
 import { LayersService } from 'src/app/services/layers.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
 import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 
@@ -49,7 +49,6 @@ export class LayersEditPage implements OnInit {
     private readonly layers: LayersService,
     private readonly modalCtrl: ModalWrapper,
     private readonly alertCtrl: AlertWrapper,
-    private readonly translate: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -80,30 +79,10 @@ export class LayersEditPage implements OnInit {
   }
 
   protected async closeModal() {
-    const modal = await this.modalCtrl.getTop();
-
-    if (!modal) {
-      return;
-    }
-
-    await modal.dismiss();
+    await this.modalCtrl.dismissTop();
   }
 
   private async errorToast(textKey: string) {
-    const headerText = await this.translate.instant('layersEdit.errorHeader');
-    const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('general.ok');
-
-    const toast = await this.alertCtrl.create({
-      header: headerText,
-      message: messageText,
-      buttons: [
-        {
-          text: okText,
-        },
-      ],
-    });
-
-    await toast.present();
+    await this.alertCtrl.show('layersEdit.errorHeader', textKey);
   }
 }
