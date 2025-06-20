@@ -122,6 +122,10 @@ export class TracksPage implements OnInit {
       },
     });
 
+    modal.onWillDismiss().then(async () => {
+      await this.loadTracks();
+    });
+
     await modal.present();
   }
 
