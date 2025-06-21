@@ -6,4 +6,43 @@
 
 <ion-content [fullscreen]="true">
   <div id="tracks-view-map"></div>
+
+  <ion-list>
+    
+    <ion-item>
+      <ion-title>{{ 'tracksView.timeTitle' | translate }}</ion-title>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ 'tracksView.startTimeLabel' | translate }}</ion-label>
+      <ion-label slot="end">{{ trackDetails?.startTime }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ 'tracksView.endTimeLabel' | translate }}</ion-label>
+      <ion-label slot="end">{{ trackDetails?.endTime }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ 'tracksView.durationLabel' | translate }}</ion-label>
+      <ion-label slot="end">{{ trackDetails?.duration }}</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-title>{{ 'tracksView.distanceTitle' | translate }}</ion-title>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ 'tracksView.lengthLabel' | translate }}</ion-label>
+      <ion-label slot="end">{{ trackDetails?.length }}</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-title>{{ 'tracksView.speedTitle' | translate }}</ion-title>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ 'tracksView.avgSpeedLabel' | translate }}</ion-label>
+      <ion-label slot="end">{{ trackDetails?.averageSpeed }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ 'tracksView.maxSpeedLabel' | translate }}</ion-label>
+      <ion-label slot="end">{{ trackDetails?.maxSpeed }}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

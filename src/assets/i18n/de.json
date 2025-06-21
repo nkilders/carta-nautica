@@ -83,6 +83,22 @@
     "errorNameEmpty": "Name darf nicht leer sein",
     "errorHeader": "Ungültige Eingabe"
   },
+  "tracksView": {
+    "timeTitle": "Zeit",
+    "startTimeLabel": "Startzeit",
+    "endTimeLabel": "Endzeit",
+    "durationLabel": "Dauer",
+    "durationValueMinSec": "{{minutes}} Min. {{seconds}} Sek.",
+    "durationValueHrMin": "{{hours}} Std. {{minutes}} Min.",
+    "distanceTitle": "Strecke",
+    "lengthLabel": "Länge",
+    "lengthValue": "{{length}} {{unit}}",
+    "speedTitle": "Geschwindigkeit",
+    "avgSpeedLabel": "⌀ Geschwindigkeit",
+    "avgSpeedValue": "{{speed}} {{unit}}",
+    "maxSpeedLabel": "Max. Geschwindigkeit",
+    "maxSpeedValue": "{{speed}} {{unit}}"
+  },
   "weather": {
     "loading": "Wetterdaten werden geladen",
     "invalidApiKey": {
