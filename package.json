@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^20.0.3",
     "@angular/platform-browser-dynamic": "^20.0.3",
     "@angular/router": "^20.0.3",
+    "@angular/service-worker": "^20.0.3",
     "@awesome-cordova-plugins/native-geocoder": "^8.0.0",
     "@capacitor-community/keep-awake": "^7.0.0",
     "@capacitor/android": "7.3.0",

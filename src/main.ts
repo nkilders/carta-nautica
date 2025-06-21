@@ -12,7 +12,7 @@ import {
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
-import { importProvidersFrom } from '@angular/core';
+import { importProvidersFrom, isDevMode } from '@angular/core';
 import {
   HttpClient,
   provideHttpClient,
@@ -21,6 +21,7 @@ import {
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { provideServiceWorker } from '@angular/service-worker';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -45,6 +46,10 @@ bootstrapApplication(AppComponent, {
         name: 'carta-nautica',
       }),
     ),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 });
 
