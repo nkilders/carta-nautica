@@ -83,6 +83,22 @@
     "errorNameEmpty": "Name must not be empty",
     "errorHeader": "Invalid input"
   },
+  "tracksView": {
+    "timeTitle": "Time",
+    "startTimeLabel": "Start Time",
+    "endTimeLabel": "End Time",
+    "durationLabel": "Duration",
+    "durationValueMinSec": "{{minutes}} Min. {{seconds}} Sec.",
+    "durationValueHrMin": "{{hours}} Hr. {{minutes}} Min.",
+    "distanceTitle": "Distance",
+    "lengthLabel": "Length",
+    "lengthValue": "{{length}} {{unit}}",
+    "speedTitle": "Speed",
+    "avgSpeedLabel": "⌀ Speed",
+    "avgSpeedValue": "{{speed}} {{unit}}",
+    "maxSpeedLabel": "Max. Speed",
+    "maxSpeedValue": "{{speed}} {{unit}}"
+  },
   "weather": {
     "loading": "Loading weather data",
     "invalidApiKey": {
