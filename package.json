@@ -10,7 +10,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "prettier": "prettier -w src/"
+    "prettier": "prettier -w src/",
+    "android-sync": "ionic cap sync android",
+    "android-open": "ionic cap open android"
   },
   "private": true,
   "dependencies": {
