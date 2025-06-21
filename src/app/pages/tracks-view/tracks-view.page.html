@@ -8,7 +8,6 @@
   <div id="tracks-view-map"></div>
 
   <ion-list>
-    
     <ion-item>
       <ion-title>{{ 'tracksView.timeTitle' | translate }}</ion-title>
     </ion-item>
@@ -35,6 +34,9 @@
 
     <ion-item>
       <ion-title>{{ 'tracksView.speedTitle' | translate }}</ion-title>
+    </ion-item>
+    <ion-item>
+      <div echarts [options]="options" class="demo-chart" style="width: 100%; height: 12em;"></div>
     </ion-item>
     <ion-item>
       <ion-label>{{ 'tracksView.avgSpeedLabel' | translate }}</ion-label>
