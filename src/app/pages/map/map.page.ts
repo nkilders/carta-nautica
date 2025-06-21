@@ -109,14 +109,11 @@ export class MapPage implements OnInit {
   }
 
   ngOnInit() {
-    // TODO: check if awaits are required here
-    (async () => {
-      await this.initMap();
-      this.initMapLayerManagers();
-      await this.initPositionWatch();
-      this.initSettingsListeners();
-      this.initFabs();
-    })();
+    this.initMap();
+    this.initMapLayerManagers();
+    this.initPositionWatch();
+    this.initSettingsListeners();
+    this.initFabs();
   }
 
   public fabRecordTrack() {
@@ -137,7 +134,7 @@ export class MapPage implements OnInit {
     }
   }
 
-  private async initMap() {
+  private initMap() {
     this.mapSrv.setTarget('map');
 
     this.mapSrv.getMap().addControl(
@@ -278,7 +275,7 @@ export class MapPage implements OnInit {
     const buttons = [
       {
         text: this.translate.instant('routeStop.addStopBefore1'),
-        handler: async () =>
+        handler: () =>
           this.routePlanningSrv.addStop({ latitude, longitude }, 0),
       },
     ];
@@ -288,7 +285,7 @@ export class MapPage implements OnInit {
         text: this.translate.instant('routeStop.addStopAfter', {
           sequence: i + 1,
         }),
-        handler: async () =>
+        handler: () =>
           this.routePlanningSrv.addStop({ latitude, longitude }, i + 1),
       });
     });
