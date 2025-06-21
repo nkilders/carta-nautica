@@ -43,7 +43,7 @@ export class TracksViewPage implements OnInit {
   }
 
   ngOnInit() {
-    this.map.setTarget('map');
+    this.map.setTarget('tracks-view-map');
 
     useGeographic();
 
