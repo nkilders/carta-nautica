@@ -51,7 +51,7 @@ export class TracksViewPage implements OnInit {
 
   private readonly map: OLMap;
 
-  options: EChartsCoreOption = {};
+  speedChartOptions: EChartsCoreOption = {};
 
   constructor(
     private readonly layers: LayersService,
@@ -122,7 +122,7 @@ export class TracksViewPage implements OnInit {
   }
 
   private setSpeedChartData(timestamps: string[] = [], speeds: number[] = []) {
-    this.options = {
+    this.speedChartOptions = {
       grid: {
         top: '10%',
         bottom: '15%',
