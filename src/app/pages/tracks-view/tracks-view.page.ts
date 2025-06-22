@@ -21,6 +21,8 @@ import { geoDistance } from 'src/app/utils/coordinates';
 import { DistanceUnit, SpeedUnit } from 'src/app/models/settings';
 import { UnitService } from 'src/app/services/unit.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { EChartsCoreOption } from 'echarts/core';
+import { NgxEchartsDirective } from 'ngx-echarts';
 
 @Component({
   selector: 'app-tracks-view',
@@ -38,6 +40,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     CommonModule,
     FormsModule,
     TranslateModule,
+    NgxEchartsDirective,
   ],
 })
 export class TracksViewPage implements OnInit {
@@ -48,6 +51,8 @@ export class TracksViewPage implements OnInit {
 
   private readonly map: OLMap;
 
+  speedChartOptions: EChartsCoreOption = {};
+
   constructor(
     private readonly layers: LayersService,
     private readonly settings: SettingsService,
@@ -55,6 +60,7 @@ export class TracksViewPage implements OnInit {
     private readonly unit: UnitService,
   ) {
     this.map = new OLMap({});
+    this.setSpeedChartData();
   }
 
   ngOnInit() {
@@ -76,6 +82,72 @@ export class TracksViewPage implements OnInit {
       length: await this.lengthText(),
       averageSpeed: await this.averageSpeedText(),
       maxSpeed: await this.maximumSpeedText(),
+    };
+
+    const { timestamps, speedValues } = await this.calculateSpeedChartData();
+    this.setSpeedChartData(timestamps, speedValues);
+  }
+
+  private async calculateSpeedChartData() {
+    const { points } = this.track;
+
+    const lang = await this.settings.getLanguage();
+
+    const timestamps: string[] = [];
+    const speedValues: number[] = [];
+
+    for (let i = 0; i < points.length - 1; i++) {
+      const p1 = points[i];
+      const p2 = points[i + 1];
+
+      timestamps.push(new Date(p1.timestamp).toLocaleTimeString(lang));
+
+      const distanceKm = geoDistance(
+        p1.latitude,
+        p1.longitude,
+        p2.latitude,
+        p2.longitude,
+      );
+      const timeHr = (p2.timestamp - p1.timestamp) / 1000 / 60 / 60;
+      const speedKmh = distanceKm / timeHr;
+
+      const speed = await this.unit.convertSpeed(
+        speedKmh,
+        SpeedUnit.KILOMETERS_PER_HOUR,
+      );
+      speedValues.push(Math.round(speed.value));
+    }
+
+    return { timestamps, speedValues };
+  }
+
+  private setSpeedChartData(timestamps: string[] = [], speeds: number[] = []) {
+    this.speedChartOptions = {
+      grid: {
+        top: '10%',
+        bottom: '15%',
+        right: '1%',
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: timestamps,
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          type: 'line',
+          smooth: true,
+          data: speeds,
+          markArea: {
+            itemStyle: {
+              color: 'rgba(255, 173, 177, 0.4)',
+            },
+          },
+        },
+      ],
     };
   }
 

@@ -39,6 +39,21 @@ import { MarkersPage } from './pages/markers/markers.page';
 import { APP_NAME, APP_VERSION } from './app';
 import { ModalWrapper } from './wrappers/modal-wrapper';
 
+import { provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { LineChart } from 'echarts/charts';
+import { GridComponent } from 'echarts/components';
+
+echarts.use([
+  // Renderers
+  CanvasRenderer,
+  // Charts
+  LineChart,
+  // Components
+  GridComponent,
+]);
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -60,7 +75,7 @@ import { ModalWrapper } from './wrappers/modal-wrapper';
     IonRouterOutlet,
     TranslateModule,
   ],
-  providers: [ModalWrapper, ModalController],
+  providers: [ModalWrapper, ModalController, provideEchartsCore({ echarts })],
 })
 export class AppComponent {
   public appPages = [
