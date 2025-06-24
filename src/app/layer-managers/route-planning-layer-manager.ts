@@ -11,6 +11,7 @@ import { Route, StopFeature } from '../models/route-planning';
 import { RoutePlanningService } from '../services/route-planning.service';
 import { LineString } from 'ol/geom';
 import { GeolocationService } from '../services/geolocation.service';
+import { Stroke, Style } from 'ol/style';
 
 export function createRoutePlanningLayerManager(
   mapSrv: MapService,
@@ -30,9 +31,9 @@ export function createRoutePlanningLayerManager(
 
 class RoutePlanningLayerManager {
   private readonly layerSource: VectorSource;
+  private readonly lineFeature: Feature;
 
   private stopFeatures: StopFeature[];
-  private lineFeature?: Feature;
 
   constructor(
     private readonly mapSrv: MapService,
@@ -41,6 +42,8 @@ class RoutePlanningLayerManager {
     private readonly actionSheetCtrl: ActionSheetWrapper,
     private readonly translate: TranslateService,
   ) {
+    this.layerSource = new VectorSource();
+    this.lineFeature = this.createLineFeature();
     this.stopFeatures = [];
 
     addIcons({
@@ -48,18 +51,28 @@ class RoutePlanningLayerManager {
       trash,
     });
 
-    this.layerSource = this.createLayerSource();
-    this.createLayer();
+    this.createLayerAndAddToMap(this.layerSource);
     this.registerListeners();
   }
 
-  private createLayerSource() {
-    return new VectorSource();
+  private createLineFeature() {
+    const line = new Feature();
+
+    line.setStyle(
+      new Style({
+        stroke: new Stroke({
+          color: 'rgb(231, 76, 60)',
+          width: 3,
+        }),
+      }),
+    );
+
+    return line;
   }
 
-  private createLayer() {
+  private createLayerAndAddToMap(source: VectorSource) {
     const layer = new VectorLayer({
-      source: this.layerSource,
+      source,
       zIndex: ZIndex.ROUTE_PLANNING,
     });
 
@@ -93,10 +106,14 @@ class RoutePlanningLayerManager {
   }
 
   private async showStopActionSheet(sequence: number) {
+    const headerText = this.translate.instant('routeStop.header', {
+      sequence: sequence + 1,
+    });
     const deleteText = this.translate.instant('general.delete');
     const cancelText = this.translate.instant('general.cancel');
 
     const actionSheet = await this.actionSheetCtrl.create({
+      header: headerText,
       buttons: [
         {
           text: deleteText,
@@ -126,7 +143,6 @@ class RoutePlanningLayerManager {
       this.layerSource.addFeature(stopFeature);
     });
 
-    this.lineFeature = new Feature();
     this.updateLineStringGeometry();
     this.layerSource.addFeature(this.lineFeature);
   }
@@ -138,7 +154,7 @@ class RoutePlanningLayerManager {
       return [longitude, latitude];
     });
 
-    this.lineFeature?.setGeometry(
+    this.lineFeature.setGeometry(
       new LineString([
         [currentPos.longitude, currentPos.latitude],
         ...stopCoordinates,

@@ -120,6 +120,7 @@
     }
   },
   "routeStop": {
+    "header": "Zwischenstopp {{sequence}}",
     "addStopTitle": "Zwischenstopp hinzufügen",
     "addStopBefore1": "Vor Stopp 1",
     "addStopAfter": "Nach Stopp {{sequence}}"
