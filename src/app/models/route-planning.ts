@@ -1,5 +1,5 @@
 import { Feature } from 'ol';
-import { Circle, Fill, Style } from 'ol/style';
+import { Circle, Fill, Stroke, Style, Text } from 'ol/style';
 import { Point } from 'ol/geom';
 
 export interface Stop {
@@ -37,8 +37,14 @@ export class StopFeature extends Feature {
     this.setStyle(
       new Style({
         image: new Circle({
-          radius: 5,
-          fill: new Fill({ color: 'rgba(255, 0, 0, 1)' }),
+          radius: 8,
+          fill: new Fill({ color: 'rgb(231, 76, 60)' }),
+          stroke: new Stroke({ color: 'black', width: 2 }),
+        }),
+        text: new Text({
+          text: String(this.sequence + 1),
+          fill: new Fill({ color: 'black' }),
+          font: '10pt Arial',
         }),
       }),
     );

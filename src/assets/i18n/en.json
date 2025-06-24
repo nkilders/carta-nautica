@@ -117,11 +117,12 @@
       "friday": "Friday",
       "saturday": "Saturday",
       "sunday": "Sunday"
-    },
-    "routeStop": {
-      "addStopTitle": "Add Stop",
-      "addStopBefore1": "Before Stop 1",
-      "addStopAfter": "After Stop {{sequence}}"
     }
+  },
+  "routeStop": {
+    "header": "Stop {{sequence}}",
+    "addStopTitle": "Add Stop",
+    "addStopBefore1": "Before Stop 1",
+    "addStopAfter": "After Stop {{sequence}}"
   }
 }
