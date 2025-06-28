@@ -17,5 +17,8 @@ out;
   node
     ["seamark:light:colour"]
     (around:20000,45.130538484089,14.333353586986);
+  node
+    ["seamark:light:1:colour"]
+    (around:20000,45.130538484089,14.333353586986);
 );
 out;

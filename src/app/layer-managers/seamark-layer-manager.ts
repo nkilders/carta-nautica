@@ -63,7 +63,7 @@ class SeamarkLayerManager {
   private async loadFeatures(longitude: number, latitude: number) {
     const radiusMeters = 20_000;
     // const url = `https://overpass-api.de/api/interpreter?data=[out:json];(node["seamark:type"~".*"](around:${radiusMeters},${latitude},${longitude}););out%20body;`;
-    const url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node["seamark:light:colour"](around:${radiusMeters},${latitude},${longitude}););out;`;
+    const url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node["seamark:light:colour"](around:${radiusMeters},${latitude},${longitude});node["seamark:light:1:colour"](around:${radiusMeters},${latitude},${longitude}););out;`;
 
     const response = await fetch(url);
 
