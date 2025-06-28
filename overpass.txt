@@ -1,0 +1,21 @@
+[out:json]
+[timeout:25]
+;
+(
+  node
+    ["seamark:type"~"light_minor|light_major"]
+    (around:20000,45.130538484089,14.333353586986);
+);
+out;
+
+
+
+[out:json]
+[timeout:25]
+;
+(
+  node
+    ["seamark:light:colour"]
+    (around:20000,45.130538484089,14.333353586986);
+);
+out;

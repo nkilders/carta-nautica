@@ -12,15 +12,15 @@ export interface Seamark {
 }
 
 export class SeamarkFeature extends Feature {
-  constructor(private seamark: Seamark) {
+  constructor(private readonly seamark: Seamark) {
     super();
 
     this.setStyle(
       new Style({
         image: new Circle({
           radius: 8,
-          fill: new Fill({ color: 'rgba(0, 0, 0, 0)' }),
-          // stroke: new Stroke({ color: 'red', width: 2 }),
+          fill: new Fill({ color: 'red' }),
+          stroke: new Stroke({ color: 'red', width: 2 }),
         }),
       }),
     );

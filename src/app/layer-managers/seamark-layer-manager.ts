@@ -2,22 +2,33 @@ import { MapBrowserEvent } from 'ol';
 import { SeamarkFeature } from '../models/seamark';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { ZIndex } from './z-indices';
+import { ZIndex } from '../utils/z-indices';
 import { MapService } from '../services/map.service';
 import { FeatureLike } from 'ol/Feature';
-import { geoDistance } from './coordinates';
+import { geoDistance } from '../utils/coordinates';
+import { AlertWrapper } from '../wrappers/alert-wrapper';
 
 const RELOAD_DISTANCE_KM = 5;
 
-export class SeamarkLayerManager {
+export function createSeamarkLayerManager(
+  map: MapService,
+  alert: AlertWrapper,
+) {
+  return new SeamarkLayerManager(map, alert);
+}
+
+class SeamarkLayerManager {
   private layer?: VectorLayer;
   private layerSource?: VectorSource;
 
-  private objects: number[] = [];
+  private readonly objects: number[] = [];
   private lastLongitude = 0;
   private lastLatitude = 0;
 
-  constructor(private mapSrv: MapService) {
+  constructor(
+    private readonly mapSrv: MapService,
+    private readonly alert: AlertWrapper,
+  ) {
     this.createLayer();
     this.registerListeners();
 
@@ -51,7 +62,8 @@ export class SeamarkLayerManager {
 
   private async loadFeatures(longitude: number, latitude: number) {
     const radiusMeters = 20_000;
-    const url = `https://overpass-api.de/api/interpreter?data=[out:json];(node["seamark:type"~".*"](around:${radiusMeters},${latitude},${longitude}););out%20body;`;
+    // const url = `https://overpass-api.de/api/interpreter?data=[out:json];(node["seamark:type"~".*"](around:${radiusMeters},${latitude},${longitude}););out%20body;`;
+    const url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node["seamark:light:colour"](around:${radiusMeters},${latitude},${longitude}););out;`;
 
     const response = await fetch(url);
 
@@ -99,6 +111,12 @@ export class SeamarkLayerManager {
       const zoom = this.mapSrv.getMap().getView().getZoom();
       console.log('#### Zoom', zoom);
       console.log('#### Objects', this.objects.length);
+
+      const alert = await this.alert.create({
+        header: 'Seamark Details',
+        message: JSON.stringify(feature.getSeamark()),
+      });
+      await alert.present();
     }
   }
 }
