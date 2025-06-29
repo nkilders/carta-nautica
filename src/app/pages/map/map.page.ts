@@ -15,7 +15,7 @@ import {
 import { ScaleLine } from 'ol/control';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
-import { BoatMarker } from '../../utils/boat';
+import { createBoatLayerManager } from '../../layer-managers/boat-layer-manager';
 import { countryCodeEmoji } from 'country-code-emoji';
 import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -76,7 +76,6 @@ export class MapPage implements OnInit {
   public speed = '';
   public heading = '';
 
-  private boat?: BoatMarker;
   private lastToolbarTitleUpdate: number;
   private fabFollowToggler?: FabToggler;
   private fabRecordTrackToggler?: FabToggler;
@@ -150,8 +149,6 @@ export class MapPage implements OnInit {
         new SpeedHeadingControl(this.settings, this.geolocation, this.unit),
       );
 
-    this.boat = new BoatMarker(this.mapSrv);
-
     this.mapSrv.on(
       'longClick',
       async (longitude, latitude, completeLongClick) =>
@@ -161,6 +158,7 @@ export class MapPage implements OnInit {
 
   private initMapLayerManagers() {
     createLayerManager(this.mapSrv, this.layers, this.settings);
+    createBoatLayerManager(this.mapSrv, this.geolocation);
     createMarkersLayerManager(
       this.mapSrv,
       this.markersSrv,
@@ -334,7 +332,6 @@ export class MapPage implements OnInit {
     if (pos.timestamp !== -1) {
       this.mapSrv.focus(pos.coords.longitude, pos.coords.latitude, 15);
     }
-    this.boat?.updatePosition(pos);
   }
 
   private initSettingsListeners() {
@@ -354,7 +351,6 @@ export class MapPage implements OnInit {
   }
 
   private onPositionChanged(position: Position) {
-    this.boat?.updatePosition(position);
     this.updateToolbarTitle();
 
     if (this.fabFollowToggler?.isActive()) {
