@@ -47,10 +47,12 @@ export class MarkersCreatePage {
   protected name: string = '';
 
   constructor(
-    private readonly markersSrv: MarkersService,
-    private readonly translate: TranslateService,
-    private readonly modalCtrl: ModalWrapper,
-    private readonly alertCtrl: AlertWrapper,
+    // Controllers
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly markersService: MarkersService,
+    private readonly translateService: TranslateService,
   ) {}
 
   protected async createMarker() {
@@ -65,13 +67,13 @@ export class MarkersCreatePage {
       latitude: this.latitude,
     };
 
-    await this.markersSrv.create(newMarker);
+    await this.markersService.create(newMarker);
 
     await this.closeModal();
   }
 
   protected async closeModal() {
-    const modal = await this.modalCtrl.getTop();
+    const modal = await this.modalController.getTop();
 
     if (!modal) {
       return;
@@ -81,13 +83,13 @@ export class MarkersCreatePage {
   }
 
   private async errorToast(textKey: string) {
-    const headerText = await this.translate.instant(
+    const headerText = await this.translateService.instant(
       'markersCreate.errorHeader',
     );
-    const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('general.ok');
+    const messageText = await this.translateService.instant(textKey);
+    const okText = await this.translateService.instant('general.ok');
 
-    const toast = await this.alertCtrl.create({
+    const toast = await this.alertController.create({
       header: headerText,
       message: messageText,
       buttons: [

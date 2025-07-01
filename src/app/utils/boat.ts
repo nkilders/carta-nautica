@@ -14,7 +14,7 @@ export class BoatMarker {
   private readonly boat: Feature<Point>;
   private readonly icon: Icon;
 
-  constructor(private readonly mapSrv: MapService) {
+  constructor(private readonly mapService: MapService) {
     this.icon = this.createIcon();
     this.boat = this.createBoatFeature();
     this.createBoatLayer();
@@ -27,7 +27,7 @@ export class BoatMarker {
     this.boat.setGeometry(new Point([longitude, latitude]));
 
     const rotation =
-      (this.mapSrv.getMap().getView().getRotation() + heading / 57.29578) %
+      (this.mapService.getMap().getView().getRotation() + heading / 57.29578) %
       (2 * Math.PI);
 
     this.icon.setRotation(rotation);
@@ -60,7 +60,7 @@ export class BoatMarker {
       zIndex: ZIndex.BOAT,
     });
 
-    this.mapSrv.getMap().addLayer(boatLayer);
+    this.mapService.getMap().addLayer(boatLayer);
 
     return boatLayer;
   }

@@ -7,24 +7,24 @@ import { SettingsService } from '../services/settings.service';
 })
 export class LoadingWrapper {
   constructor(
-    private readonly loadingCtrl: LoadingController,
-    private readonly settings: SettingsService,
+    private readonly loadingController: LoadingController,
+    private readonly settingsService: SettingsService,
   ) {}
 
   public async create(opts: LoadingOptions) {
-    const animations = await this.settings.getAnimations();
+    const animations = await this.settingsService.getAnimations();
 
-    return this.loadingCtrl.create({
+    return this.loadingController.create({
       ...opts,
       animated: animations,
     });
   }
 
   public dismiss(data?: any, role?: string, id?: string) {
-    return this.loadingCtrl.dismiss(data, role, id);
+    return this.loadingController.dismiss(data, role, id);
   }
 
   public getTop() {
-    return this.loadingCtrl.getTop();
+    return this.loadingController.getTop();
   }
 }

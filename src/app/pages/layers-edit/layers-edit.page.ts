@@ -46,9 +46,11 @@ export class LayersEditPage implements OnInit {
   protected url: string = '';
 
   constructor(
-    private readonly layers: LayersService,
-    private readonly modalCtrl: ModalWrapper,
-    private readonly alertCtrl: AlertWrapper,
+    // Controllers
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly layersService: LayersService,
   ) {}
 
   ngOnInit() {
@@ -73,16 +75,16 @@ export class LayersEditPage implements OnInit {
       source: this.url,
     };
 
-    await this.layers.update(this.layer.id, updatedLayer);
+    await this.layersService.update(this.layer.id, updatedLayer);
 
     await this.closeModal();
   }
 
   protected async closeModal() {
-    await this.modalCtrl.dismissTop();
+    await this.modalController.dismissTop();
   }
 
   private async errorToast(textKey: string) {
-    await this.alertCtrl.show('layersEdit.errorHeader', textKey);
+    await this.alertController.show('layersEdit.errorHeader', textKey);
   }
 }

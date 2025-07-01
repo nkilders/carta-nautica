@@ -72,12 +72,14 @@ export class WeatherPage implements OnInit {
   weatherData: WeatherDay[] = [];
 
   constructor(
-    private readonly settings: SettingsService,
-    private readonly unit: UnitService,
-    private readonly translate: TranslateService,
-    private readonly alertCtrl: AlertWrapper,
-    private readonly modalCtrl: ModalWrapper,
-    private readonly loadingCtrl: LoadingWrapper,
+    // Controllers
+    private readonly alertController: AlertWrapper,
+    private readonly loadingController: LoadingWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly settingsService: SettingsService,
+    private readonly translateService: TranslateService,
+    private readonly unitService: UnitService,
   ) {
     addIcons({ thermometer, water, rainy, paperPlane });
   }
@@ -103,9 +105,9 @@ export class WeatherPage implements OnInit {
   }
 
   private async showLoadingIndicator() {
-    const messageText = this.translate.instant('weather.loading');
+    const messageText = this.translateService.instant('weather.loading');
 
-    const load = await this.loadingCtrl.create({
+    const load = await this.loadingController.create({
       message: messageText,
     });
 
@@ -113,32 +115,38 @@ export class WeatherPage implements OnInit {
   }
 
   private async hideLoadingIndicator() {
-    await this.loadingCtrl.dismiss();
+    await this.loadingController.dismiss();
   }
 
   private async showInvalidApiKeyPopUp() {
-    const headerText = this.translate.instant('weather.invalidApiKey.header');
-    const messageText = this.translate.instant('weather.invalidApiKey.message');
-    const closeText = this.translate.instant('weather.invalidApiKey.close');
-    const settingsText = this.translate.instant(
+    const headerText = this.translateService.instant(
+      'weather.invalidApiKey.header',
+    );
+    const messageText = this.translateService.instant(
+      'weather.invalidApiKey.message',
+    );
+    const closeText = this.translateService.instant(
+      'weather.invalidApiKey.close',
+    );
+    const settingsText = this.translateService.instant(
       'weather.invalidApiKey.settings',
     );
 
-    const alert = await this.alertCtrl.create({
+    const alert = await this.alertController.create({
       header: headerText,
       message: messageText,
       buttons: [
         {
           text: closeText,
           handler: async () => {
-            await this.modalCtrl.dismiss();
+            await this.modalController.dismiss();
           },
           role: 'cancel',
         },
         {
           text: settingsText,
           handler: async () => {
-            const modal = await this.modalCtrl.create({
+            const modal = await this.modalController.create({
               component: SettingsPage,
             });
 
@@ -168,9 +176,9 @@ export class WeatherPage implements OnInit {
         let dayName = '';
 
         if (new Date().getDay() === day) {
-          dayName = this.translate.instant('weather.day.today');
+          dayName = this.translateService.instant('weather.day.today');
         } else if ((new Date().getDay() + 1) % 7 === day) {
-          dayName = this.translate.instant('weather.day.tomorrow');
+          dayName = this.translateService.instant('weather.day.tomorrow');
         } else {
           dayName = this.translateDayByIndex(day);
         }
@@ -188,18 +196,18 @@ export class WeatherPage implements OnInit {
 
       let temperature = '';
       if (forecast.main.temp_min === forecast.main.temp_max) {
-        const temp = await this.unit.convertTemperature(
+        const temp = await this.unitService.convertTemperature(
           forecast.main.temp,
           TemperatureUnit.CELSIUS,
         );
 
         temperature = `${temp.value.toFixed(0)} ${temp.unitText}`;
       } else {
-        const tempMin = await this.unit.convertTemperature(
+        const tempMin = await this.unitService.convertTemperature(
           forecast.main.temp_min,
           TemperatureUnit.CELSIUS,
         );
-        const tempMax = await this.unit.convertTemperature(
+        const tempMax = await this.unitService.convertTemperature(
           forecast.main.temp_max,
           TemperatureUnit.CELSIUS,
         );
@@ -207,7 +215,7 @@ export class WeatherPage implements OnInit {
         temperature = `${tempMin.value.toFixed(0)} ${tempMin.unitText} - ${tempMax.value.toFixed(0)} ${tempMin.unitText}`;
       }
 
-      const wind = await this.unit.convertSpeed(
+      const wind = await this.unitService.convertSpeed(
         forecast.wind.speed,
         SpeedUnit.METERS_PER_SECOND,
       );
@@ -231,14 +239,14 @@ export class WeatherPage implements OnInit {
   }
 
   private async fetchWeatherForecast() {
-    const apiKey = await this.settings.getOpenWeatherMapApiKey();
+    const apiKey = await this.settingsService.getOpenWeatherMapApiKey();
 
     const params = new URLSearchParams({
       lat: this.latitude.toString(),
       lon: this.longitude.toString(),
       appid: apiKey,
       units: 'metric',
-      lang: this.translate.getDefaultLang(),
+      lang: this.translateService.getDefaultLang(),
     }).toString();
 
     const res = await fetch(`${FORECAST_API_URL}?${params}`, {
@@ -251,7 +259,7 @@ export class WeatherPage implements OnInit {
   }
 
   private async isApiKeyValid() {
-    const key = await this.settings.getOpenWeatherMapApiKey();
+    const key = await this.settingsService.getOpenWeatherMapApiKey();
 
     if (key === '') {
       return false;
@@ -282,7 +290,7 @@ export class WeatherPage implements OnInit {
         'sunday',
       ][dayIndex];
 
-    return this.translate.instant(key);
+    return this.translateService.instant(key);
   }
 }
 
