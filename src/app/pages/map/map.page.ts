@@ -151,8 +151,8 @@ export class MapPage implements OnInit {
       .getMap()
       .addControl(
         new SpeedHeadingControl(
-          this.settingsService,
           this.geolocation,
+          this.settingsService,
           this.unitService,
         ),
       );
