@@ -10,10 +10,10 @@ import { MapService } from '../services/map.service';
 import { GeolocationService } from '../services/geolocation.service';
 
 export function createBoatLayerManager(
-  mapService: MapService,
   geolocationService: GeolocationService,
+  mapService: MapService,
 ) {
-  return new BoatLayerManager(mapService, geolocationService);
+  return new BoatLayerManager(geolocationService, mapService);
 }
 
 const ICON_URL = '/assets/boat-marker.png';
@@ -23,8 +23,8 @@ class BoatLayerManager {
   private readonly icon: Icon;
 
   constructor(
-    private readonly mapService: MapService,
     private readonly geolocationService: GeolocationService,
+    private readonly mapService: MapService,
   ) {
     this.icon = this.createIcon();
     this.boatFeature = this.createBoatFeature(this.icon);
