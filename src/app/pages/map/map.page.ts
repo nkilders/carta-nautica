@@ -192,7 +192,7 @@ export class MapPage implements OnInit {
       this.routePlanningService,
       this.translateService,
     );
-    createSeamarkLayerManager(this.mapService, this.alertController);
+    createSeamarkLayerManager(this.alertController, this.mapService);
   }
 
   private async onLongClick(

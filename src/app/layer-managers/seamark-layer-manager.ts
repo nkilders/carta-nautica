@@ -11,10 +11,12 @@ import { AlertWrapper } from '../wrappers/alert-wrapper';
 const RELOAD_DISTANCE_KM = 5;
 
 export function createSeamarkLayerManager(
-  map: MapService,
-  alert: AlertWrapper,
+  // Controllers
+  alertController: AlertWrapper,
+  // Services
+  mapService: MapService,
 ) {
-  return new SeamarkLayerManager(map, alert);
+  return new SeamarkLayerManager(alertController, mapService);
 }
 
 class SeamarkLayerManager {
@@ -26,13 +28,15 @@ class SeamarkLayerManager {
   private lastLatitude = 0;
 
   constructor(
-    private readonly mapSrv: MapService,
-    private readonly alert: AlertWrapper,
+    // Controllers
+    private readonly alertController: AlertWrapper,
+    // Services
+    private readonly mapService: MapService,
   ) {
     this.createLayer();
     this.registerListeners();
 
-    mapSrv.getMap().on('moveend', (e) => {
+    mapService.getMap().on('moveend', (e) => {
       const zoom = e.map.getView().getZoom() ?? 0;
       const tooFarAway = zoom < 12;
 
@@ -96,11 +100,11 @@ class SeamarkLayerManager {
       zIndex: ZIndex.SEAMARKS,
     });
 
-    this.mapSrv.getMap().addLayer(this.layer);
+    this.mapService.getMap().addLayer(this.layer);
   }
 
   private registerListeners() {
-    this.mapSrv.on('featureClicked', async (feature) => {
+    this.mapService.on('featureClicked', async (feature) => {
       await this.onMapClick(feature);
     });
   }
@@ -108,11 +112,11 @@ class SeamarkLayerManager {
   private async onMapClick(feature: FeatureLike) {
     if (feature instanceof SeamarkFeature) {
       console.log('####', JSON.stringify(feature.getSeamark(), null, '  '));
-      const zoom = this.mapSrv.getMap().getView().getZoom();
+      const zoom = this.mapService.getMap().getView().getZoom();
       console.log('#### Zoom', zoom);
       console.log('#### Objects', this.objects.length);
 
-      const alert = await this.alert.create({
+      const alert = await this.alertController.create({
         header: 'Seamark Details',
         message: JSON.stringify(feature.getSeamark()),
       });
