@@ -16,15 +16,17 @@ export class RoutePlanningService {
   private route: Route;
 
   constructor(
-    private readonly storage: StorageService,
-    private readonly geolocation: GeolocationService,
+    private readonly geolocationService: GeolocationService,
+    private readonly storageService: StorageService,
   ) {
     this.eventEmitter = new EventEmitter();
     this.route = [];
 
     this.loadRoute();
 
-    this.geolocation.watchPosition((position) => this.handlePosition(position));
+    this.geolocationService.watchPosition((position) =>
+      this.handlePosition(position),
+    );
   }
 
   public get() {
@@ -107,11 +109,11 @@ export class RoutePlanningService {
   }
 
   private async save() {
-    await this.storage.set(STORAGE_KEY, this.route);
+    await this.storageService.set(STORAGE_KEY, this.route);
   }
 
   private loadRoute() {
-    this.storage.get(STORAGE_KEY).then((route) => {
+    this.storageService.get(STORAGE_KEY).then((route) => {
       if (route) {
         this.route = route;
         this.eventEmitter.emit('update', this.route);

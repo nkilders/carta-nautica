@@ -62,12 +62,14 @@ export class TracksPage implements OnInit {
   tracks: DisplayTrack[] = [];
 
   constructor(
-    private readonly tracksSrv: TracksService,
-    private readonly translate: TranslateService,
-    private readonly unit: UnitService,
-    private readonly actionSheetCtrl: ActionSheetWrapper,
-    private readonly alertCtrl: AlertWrapper,
-    private readonly modalCtrl: ModalWrapper,
+    // Controllers
+    private readonly actionSheetController: ActionSheetWrapper,
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly tracksService: TracksService,
+    private readonly translateService: TranslateService,
+    private readonly unitService: UnitService,
   ) {
     addIcons({
       ellipsisVertical,
@@ -81,7 +83,7 @@ export class TracksPage implements OnInit {
   }
 
   async showTrackDetails(track: Track) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: TracksViewPage,
       componentProps: {
         track,
@@ -92,10 +94,10 @@ export class TracksPage implements OnInit {
   }
 
   async showTrackOptions(track: Track) {
-    const editText = this.translate.instant('general.edit');
-    const deleteText = this.translate.instant('general.delete');
+    const editText = this.translateService.instant('general.edit');
+    const deleteText = this.translateService.instant('general.delete');
 
-    const actionSheet = await this.actionSheetCtrl.create({
+    const actionSheet = await this.actionSheetController.create({
       header: track.name,
       buttons: [
         {
@@ -115,7 +117,7 @@ export class TracksPage implements OnInit {
   }
 
   private async editTrack(track: Track) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: TracksEditPage,
       componentProps: {
         track,
@@ -130,13 +132,13 @@ export class TracksPage implements OnInit {
   }
 
   private async confirmDeleteTrack(track: Track) {
-    const deleteTitleText = this.translate.instant(
+    const deleteTitleText = this.translateService.instant(
       'tracks.deleteConfirmHeader',
     );
-    const cancelText = this.translate.instant('general.cancel');
-    const deleteText = this.translate.instant('general.delete');
+    const cancelText = this.translateService.instant('general.cancel');
+    const deleteText = this.translateService.instant('general.delete');
 
-    const alert = await this.alertCtrl.create({
+    const alert = await this.alertController.create({
       header: deleteTitleText,
       subHeader: track.name,
       buttons: [
@@ -147,7 +149,7 @@ export class TracksPage implements OnInit {
         {
           text: deleteText,
           handler: async () => {
-            await this.tracksSrv.delete(track.id);
+            await this.tracksService.delete(track.id);
             await alert.dismiss();
             await this.loadTracks();
           },
@@ -159,7 +161,7 @@ export class TracksPage implements OnInit {
   }
 
   private async loadTracks() {
-    const tracks = await this.tracksSrv.getAll();
+    const tracks = await this.tracksService.getAll();
 
     this.tracks = [];
 
@@ -168,25 +170,25 @@ export class TracksPage implements OnInit {
       const durationMin = this.durationMinutes(track);
       const avgSpeedKmh = lengthKm / (durationMin / 60) || 0;
 
-      const length = await this.unit.convertDistance(
+      const length = await this.unitService.convertDistance(
         lengthKm,
         DistanceUnit.KILOMETERS,
       );
-      const avgSpeed = await this.unit.convertSpeed(
+      const avgSpeed = await this.unitService.convertSpeed(
         avgSpeedKmh,
         SpeedUnit.KILOMETERS_PER_HOUR,
       );
 
       this.tracks.push({
         ...track,
-        length: this.translate.instant('tracks.length', {
+        length: this.translateService.instant('tracks.length', {
           length: length.value.toFixed(1),
           unit: length.unitText,
         }),
-        duration: this.translate.instant('tracks.duration', {
+        duration: this.translateService.instant('tracks.duration', {
           duration: this.formatDuration(durationMin),
         }),
-        averageSpeed: this.translate.instant('tracks.avgSpeed', {
+        averageSpeed: this.translateService.instant('tracks.avgSpeed', {
           speed: avgSpeed.value.toFixed(1),
           unit: avgSpeed.unitText,
         }),

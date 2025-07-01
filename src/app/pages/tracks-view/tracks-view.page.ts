@@ -54,10 +54,10 @@ export class TracksViewPage implements OnInit {
   speedChartOptions: EChartsCoreOption = {};
 
   constructor(
-    private readonly layers: LayersService,
-    private readonly settings: SettingsService,
-    private readonly translate: TranslateService,
-    private readonly unit: UnitService,
+    private readonly layersService: LayersService,
+    private readonly settingsService: SettingsService,
+    private readonly translateService: TranslateService,
+    private readonly unitService: UnitService,
   ) {
     this.map = new OLMap({});
     this.setSpeedChartData();
@@ -68,7 +68,7 @@ export class TracksViewPage implements OnInit {
 
     useGeographic();
 
-    createLayerManager(this.map, this.layers, this.settings);
+    createLayerManager(this.layersService, this.map, this.settingsService);
     createTrackViewLayerManager(this.map, this.track);
 
     this.calculateTrackDetails();
@@ -91,7 +91,7 @@ export class TracksViewPage implements OnInit {
   private async calculateSpeedChartData() {
     const { points } = this.track;
 
-    const lang = await this.settings.getLanguage();
+    const lang = await this.settingsService.getLanguage();
 
     const timestamps: string[] = [];
     const speedValues: number[] = [];
@@ -111,7 +111,7 @@ export class TracksViewPage implements OnInit {
       const timeHr = (p2.timestamp - p1.timestamp) / 1000 / 60 / 60;
       const speedKmh = distanceKm / timeHr;
 
-      const speed = await this.unit.convertSpeed(
+      const speed = await this.unitService.convertSpeed(
         speedKmh,
         SpeedUnit.KILOMETERS_PER_HOUR,
       );
@@ -152,24 +152,24 @@ export class TracksViewPage implements OnInit {
   }
 
   private async startTimeText() {
-    const lang = await this.settings.getLanguage();
+    const lang = await this.settingsService.getLanguage();
     return new Date(this.track.points[0].timestamp).toLocaleString(lang);
   }
 
   private async endTimeText() {
-    const lang = await this.settings.getLanguage();
+    const lang = await this.settingsService.getLanguage();
     return new Date(this.track.points.slice(-1)[0].timestamp).toLocaleString(
       lang,
     );
   }
 
   private async lengthText() {
-    const length = await this.unit.convertDistance(
+    const length = await this.unitService.convertDistance(
       this.lengthKm(),
       DistanceUnit.KILOMETERS,
     );
 
-    return this.translate.instant('tracksView.lengthValue', {
+    return this.translateService.instant('tracksView.lengthValue', {
       length: length.value.toFixed(1),
       unit: length.unitText,
     });
@@ -207,15 +207,21 @@ export class TracksViewPage implements OnInit {
     const seconds = Math.round((durationMin - Math.floor(durationMin)) * 60);
 
     if (hours === 0) {
-      return await this.translate.instant('tracksView.durationValueMinSec', {
-        minutes: minutes.toFixed(0),
-        seconds: seconds.toFixed(0),
-      });
+      return await this.translateService.instant(
+        'tracksView.durationValueMinSec',
+        {
+          minutes: minutes.toFixed(0),
+          seconds: seconds.toFixed(0),
+        },
+      );
     } else {
-      return await this.translate.instant('tracksView.durationValueHrMin', {
-        hours: hours.toFixed(0),
-        minutes: minutes.toFixed(0),
-      });
+      return await this.translateService.instant(
+        'tracksView.durationValueHrMin',
+        {
+          hours: hours.toFixed(0),
+          minutes: minutes.toFixed(0),
+        },
+      );
     }
   }
 
@@ -235,12 +241,12 @@ export class TracksViewPage implements OnInit {
   }
 
   private async maximumSpeedText() {
-    const maxSpeed = await this.unit.convertSpeed(
+    const maxSpeed = await this.unitService.convertSpeed(
       this.maxSpeedKmh(),
       SpeedUnit.KILOMETERS_PER_HOUR,
     );
 
-    return this.translate.instant('tracksView.maxSpeedValue', {
+    return this.translateService.instant('tracksView.maxSpeedValue', {
       speed: maxSpeed.value.toFixed(1),
       unit: maxSpeed.unitText,
     });
@@ -272,12 +278,12 @@ export class TracksViewPage implements OnInit {
   }
 
   private async averageSpeedText() {
-    const avgSpeed = await this.unit.convertSpeed(
+    const avgSpeed = await this.unitService.convertSpeed(
       this.averageSpeedKmh(),
       SpeedUnit.KILOMETERS_PER_HOUR,
     );
 
-    return this.translate.instant('tracksView.avgSpeedValue', {
+    return this.translateService.instant('tracksView.avgSpeedValue', {
       speed: avgSpeed.value.toFixed(1),
       unit: avgSpeed.unitText,
     });

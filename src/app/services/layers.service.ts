@@ -18,7 +18,7 @@ export class LayersService {
    */
   private layers?: Layer[];
 
-  constructor(private readonly storage: StorageService) {
+  constructor(private readonly storageService: StorageService) {
     this.eventEmitter = new EventEmitter();
   }
 
@@ -135,7 +135,7 @@ export class LayersService {
       return;
     }
 
-    this.layers = await this.storage.get(STORAGE_KEY);
+    this.layers = await this.storageService.get(STORAGE_KEY);
 
     if (!this.layers) {
       this.layers = this.defaultLayers();
@@ -167,6 +167,6 @@ export class LayersService {
   }
 
   private async save() {
-    await this.storage.set(STORAGE_KEY, this.layers);
+    await this.storageService.set(STORAGE_KEY, this.layers);
   }
 }

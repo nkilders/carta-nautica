@@ -19,7 +19,7 @@ export class GeolocationService {
   private readonly positionWatchCallbacks: Map<string, WatchPositionCallback> =
     new Map();
 
-  constructor(private readonly storage: StorageService) {
+  constructor(private readonly storageService: StorageService) {
     this.position = this.defaultPosition();
   }
 
@@ -61,7 +61,7 @@ export class GeolocationService {
   }
 
   public async loadLastKnownPosition() {
-    const position = await this.storage.get(STORAGE_KEY);
+    const position = await this.storageService.get(STORAGE_KEY);
 
     if (position) {
       this.position = position;
@@ -73,7 +73,7 @@ export class GeolocationService {
   private async updatePosition(position: Position) {
     this.position = position;
 
-    await this.storage.set(
+    await this.storageService.set(
       STORAGE_KEY,
       JSON.parse(JSON.stringify(this.position)),
     );
