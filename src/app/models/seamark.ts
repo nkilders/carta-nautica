@@ -6,9 +6,7 @@ export interface Seamark {
   longitude: number;
   latitude: number;
   id: number;
-  tags: {
-    [key: string]: string;
-  };
+  tags: Record<string, string>[];
 }
 
 export class SeamarkFeature extends Feature {

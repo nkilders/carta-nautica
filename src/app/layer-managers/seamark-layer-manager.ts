@@ -7,6 +7,7 @@ import { MapService } from '../services/map.service';
 import { FeatureLike } from 'ol/Feature';
 import { geoDistance } from '../utils/coordinates';
 import { AlertWrapper } from '../wrappers/alert-wrapper';
+import { OverpassResponse } from '../models/overpass';
 
 const RELOAD_DISTANCE_KM = 5;
 
@@ -66,20 +67,14 @@ class SeamarkLayerManager {
 
   private async loadFeatures(longitude: number, latitude: number) {
     const radiusMeters = 20_000;
-    // const url = `https://overpass-api.de/api/interpreter?data=[out:json];(node["seamark:type"~".*"](around:${radiusMeters},${latitude},${longitude}););out%20body;`;
     const url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node["seamark:light:colour"](around:${radiusMeters},${latitude},${longitude});node["seamark:light:1:colour"](around:${radiusMeters},${latitude},${longitude}););out;`;
 
     const response = await fetch(url);
-
-    const json = await response.json();
-
-    // this.layerSource?.clear();
-
-    console.log('#### fetched', json.elements.length, 'new objects');
+    const json: OverpassResponse = await response.json();
 
     json.elements
-      .filter((e: any) => !this.objects.includes(e.id))
-      .forEach((e: any) => {
+      .filter((e) => !this.objects.includes(e.id))
+      .forEach((e) => {
         this.objects.push(e.id);
         this.layerSource?.addFeature(
           new SeamarkFeature({
