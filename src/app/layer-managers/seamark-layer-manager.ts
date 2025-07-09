@@ -1,4 +1,4 @@
-import { MapBrowserEvent } from 'ol';
+import { MapEvent } from 'ol';
 import { SeamarkFeature } from '../models/seamark';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
@@ -36,33 +36,6 @@ class SeamarkLayerManager {
   ) {
     this.createLayer();
     this.registerListeners();
-
-    mapService.getMap().on('moveend', (e) => {
-      const zoom = e.map.getView().getZoom() ?? 0;
-      const tooFarAway = zoom < 12;
-
-      this.layer?.setVisible(!tooFarAway);
-
-      if (tooFarAway) {
-        return;
-      }
-
-      const [longitude, latitude] = e.map.getView().getCenter()!;
-
-      const distKm = geoDistance(
-        latitude,
-        longitude,
-        this.lastLatitude,
-        this.lastLongitude,
-      );
-
-      if (distKm > RELOAD_DISTANCE_KM) {
-        this.lastLatitude = latitude;
-        this.lastLongitude = longitude;
-
-        this.loadFeatures(longitude, latitude);
-      }
-    });
   }
 
   private async loadFeatures(longitude: number, latitude: number) {
@@ -99,8 +72,12 @@ class SeamarkLayerManager {
   }
 
   private registerListeners() {
-    this.mapService.on('featureClicked', async (feature) => {
-      await this.onMapClick(feature);
+    this.mapService.on('featureClicked', (feature) => {
+      this.onMapClick(feature);
+    });
+
+    this.mapService.getMap().on('moveend', (event) => {
+      this.onMapMoveEnd(event);
     });
   }
 
@@ -116,6 +93,33 @@ class SeamarkLayerManager {
         message: JSON.stringify(feature.getSeamark()),
       });
       await alert.present();
+    }
+  }
+
+  private onMapMoveEnd(event: MapEvent) {
+    const zoom = event.map.getView().getZoom() ?? 0;
+    const tooFarAway = zoom < 12;
+
+    this.layer?.setVisible(!tooFarAway);
+
+    if (tooFarAway) {
+      return;
+    }
+
+    const [longitude, latitude] = event.map.getView().getCenter()!;
+
+    const distKm = geoDistance(
+      latitude,
+      longitude,
+      this.lastLatitude,
+      this.lastLongitude,
+    );
+
+    if (distKm > RELOAD_DISTANCE_KM) {
+      this.lastLatitude = latitude;
+      this.lastLongitude = longitude;
+
+      this.loadFeatures(longitude, latitude);
     }
   }
 }
