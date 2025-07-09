@@ -6,13 +6,13 @@ import { DistanceUnit, SpeedUnit, TemperatureUnit } from '../models/settings';
   providedIn: 'root',
 })
 export class UnitService {
-  constructor(private readonly settings: SettingsService) {}
+  constructor(private readonly settingsService: SettingsService) {}
 
   public async convertSpeed(
     speed: number,
     sourceUnit: SpeedUnit,
   ): Promise<ConversionResult<SpeedUnit>> {
-    const targetUnit = await this.settings.getSpeedUnit();
+    const targetUnit = await this.settingsService.getSpeedUnit();
 
     if (sourceUnit == targetUnit) {
       return {
@@ -55,7 +55,7 @@ export class UnitService {
     distance: number,
     sourceUnit: DistanceUnit,
   ): Promise<ConversionResult<DistanceUnit>> {
-    const targetUnit = await this.settings.getDistanceUnit();
+    const targetUnit = await this.settingsService.getDistanceUnit();
 
     if (sourceUnit == targetUnit) {
       return {
@@ -98,7 +98,7 @@ export class UnitService {
     temperature: number,
     sourceUnit: TemperatureUnit,
   ): Promise<ConversionResult<TemperatureUnit>> {
-    const targetUnit = await this.settings.getTemperatureUnit();
+    const targetUnit = await this.settingsService.getTemperatureUnit();
 
     if (sourceUnit == targetUnit) {
       return {

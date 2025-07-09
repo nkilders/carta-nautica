@@ -13,7 +13,7 @@ export class MarkersService {
   private readonly eventEmitter: EventEmitter;
   private markers?: Marker[];
 
-  constructor(private readonly storage: StorageService) {
+  constructor(private readonly storageService: StorageService) {
     this.eventEmitter = new EventEmitter();
   }
 
@@ -98,7 +98,7 @@ export class MarkersService {
       return;
     }
 
-    this.markers = await this.storage.get(STORAGE_KEY);
+    this.markers = await this.storageService.get(STORAGE_KEY);
 
     if (!this.markers) {
       this.markers = [];
@@ -107,6 +107,6 @@ export class MarkersService {
   }
 
   private async save() {
-    await this.storage.set(STORAGE_KEY, this.markers);
+    await this.storageService.set(STORAGE_KEY, this.markers);
   }
 }

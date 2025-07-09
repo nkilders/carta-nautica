@@ -4,5 +4,6 @@ export const ZIndex = {
   ROUTE_PLANNING: 15,
   TRACK: 10,
   POSITION_ACCURACY: 5,
+  SEAMARKS: 0,
   // actual map tile layers are z-index 0 and downwards
 };

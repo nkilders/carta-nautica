@@ -10,11 +10,15 @@ import { Fill, Stroke, Style } from 'ol/style';
 import { toProjectedDistance } from '../utils/coordinates';
 
 export function createPositionAccuracyLayerManager(
-  mapSrv: MapService,
-  settingsSrv: SettingsService,
-  geolocationSrv: GeolocationService,
+  geolocationService: GeolocationService,
+  mapService: MapService,
+  settingsService: SettingsService,
 ) {
-  return new PositionAccuracyLayerManager(mapSrv, settingsSrv, geolocationSrv);
+  return new PositionAccuracyLayerManager(
+    geolocationService,
+    mapService,
+    settingsService,
+  );
 }
 
 class PositionAccuracyLayerManager {
@@ -23,9 +27,9 @@ class PositionAccuracyLayerManager {
   private feature?: Feature;
 
   constructor(
-    private readonly mapSrv: MapService,
-    private readonly settingsSrv: SettingsService,
-    private readonly geolocationSrv: GeolocationService,
+    private readonly geolocationService: GeolocationService,
+    private readonly mapService: MapService,
+    private readonly settingsService: SettingsService,
   ) {
     this.layerSource = new VectorSource();
     this.layer = this.createLayer(this.layerSource);
@@ -39,21 +43,21 @@ class PositionAccuracyLayerManager {
       visible: false,
     });
 
-    this.settingsSrv.getPositionAccuracy().then((positionAccuracy) => {
+    this.settingsService.getPositionAccuracy().then((positionAccuracy) => {
       layer.setVisible(positionAccuracy);
     });
 
-    this.mapSrv.getMap().addLayer(layer);
+    this.mapService.getMap().addLayer(layer);
 
     return layer;
   }
 
   private registerListeners() {
-    this.settingsSrv.on('positionAccuracy', (positionAccuracy) => {
+    this.settingsService.on('positionAccuracy', (positionAccuracy) => {
       this.layer.setVisible(positionAccuracy);
     });
 
-    this.geolocationSrv.watchPosition((position) => {
+    this.geolocationService.watchPosition((position) => {
       if (!this.feature) {
         this.initFeature();
       }

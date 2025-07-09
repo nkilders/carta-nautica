@@ -15,7 +15,7 @@ import {
 import { ScaleLine } from 'ol/control';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
-import { BoatMarker } from '../../utils/boat';
+import { createBoatLayerManager } from '../../layer-managers/boat-layer-manager';
 import { countryCodeEmoji } from 'country-code-emoji';
 import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -51,6 +51,8 @@ import { MapService } from 'src/app/services/map.service';
 import { createPositionAccuracyLayerManager } from 'src/app/layer-managers/position-accuracy-layer-manager';
 import { createRoutePlanningLayerManager } from 'src/app/layer-managers/route-planning-layer-manager';
 import { RoutePlanningService } from 'src/app/services/route-planning.service';
+import { createSeamarkLayerManager } from 'src/app/layer-managers/seamark-layer-manager';
+import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-map',
@@ -76,24 +78,27 @@ export class MapPage implements OnInit {
   public speed = '';
   public heading = '';
 
-  private boat?: BoatMarker;
   private lastToolbarTitleUpdate: number;
   private fabFollowToggler?: FabToggler;
   private fabRecordTrackToggler?: FabToggler;
 
   constructor(
-    private readonly mapSrv: MapService,
+    // Controllers
+    private readonly actionSheetController: ActionSheetWrapper,
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
     private readonly geolocation: GeolocationService,
-    private readonly settings: SettingsService,
-    private readonly unit: UnitService,
-    private readonly layers: LayersService,
-    private readonly markersSrv: MarkersService,
-    private readonly trackRecord: TrackRecorderService,
-    private readonly routePlanningSrv: RoutePlanningService,
+    private readonly layersService: LayersService,
+    private readonly mapService: MapService,
+    private readonly markersService: MarkersService,
+    private readonly routePlanningService: RoutePlanningService,
+    private readonly settingsService: SettingsService,
+    private readonly trackRecorderService: TrackRecorderService,
+    private readonly translateService: TranslateService,
+    private readonly unitService: UnitService,
+    // Others
     private readonly ref: ChangeDetectorRef,
-    private readonly actionSheetCtrl: ActionSheetWrapper,
-    private readonly modalCtrl: ModalWrapper,
-    private readonly translate: TranslateService,
   ) {
     this.lastToolbarTitleUpdate = 0;
 
@@ -120,9 +125,9 @@ export class MapPage implements OnInit {
     const active = this.fabRecordTrackToggler?.toggle();
 
     if (active) {
-      this.trackRecord.startRecording();
+      this.trackRecorderService.startRecording();
     } else {
-      this.trackRecord.stopRecording();
+      this.trackRecorderService.stopRecording();
     }
   }
 
@@ -135,24 +140,26 @@ export class MapPage implements OnInit {
   }
 
   private initMap() {
-    this.mapSrv.setTarget('map');
+    this.mapService.setTarget('map');
 
-    this.mapSrv.getMap().addControl(
+    this.mapService.getMap().addControl(
       new ScaleLine({
         bar: false,
         units: 'metric',
       }),
     );
 
-    this.mapSrv
+    this.mapService
       .getMap()
       .addControl(
-        new SpeedHeadingControl(this.settings, this.geolocation, this.unit),
+        new SpeedHeadingControl(
+          this.geolocation,
+          this.settingsService,
+          this.unitService,
+        ),
       );
 
-    this.boat = new BoatMarker(this.mapSrv);
-
-    this.mapSrv.on(
+    this.mapService.on(
       'longClick',
       async (longitude, latitude, completeLongClick) =>
         this.onLongClick(longitude, latitude, completeLongClick),
@@ -160,26 +167,32 @@ export class MapPage implements OnInit {
   }
 
   private initMapLayerManagers() {
-    createLayerManager(this.mapSrv, this.layers, this.settings);
-    createMarkersLayerManager(
-      this.mapSrv,
-      this.markersSrv,
-      this.actionSheetCtrl,
-      this.translate,
+    createLayerManager(
+      this.layersService,
+      this.mapService,
+      this.settingsService,
     );
-    createTrackLayerManager(this.mapSrv, this.trackRecord);
+    createBoatLayerManager(this.geolocation, this.mapService);
+    createMarkersLayerManager(
+      this.actionSheetController,
+      this.mapService,
+      this.markersService,
+      this.translateService,
+    );
+    createTrackLayerManager(this.mapService, this.trackRecorderService);
     createPositionAccuracyLayerManager(
-      this.mapSrv,
-      this.settings,
       this.geolocation,
+      this.mapService,
+      this.settingsService,
     );
     createRoutePlanningLayerManager(
-      this.mapSrv,
-      this.routePlanningSrv,
+      this.actionSheetController,
       this.geolocation,
-      this.actionSheetCtrl,
-      this.translate,
+      this.mapService,
+      this.routePlanningService,
+      this.translateService,
     );
+    createSeamarkLayerManager(this.alertController, this.mapService);
   }
 
   private async onLongClick(
@@ -187,8 +200,8 @@ export class MapPage implements OnInit {
     latitude: number,
     completeLongClick: () => void,
   ) {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: this.translate.instant('longClick.title'),
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translateService.instant('longClick.title'),
       buttons: [
         {
           text: await this.buildLongClickDistanceText(longitude, latitude),
@@ -196,7 +209,7 @@ export class MapPage implements OnInit {
           icon: 'information-circle',
         },
         {
-          text: this.translate.instant('longClick.createMarker'),
+          text: this.translateService.instant('longClick.createMarker'),
           icon: 'location',
           handler: async () => {
             await this.openCreateMarkerPopUp(longitude, latitude);
@@ -204,14 +217,14 @@ export class MapPage implements OnInit {
         },
         this.longClickRoutePlanningButton(longitude, latitude),
         {
-          text: this.translate.instant('longClick.weather'),
+          text: this.translateService.instant('longClick.weather'),
           icon: 'sunny',
           handler: async () => {
             await this.openWeatherPopUp(longitude, latitude);
           },
         },
         {
-          text: this.translate.instant('general.cancel'),
+          text: this.translateService.instant('general.cancel'),
           role: 'cancel',
           icon: 'close-circle',
         },
@@ -236,7 +249,7 @@ export class MapPage implements OnInit {
       longitude,
     );
 
-    const distance = await this.unit.convertDistance(
+    const distance = await this.unitService.convertDistance(
       distanceKm,
       DistanceUnit.KILOMETERS,
     );
@@ -244,23 +257,23 @@ export class MapPage implements OnInit {
     const distanceText = distance.value.toFixed(2);
     const unitText = distance.unitText;
 
-    return this.translate.instant('longClick.distance', {
+    return this.translateService.instant('longClick.distance', {
       distance: distanceText,
       unit: unitText,
     });
   }
 
   private longClickRoutePlanningButton(longitude: number, latitude: number) {
-    if (this.routePlanningSrv.get().length === 0) {
+    if (this.routePlanningService.get().length === 0) {
       return {
-        text: this.translate.instant('longClick.setDestination'),
+        text: this.translateService.instant('longClick.setDestination'),
         icon: 'flag',
         handler: async () =>
-          this.routePlanningSrv.addStop({ latitude, longitude }, 0),
+          this.routePlanningService.addStop({ latitude, longitude }, 0),
       };
     } else {
       return {
-        text: this.translate.instant('longClick.addStop'),
+        text: this.translateService.instant('longClick.addStop'),
         icon: 'flag',
         handler: async () =>
           await this.showRoutePlanningAddStopActionSheet(longitude, latitude),
@@ -274,24 +287,24 @@ export class MapPage implements OnInit {
   ) {
     const buttons = [
       {
-        text: this.translate.instant('routeStop.addStopBefore1'),
+        text: this.translateService.instant('routeStop.addStopBefore1'),
         handler: () =>
-          this.routePlanningSrv.addStop({ latitude, longitude }, 0),
+          this.routePlanningService.addStop({ latitude, longitude }, 0),
       },
     ];
 
-    this.routePlanningSrv.get().forEach((stop, i) => {
+    this.routePlanningService.get().forEach((stop, i) => {
       buttons.push({
-        text: this.translate.instant('routeStop.addStopAfter', {
+        text: this.translateService.instant('routeStop.addStopAfter', {
           sequence: i + 1,
         }),
         handler: () =>
-          this.routePlanningSrv.addStop({ latitude, longitude }, i + 1),
+          this.routePlanningService.addStop({ latitude, longitude }, i + 1),
       });
     });
 
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: this.translate.instant('routeStop.addStopTitle'),
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translateService.instant('routeStop.addStopTitle'),
       buttons,
     });
 
@@ -299,7 +312,7 @@ export class MapPage implements OnInit {
   }
 
   private async openCreateMarkerPopUp(longitude: number, latitude: number) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: MarkersCreatePage,
       componentProps: {
         longitude,
@@ -311,7 +324,7 @@ export class MapPage implements OnInit {
   }
 
   private async openWeatherPopUp(longitude: number, latitude: number) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: WeatherPage,
       componentProps: {
         longitude,
@@ -332,14 +345,13 @@ export class MapPage implements OnInit {
   private async focusLastKnownPosition() {
     const pos = await this.geolocation.loadLastKnownPosition();
     if (pos.timestamp !== -1) {
-      this.mapSrv.focus(pos.coords.longitude, pos.coords.latitude, 15);
+      this.mapService.focus(pos.coords.longitude, pos.coords.latitude, 15);
     }
-    this.boat?.updatePosition(pos);
   }
 
   private initSettingsListeners() {
-    this.settings.on('mapPreloading', (preload) => {
-      const layers = this.mapSrv.getMap().getAllLayers();
+    this.settingsService.on('mapPreloading', (preload) => {
+      const layers = this.mapService.getMap().getAllLayers();
 
       if (!layers) {
         return;
@@ -354,7 +366,6 @@ export class MapPage implements OnInit {
   }
 
   private onPositionChanged(position: Position) {
-    this.boat?.updatePosition(position);
     this.updateToolbarTitle();
 
     if (this.fabFollowToggler?.isActive()) {
@@ -365,7 +376,7 @@ export class MapPage implements OnInit {
   private flyToCurrentPosition() {
     const { longitude, latitude } = this.geolocation.getPosition().coords;
 
-    this.mapSrv.flyTo(longitude, latitude, 15, 1_000);
+    this.mapService.flyTo(longitude, latitude, 15, 1_000);
   }
 
   private async updateToolbarTitle() {
@@ -417,7 +428,7 @@ export class MapPage implements OnInit {
     this.fabFollowToggler = new FabToggler('fabFollow', 'dark', 'primary');
     this.fabFollowToggler.toggle();
 
-    this.mapSrv.getMap().on('pointerdrag', () => {
+    this.mapService.getMap().on('pointerdrag', () => {
       if (this.fabFollowToggler?.isActive()) {
         this.fabFollowToggler.toggle();
       }

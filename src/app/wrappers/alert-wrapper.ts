@@ -8,32 +8,32 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AlertWrapper {
   constructor(
-    private readonly alertCtrl: AlertController,
-    private readonly settings: SettingsService,
-    private readonly translate: TranslateService,
+    private readonly alertController: AlertController,
+    private readonly settingsService: SettingsService,
+    private readonly translateService: TranslateService,
   ) {}
 
   public async create(opts: AlertOptions) {
-    const animations = await this.settings.getAnimations();
+    const animations = await this.settingsService.getAnimations();
 
-    return this.alertCtrl.create({
+    return this.alertController.create({
       ...opts,
       animated: animations,
     });
   }
 
   public dismiss(data?: any, role?: string, id?: string) {
-    return this.alertCtrl.dismiss(data, role, id);
+    return this.alertController.dismiss(data, role, id);
   }
 
   public getTop() {
-    return this.alertCtrl.getTop();
+    return this.alertController.getTop();
   }
 
   public async show(headerTextKey: string, messageTextKey: string) {
-    const headerText = await this.translate.instant(headerTextKey);
-    const messageText = await this.translate.instant(messageTextKey);
-    const okText = await this.translate.instant('general.ok');
+    const headerText = await this.translateService.instant(headerTextKey);
+    const messageText = await this.translateService.instant(messageTextKey);
+    const okText = await this.translateService.instant('general.ok');
 
     const toast = await this.create({
       header: headerText,

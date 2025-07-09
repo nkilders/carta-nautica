@@ -49,12 +49,14 @@ export class MarkersPage implements OnInit {
   protected markers: Marker[] = [];
 
   constructor(
-    private readonly mapSrv: MapService,
-    private readonly markersSrv: MarkersService,
-    private readonly translate: TranslateService,
-    private readonly actionSheetCtrl: ActionSheetWrapper,
-    private readonly alertCtrl: AlertWrapper,
-    private readonly modalCtrl: ModalWrapper,
+    // Controllers
+    private readonly actionSheetController: ActionSheetWrapper,
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly mapService: MapService,
+    private readonly markersService: MarkersService,
+    private readonly translateService: TranslateService,
   ) {
     addIcons({
       add,
@@ -70,11 +72,11 @@ export class MarkersPage implements OnInit {
   }
 
   protected async showMarkerOptions(marker: Marker) {
-    const flyToText = this.translate.instant('markers.flyTo');
-    const editText = this.translate.instant('general.edit');
-    const deleteText = this.translate.instant('general.delete');
+    const flyToText = this.translateService.instant('markers.flyTo');
+    const editText = this.translateService.instant('general.edit');
+    const deleteText = this.translateService.instant('general.delete');
 
-    const actionSheet = await this.actionSheetCtrl.create({
+    const actionSheet = await this.actionSheetController.create({
       header: marker.name,
       buttons: [
         {
@@ -99,18 +101,18 @@ export class MarkersPage implements OnInit {
   }
 
   private async loadMarkers() {
-    this.markers = await this.markersSrv.getAll();
+    this.markers = await this.markersService.getAll();
   }
 
   private async flyToMarker(marker: Marker) {
     const { longitude, latitude } = marker;
-    this.mapSrv.flyTo(longitude, latitude, 15, 1000);
+    this.mapService.flyTo(longitude, latitude, 15, 1000);
 
-    await this.modalCtrl.dismiss();
+    await this.modalController.dismiss();
   }
 
   private async editMarker(marker: Marker) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: MarkersEditPage,
       componentProps: {
         marker,
@@ -125,13 +127,13 @@ export class MarkersPage implements OnInit {
   }
 
   private async confirmDeleteMarker(marker: Marker) {
-    const deleteTitleText = this.translate.instant(
+    const deleteTitleText = this.translateService.instant(
       'markers.deleteConfirmHeader',
     );
-    const cancelText = this.translate.instant('general.cancel');
-    const deleteText = this.translate.instant('general.delete');
+    const cancelText = this.translateService.instant('general.cancel');
+    const deleteText = this.translateService.instant('general.delete');
 
-    const alert = await this.alertCtrl.create({
+    const alert = await this.alertController.create({
       header: deleteTitleText,
       subHeader: marker.name,
       buttons: [
@@ -142,7 +144,7 @@ export class MarkersPage implements OnInit {
         {
           text: deleteText,
           handler: async () => {
-            await this.markersSrv.delete(marker.id);
+            await this.markersService.delete(marker.id);
             await alert.dismiss();
             await this.loadMarkers();
           },

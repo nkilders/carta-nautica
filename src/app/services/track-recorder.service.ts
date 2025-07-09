@@ -17,9 +17,9 @@ export class TrackRecorderService {
   private track?: TrackWithoutId;
 
   constructor(
-    private readonly geolocation: GeolocationService,
-    private readonly settings: SettingsService,
-    private readonly tracks: TracksService,
+    private readonly geolocationService: GeolocationService,
+    private readonly settingsService: SettingsService,
+    private readonly tracksService: TracksService,
   ) {
     this.eventEmitter = new EventEmitter();
   }
@@ -27,7 +27,7 @@ export class TrackRecorderService {
   public async startRecording() {
     this.recording = true;
 
-    const language = await this.settings.getLanguage();
+    const language = await this.settingsService.getLanguage();
 
     this.track = {
       name: new Date().toLocaleString(language),
@@ -36,16 +36,16 @@ export class TrackRecorderService {
 
     this.eventEmitter.emit('startRecording');
 
-    this.positionWatchId = await this.geolocation.watchPosition((position) =>
-      this.positionHandler(position),
+    this.positionWatchId = await this.geolocationService.watchPosition(
+      (position) => this.positionHandler(position),
     );
   }
 
   public async stopRecording() {
     this.recording = false;
-    this.geolocation.cleanPositionWatch(this.positionWatchId);
+    this.geolocationService.cleanPositionWatch(this.positionWatchId);
 
-    const track = await this.tracks.create(this.track!);
+    const track = await this.tracksService.create(this.track!);
 
     this.eventEmitter.emit('stopRecording', track);
 

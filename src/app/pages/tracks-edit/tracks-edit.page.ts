@@ -45,9 +45,11 @@ export class TracksEditPage implements OnInit {
   protected name: string = '';
 
   constructor(
-    private readonly modalCtrl: ModalWrapper,
-    private readonly alertCtrl: AlertWrapper,
-    private readonly tracks: TracksService,
+    // Controllers
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly tracksService: TracksService,
   ) {}
 
   ngOnInit() {
@@ -65,16 +67,16 @@ export class TracksEditPage implements OnInit {
       name: this.name,
     };
 
-    await this.tracks.update(this.track.id, updatedTrack);
+    await this.tracksService.update(this.track.id, updatedTrack);
 
     await this.closeModal();
   }
 
   protected async closeModal() {
-    await this.modalCtrl.dismissTop();
+    await this.modalController.dismissTop();
   }
 
   private async errorToast(textKey: string) {
-    await this.alertCtrl.show('tracksEdit.errorHeader', textKey);
+    await this.alertController.show('tracksEdit.errorHeader', textKey);
   }
 }
