@@ -18,7 +18,7 @@ export class SettingsService {
   private readonly eventEmitter: EventEmitter;
   private settings?: Settings;
 
-  constructor(private readonly storage: StorageService) {
+  constructor(private readonly storageService: StorageService) {
     this.eventEmitter = new EventEmitter();
   }
 
@@ -185,7 +185,7 @@ export class SettingsService {
       return;
     }
 
-    const storedSettings = await this.storage.get(STORAGE_KEY);
+    const storedSettings = await this.storageService.get(STORAGE_KEY);
     this.settings = {
       ...this.defaultSettings(),
       ...storedSettings,
@@ -212,6 +212,6 @@ export class SettingsService {
   }
 
   private async save() {
-    await this.storage.set(STORAGE_KEY, this.settings);
+    await this.storageService.set(STORAGE_KEY, this.settings);
   }
 }

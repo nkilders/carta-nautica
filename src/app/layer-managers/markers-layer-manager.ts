@@ -11,16 +11,18 @@ import { FeatureLike } from 'ol/Feature';
 import { TranslateService } from '@ngx-translate/core';
 
 export function createMarkersLayerManager(
-  mapSrv: MapService,
-  markersSrv: MarkersService,
-  actionSheetCtrl: ActionSheetWrapper,
-  translate: TranslateService,
+  // Controllers
+  actionSheetController: ActionSheetWrapper,
+  // Services
+  mapService: MapService,
+  markersService: MarkersService,
+  translateService: TranslateService,
 ) {
   return new MarkersLayerManager(
-    mapSrv,
-    markersSrv,
-    actionSheetCtrl,
-    translate,
+    actionSheetController,
+    mapService,
+    markersService,
+    translateService,
   );
 }
 
@@ -29,10 +31,12 @@ class MarkersLayerManager {
   private readonly markers: Map<string, MarkerFeature>;
 
   constructor(
-    private readonly mapSrv: MapService,
-    private readonly markersSrv: MarkersService,
-    private readonly actionSheetCtrl: ActionSheetWrapper,
-    private readonly translate: TranslateService,
+    // Controllers
+    private readonly actionSheetController: ActionSheetWrapper,
+    // Services
+    private readonly mapService: MapService,
+    private readonly markersService: MarkersService,
+    private readonly translateService: TranslateService,
   ) {
     this.layerSource = new VectorSource();
     this.markers = new Map();
@@ -53,21 +57,21 @@ class MarkersLayerManager {
       zIndex: ZIndex.MARKERS,
     });
 
-    this.mapSrv.getMap().addLayer(layer);
+    this.mapService.getMap().addLayer(layer);
   }
 
   private registerListeners() {
-    this.mapSrv.on('featureClicked', async (feature) => {
+    this.mapService.on('featureClicked', async (feature) => {
       await this.onFeatureClicked(feature);
     });
 
-    this.markersSrv.on('create', (markerId, marker) =>
+    this.markersService.on('create', (markerId, marker) =>
       this.onMarkerCreated(marker),
     );
-    this.markersSrv.on('update', (markerId, marker) =>
+    this.markersService.on('update', (markerId, marker) =>
       this.onMarkerUpdated(markerId, marker),
     );
-    this.markersSrv.on('delete', (markerId, marker) =>
+    this.markersService.on('delete', (markerId, marker) =>
       this.onMarkerDeleted(markerId),
     );
   }
@@ -104,10 +108,10 @@ class MarkersLayerManager {
   }
 
   private async showMarkerActionSheet(marker: Marker) {
-    const flyToText = this.translate.instant('markerClick.flyTo');
-    const cancelText = this.translate.instant('general.cancel');
+    const flyToText = this.translateService.instant('markerClick.flyTo');
+    const cancelText = this.translateService.instant('general.cancel');
 
-    const actionSheet = await this.actionSheetCtrl.create({
+    const actionSheet = await this.actionSheetController.create({
       header: marker.name,
       buttons: [
         {
@@ -115,7 +119,7 @@ class MarkersLayerManager {
           icon: 'locate',
           handler: async () => {
             const { longitude, latitude } = marker;
-            this.mapSrv.flyTo(longitude, latitude, 15, 1000);
+            this.mapService.flyTo(longitude, latitude, 15, 1000);
           },
         },
         {
@@ -132,7 +136,7 @@ class MarkersLayerManager {
   private async reloadAllMarkers() {
     this.removeAllMarkers();
 
-    const allMarkers = await this.markersSrv.getAll();
+    const allMarkers = await this.markersService.getAll();
 
     allMarkers.forEach((marker) => {
       this.addMarker(marker);

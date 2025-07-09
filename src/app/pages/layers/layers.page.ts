@@ -59,11 +59,13 @@ export class LayersPage implements OnInit {
   protected layers: Layer[] = [];
 
   constructor(
-    private readonly layerSrv: LayersService,
-    private readonly translate: TranslateService,
-    private readonly actionSheetCtrl: ActionSheetWrapper,
-    private readonly alertCtrl: AlertWrapper,
-    private readonly modalCtrl: ModalWrapper,
+    // Controllers
+    private readonly actionSheetController: ActionSheetWrapper,
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly layerService: LayersService,
+    private readonly translateService: TranslateService,
   ) {
     addIcons({ ellipsisVertical, add, pencil, trash });
   }
@@ -77,7 +79,7 @@ export class LayersPage implements OnInit {
 
     const layerId = this.layers[from].id;
 
-    await this.layerSrv.moveLayer(layerId, to);
+    await this.layerService.moveLayer(layerId, to);
 
     complete();
   }
@@ -87,14 +89,14 @@ export class LayersPage implements OnInit {
 
     layer.visible = checked;
 
-    await this.layerSrv.update(layer.id, layer);
+    await this.layerService.update(layer.id, layer);
   }
 
   protected async showLayerOptions(layer: Layer) {
-    const editText = this.translate.instant('general.edit');
-    const deleteText = this.translate.instant('general.delete');
+    const editText = this.translateService.instant('general.edit');
+    const deleteText = this.translateService.instant('general.delete');
 
-    const actionSheet = await this.actionSheetCtrl.create({
+    const actionSheet = await this.actionSheetController.create({
       header: layer.name,
       buttons: [
         {
@@ -114,7 +116,7 @@ export class LayersPage implements OnInit {
   }
 
   protected async createLayer() {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: LayersCreatePage,
     });
 
@@ -126,11 +128,11 @@ export class LayersPage implements OnInit {
   }
 
   private async loadLayers() {
-    this.layers = await this.layerSrv.getAll();
+    this.layers = await this.layerService.getAll();
   }
 
   private async editLayer(layer: Layer) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: LayersEditPage,
       componentProps: {
         layer,
@@ -145,13 +147,13 @@ export class LayersPage implements OnInit {
   }
 
   private async confirmDeleteLayer(layer: Layer) {
-    const deleteTitleText = this.translate.instant(
+    const deleteTitleText = this.translateService.instant(
       'layers.deleteConfirmHeader',
     );
-    const cancelText = this.translate.instant('general.cancel');
-    const deleteText = this.translate.instant('general.delete');
+    const cancelText = this.translateService.instant('general.cancel');
+    const deleteText = this.translateService.instant('general.delete');
 
-    const alert = await this.alertCtrl.create({
+    const alert = await this.alertController.create({
       header: deleteTitleText,
       subHeader: layer.name,
       buttons: [
@@ -162,7 +164,7 @@ export class LayersPage implements OnInit {
         {
           text: deleteText,
           handler: async () => {
-            await this.layerSrv.delete(layer.id);
+            await this.layerService.delete(layer.id);
             await alert.dismiss();
             await this.loadLayers();
           },

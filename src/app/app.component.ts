@@ -89,12 +89,14 @@ export class AppComponent {
   readonly appVersion = APP_VERSION;
 
   constructor(
-    private readonly modalCtrl: ModalWrapper,
-    private readonly settings: SettingsService,
-    private readonly translate: TranslateService,
+    // Controllers
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly settingsService: SettingsService,
+    private readonly translateService: TranslateService,
   ) {
-    this.settings.getLanguage().then((language) => {
-      this.translate.setDefaultLang(language);
+    this.settingsService.getLanguage().then((language) => {
+      this.translateService.setDefaultLang(language);
     });
 
     this.initKeepAwake();
@@ -114,7 +116,7 @@ export class AppComponent {
   }
 
   public async openModal(page: any) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: page,
     });
 
@@ -122,7 +124,7 @@ export class AppComponent {
   }
 
   private async initKeepAwake() {
-    const keepAwake = await this.settings.getKeepAwake();
+    const keepAwake = await this.settingsService.getKeepAwake();
 
     if (keepAwake) {
       await KeepAwake.keepAwake();
@@ -130,7 +132,7 @@ export class AppComponent {
       await KeepAwake.allowSleep();
     }
 
-    this.settings.on('keepAwake', async (newValue) => {
+    this.settingsService.on('keepAwake', async (newValue) => {
       if (newValue) {
         await KeepAwake.keepAwake();
       } else {

@@ -54,8 +54,8 @@ export class SettingsPage implements OnInit {
   public openWeatherMapApiKey = '';
 
   constructor(
-    private readonly settings: SettingsService,
-    private readonly translate: TranslateService,
+    private readonly settingsService: SettingsService,
+    private readonly translateService: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -73,7 +73,7 @@ export class SettingsPage implements OnInit {
       animations,
       positionAccuracy,
       openWeatherMapApiKey,
-    } = await this.settings.getAllSettings();
+    } = await this.settingsService.getAllSettings();
 
     this.speedUnit = speedUnit.toString();
     this.distanceUnit = distanceUnit.toString();
@@ -88,42 +88,44 @@ export class SettingsPage implements OnInit {
 
   protected async updateSpeedUnit() {
     const value = Number.parseInt(this.speedUnit);
-    await this.settings.setSpeedUnit(value);
+    await this.settingsService.setSpeedUnit(value);
   }
 
   protected async updateDistanceUnit() {
     const value = Number.parseInt(this.distanceUnit);
-    await this.settings.setDistanceUnit(value);
+    await this.settingsService.setDistanceUnit(value);
   }
 
   protected async updateTemperatureUnit() {
     const value = Number.parseInt(this.temperatureUnit);
-    await this.settings.setTemperatureUnit(value);
+    await this.settingsService.setTemperatureUnit(value);
   }
 
   protected async updateLanguage() {
     const value = this.language;
-    await this.settings.setLanguage(value);
-    this.translate.setDefaultLang(value);
+    await this.settingsService.setLanguage(value);
+    this.translateService.setDefaultLang(value);
   }
 
   protected async updateMapPreloading() {
-    await this.settings.setMapPreloading(this.mapPreloading);
+    await this.settingsService.setMapPreloading(this.mapPreloading);
   }
 
   protected async updateKeepAwake() {
-    await this.settings.setKeepAwake(this.keepAwake);
+    await this.settingsService.setKeepAwake(this.keepAwake);
   }
 
   protected async updateAnimations() {
-    await this.settings.setAnimations(this.animations);
+    await this.settingsService.setAnimations(this.animations);
   }
 
   protected async updatePositionAccuracy() {
-    await this.settings.setPositionAccuracy(this.positionAccuracy);
+    await this.settingsService.setPositionAccuracy(this.positionAccuracy);
   }
 
   protected async updateOpenWeatherMapApiKey() {
-    await this.settings.setOpenWeatherMapApiKey(this.openWeatherMapApiKey);
+    await this.settingsService.setOpenWeatherMapApiKey(
+      this.openWeatherMapApiKey,
+    );
   }
 }

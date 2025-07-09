@@ -7,24 +7,27 @@ import { MapService } from '../services/map.service';
 import { Map as OLMap } from 'ol';
 
 export function createLayerManager(
+  // Services
+  layersService: LayersService,
   map: MapService | OLMap,
-  layersSrv: LayersService,
-  settings: SettingsService,
+  settingsService: SettingsService,
 ) {
   if (map instanceof MapService) {
     map = map.getMap();
   }
 
-  return new LayerManager(map, layersSrv, settings);
+  return new LayerManager(layersService, settingsService, map);
 }
 
 class LayerManager {
   private readonly layers: Map<string, TileLayer<any>>;
 
   constructor(
+    // Services
+    private readonly layersService: LayersService,
+    private readonly settingsService: SettingsService,
+    // Other
     private readonly map: OLMap,
-    private readonly layersSrv: LayersService,
-    private readonly settings: SettingsService,
   ) {
     this.layers = new Map();
 
@@ -33,10 +36,12 @@ class LayerManager {
   }
 
   private registerListeners() {
-    this.layersSrv.on('create', (id, layer) => this.onLayerCreated(layer));
-    this.layersSrv.on('update', (id, layer) => this.onLayerUpdated(id, layer));
-    this.layersSrv.on('delete', (id, layer) => this.onLayerDeleted(id));
-    this.layersSrv.on('updateOrder', () => this.reloadAllLayers());
+    this.layersService.on('create', (id, layer) => this.onLayerCreated(layer));
+    this.layersService.on('update', (id, layer) =>
+      this.onLayerUpdated(id, layer),
+    );
+    this.layersService.on('delete', (id, layer) => this.onLayerDeleted(id));
+    this.layersService.on('updateOrder', () => this.reloadAllLayers());
   }
 
   private async onLayerCreated(layer: Layer) {
@@ -72,7 +77,7 @@ class LayerManager {
   private async reloadAllLayers() {
     this.removeAllLayers();
 
-    const allLayers = await this.layersSrv.getAll();
+    const allLayers = await this.layersService.getAll();
 
     allLayers.forEach((layer, i) => {
       this.addLayer(layer, i);
@@ -80,7 +85,7 @@ class LayerManager {
   }
 
   private async addLayer(layer: Layer, zIndex: number) {
-    const preload = await this.settings.getMapPreloading();
+    const preload = await this.settingsService.getMapPreloading();
     const tileLayer = new TileLayer({
       source: new XYZ({
         url: layer.source,

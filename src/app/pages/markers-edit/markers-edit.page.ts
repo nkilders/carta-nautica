@@ -45,9 +45,11 @@ export class MarkersEditPage implements OnInit {
   protected name: string = '';
 
   constructor(
-    private readonly modalCtrl: ModalWrapper,
-    private readonly alertCtrl: AlertWrapper,
-    private readonly markers: MarkersService,
+    // Controllers
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly markersService: MarkersService,
   ) {}
 
   ngOnInit() {
@@ -65,16 +67,16 @@ export class MarkersEditPage implements OnInit {
       name: this.name,
     };
 
-    await this.markers.update(this.marker.id, updatedMarker);
+    await this.markersService.update(this.marker.id, updatedMarker);
 
     await this.closeModal();
   }
 
   protected async closeModal() {
-    await this.modalCtrl.dismissTop();
+    await this.modalController.dismissTop();
   }
 
   private async errorToast(textKey: string) {
-    await this.alertCtrl.show('markersEdit.errorHeader', textKey);
+    await this.alertController.show('markersEdit.errorHeader', textKey);
   }
 }
