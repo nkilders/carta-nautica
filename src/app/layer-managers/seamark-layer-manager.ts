@@ -40,28 +40,6 @@ class SeamarkLayerManager {
     this.registerListeners();
   }
 
-  private async loadFeatures(longitude: number, latitude: number) {
-    const radiusMeters = 20_000;
-    const url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node["seamark:light:colour"](around:${radiusMeters},${latitude},${longitude});node["seamark:light:1:colour"](around:${radiusMeters},${latitude},${longitude}););out;`;
-
-    const response = await fetch(url);
-    const json: OverpassResponse = await response.json();
-
-    json.elements
-      .filter((e) => !this.objects.includes(e.id))
-      .forEach((e) => {
-        this.objects.push(e.id);
-        this.layerSource.addFeature(
-          new SeamarkFeature({
-            id: e.id,
-            longitude: e.lon,
-            latitude: e.lat,
-            tags: e.tags,
-          }),
-        );
-      });
-  }
-
   private createLayer(source: VectorSource) {
     const layer = new VectorLayer({
       source,
@@ -123,5 +101,27 @@ class SeamarkLayerManager {
 
       this.loadFeatures(longitude, latitude);
     }
+  }
+
+  private async loadFeatures(longitude: number, latitude: number) {
+    const radiusMeters = 20_000;
+    const url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node["seamark:light:colour"](around:${radiusMeters},${latitude},${longitude});node["seamark:light:1:colour"](around:${radiusMeters},${latitude},${longitude}););out;`;
+
+    const response = await fetch(url);
+    const json: OverpassResponse = await response.json();
+
+    json.elements
+      .filter((e) => !this.objects.includes(e.id))
+      .forEach((e) => {
+        this.objects.push(e.id);
+        this.layerSource.addFeature(
+          new SeamarkFeature({
+            id: e.id,
+            longitude: e.lon,
+            latitude: e.lat,
+            tags: e.tags,
+          }),
+        );
+      });
   }
 }
