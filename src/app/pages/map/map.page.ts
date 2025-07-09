@@ -51,6 +51,8 @@ import { MapService } from 'src/app/services/map.service';
 import { createPositionAccuracyLayerManager } from 'src/app/layer-managers/position-accuracy-layer-manager';
 import { createRoutePlanningLayerManager } from 'src/app/layer-managers/route-planning-layer-manager';
 import { RoutePlanningService } from 'src/app/services/route-planning.service';
+import { createSeamarkLayerManager } from 'src/app/layer-managers/seamark-layer-manager';
+import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-map',
@@ -83,6 +85,7 @@ export class MapPage implements OnInit {
   constructor(
     // Controllers
     private readonly actionSheetController: ActionSheetWrapper,
+    private readonly alertController: AlertWrapper,
     private readonly modalController: ModalWrapper,
     // Services
     private readonly geolocation: GeolocationService,
@@ -189,6 +192,7 @@ export class MapPage implements OnInit {
       this.routePlanningService,
       this.translateService,
     );
+    createSeamarkLayerManager(this.alertController, this.mapService);
   }
 
   private async onLongClick(
