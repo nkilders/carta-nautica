@@ -41,9 +41,17 @@ export class SeamarkViewPage implements OnInit {
     const element = this.seamark;
     const keys = Object.keys(element.tags);
     if (keys.includes('seamark:light:colour')) {
-      console.error('This should not happen at the moment');
+      const sectorStart =
+        Number.parseInt(element.tags[`seamark:light:sector_start`]) || 0;
+      const sectorEnd =
+        Number.parseInt(element.tags[`seamark:light:sector_end`]) || 359.99;
+      const colour = element.tags[`seamark:light:colour`];
+
+      this.addArc(sectorStart, sectorEnd, dom, this.color(colour));
     } else {
-      const numberOfLights = keys.filter((k) => k.endsWith(':colour')).length;
+      const numberOfLights = keys.filter(
+        (k) => k.startsWith('seamark:light:') && k.endsWith(':colour'),
+      ).length;
 
       for (let i = 1; i <= numberOfLights; i++) {
         const sectorStart = Number.parseInt(
@@ -68,11 +76,13 @@ export class SeamarkViewPage implements OnInit {
   private color(name: string) {
     switch (name) {
       case 'white':
-        return '#ff0';
+        return '#fff';
       case 'red':
         return '#f00';
       case 'green':
         return '#0f0';
+      case 'yellow':
+        return '#ff0';
       default:
         console.log('Unknown color:', name);
         return '#000';
@@ -122,7 +132,7 @@ export class SeamarkViewPage implements OnInit {
   private rawSvgStr() {
     return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 20 20">
-   <rect id="background" x="0.0" y="0.0" width="20.0" height="20.0" style="fill:#fff; fill-opacity:1;" />
+   <rect id="background" x="0.0" y="0.0" width="20.0" height="20.0" style="fill:#aad3df; fill-opacity:1;" />
    <ellipse id="center" style="fill:#000; fill-opacity:1; stroke:#000; stroke-width:1.0; stroke-opacity:0.5" cx="10.0" cy="10.0" rx="1.0" ry="1.0" />
    <g id="arcs"></g>
 </svg>`;
