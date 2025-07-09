@@ -75,7 +75,6 @@ export class SeamarkViewPage implements OnInit {
         return '#0f0';
       default:
         console.log('Unknown color:', name);
-
         return '#000';
     }
   }
@@ -89,11 +88,11 @@ export class SeamarkViewPage implements OnInit {
     const sectorStart = (start + 360) % 360;
     const sectorEnd = (end + 360) % 360;
 
-    const largeArc =
-      sectorEnd - sectorStart > 180 || sectorEnd - sectorStart < 0 ? 1 : 0;
+    const diff = sectorEnd - sectorStart;
+    // TODO: verstehen
+    const largeArc = diff > 180 || (diff < 0 && diff > -180) ? 1 : 0;
 
     console.log(sectorEnd - sectorStart);
-
     console.log(`Sector Start: ${sectorStart}, Sector End: ${sectorEnd}`);
 
     // -90 da 0° in SVG nach rechts zeigt
