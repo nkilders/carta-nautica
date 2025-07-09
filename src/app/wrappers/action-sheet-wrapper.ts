@@ -7,24 +7,24 @@ import { SettingsService } from '../services/settings.service';
 })
 export class ActionSheetWrapper {
   constructor(
-    private readonly actionSheetCtrl: ActionSheetController,
-    private readonly settings: SettingsService,
+    private readonly actionSheetController: ActionSheetController,
+    private readonly settingsService: SettingsService,
   ) {}
 
   public async create(opts: ActionSheetOptions) {
-    const animations = await this.settings.getAnimations();
+    const animations = await this.settingsService.getAnimations();
 
-    return this.actionSheetCtrl.create({
+    return this.actionSheetController.create({
       ...opts,
       animated: animations,
     });
   }
 
   public dismiss(data?: any, role?: string, id?: string) {
-    return this.actionSheetCtrl.dismiss(data, role, id);
+    return this.actionSheetController.dismiss(data, role, id);
   }
 
   public getTop() {
-    return this.actionSheetCtrl.getTop();
+    return this.actionSheetController.getTop();
   }
 }

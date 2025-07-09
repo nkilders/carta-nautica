@@ -14,18 +14,20 @@ import { GeolocationService } from '../services/geolocation.service';
 import { Stroke, Style } from 'ol/style';
 
 export function createRoutePlanningLayerManager(
-  mapSrv: MapService,
-  routePlanningSrv: RoutePlanningService,
-  geoSrv: GeolocationService,
-  actionSheetCtrl: ActionSheetWrapper,
-  translate: TranslateService,
+  // Controllers
+  actionSheetController: ActionSheetWrapper,
+  // Services
+  geoService: GeolocationService,
+  mapService: MapService,
+  routePlanningService: RoutePlanningService,
+  translateService: TranslateService,
 ) {
   return new RoutePlanningLayerManager(
-    mapSrv,
-    routePlanningSrv,
-    geoSrv,
-    actionSheetCtrl,
-    translate,
+    actionSheetController,
+    geoService,
+    mapService,
+    routePlanningService,
+    translateService,
   );
 }
 
@@ -36,11 +38,13 @@ class RoutePlanningLayerManager {
   private stopFeatures: StopFeature[];
 
   constructor(
-    private readonly mapSrv: MapService,
-    private readonly routePlanningSrv: RoutePlanningService,
-    private readonly geolocationSrv: GeolocationService,
-    private readonly actionSheetCtrl: ActionSheetWrapper,
-    private readonly translate: TranslateService,
+    // Controllers
+    private readonly actionSheetController: ActionSheetWrapper,
+    // Services
+    private readonly geolocationService: GeolocationService,
+    private readonly mapService: MapService,
+    private readonly routePlanningService: RoutePlanningService,
+    private readonly translateService: TranslateService,
   ) {
     this.layerSource = new VectorSource();
     this.lineFeature = this.createLineFeature();
@@ -76,19 +80,19 @@ class RoutePlanningLayerManager {
       zIndex: ZIndex.ROUTE_PLANNING,
     });
 
-    this.mapSrv.getMap().addLayer(layer);
+    this.mapService.getMap().addLayer(layer);
   }
 
   private registerListeners() {
-    this.mapSrv.on('featureClicked', async (feature) => {
+    this.mapService.on('featureClicked', async (feature) => {
       await this.onFeatureClicked(feature);
     });
 
-    this.routePlanningSrv.on('update', (route) => {
+    this.routePlanningService.on('update', (route) => {
       this.updateRoute(route);
     });
 
-    this.geolocationSrv.watchPosition(() => {
+    this.geolocationService.watchPosition(() => {
       if (this.stopFeatures.length === 0) {
         return;
       }
@@ -106,20 +110,20 @@ class RoutePlanningLayerManager {
   }
 
   private async showStopActionSheet(sequence: number) {
-    const headerText = this.translate.instant('routeStop.header', {
+    const headerText = this.translateService.instant('routeStop.header', {
       sequence: sequence + 1,
     });
-    const deleteText = this.translate.instant('general.delete');
-    const cancelText = this.translate.instant('general.cancel');
+    const deleteText = this.translateService.instant('general.delete');
+    const cancelText = this.translateService.instant('general.cancel');
 
-    const actionSheet = await this.actionSheetCtrl.create({
+    const actionSheet = await this.actionSheetController.create({
       header: headerText,
       buttons: [
         {
           text: deleteText,
           icon: 'trash',
           handler: () => {
-            this.routePlanningSrv.removeStop(sequence);
+            this.routePlanningService.removeStop(sequence);
           },
         },
         {
@@ -148,7 +152,7 @@ class RoutePlanningLayerManager {
   }
 
   private updateLineStringGeometry() {
-    const currentPos = this.geolocationSrv.getPosition().coords;
+    const currentPos = this.geolocationService.getPosition().coords;
     const stopCoordinates = this.stopFeatures.map((stop) => {
       const { longitude, latitude } = stop.getStop();
       return [longitude, latitude];

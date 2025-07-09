@@ -11,9 +11,9 @@ export class SpeedHeadingControl extends Control {
   private speed: number = 0;
 
   constructor(
-    private readonly settingsSrv: SettingsService,
-    private readonly geolocationSrv: GeolocationService,
-    private readonly unitSrv: UnitService,
+    private readonly geolocationService: GeolocationService,
+    private readonly settingsService: SettingsService,
+    private readonly unitService: UnitService,
   ) {
     const element = document.createElement('div');
     element.className = 'ol-control';
@@ -56,7 +56,7 @@ export class SpeedHeadingControl extends Control {
   }
 
   private initPositionWatch() {
-    this.geolocationSrv.watchPosition((position) => {
+    this.geolocationService.watchPosition((position) => {
       this.updateSpeedText(position.coords.speed);
       this.updateHeadingText(position.coords.heading);
       this.changed();
@@ -64,18 +64,18 @@ export class SpeedHeadingControl extends Control {
   }
 
   private initSettingsListeners() {
-    this.settingsSrv.on('speedUnit', () => {
+    this.settingsService.on('speedUnit', () => {
       this.updateSpeedText(this.speed);
     });
   }
 
   private async handleSpeedClick() {
-    const oldSpeedUnit = await this.settingsSrv.getSpeedUnit();
+    const oldSpeedUnit = await this.settingsService.getSpeedUnit();
     const numberOfSpeedUnits = Object.keys(SpeedUnit).length / 2;
 
     const newSpeedUnit = (oldSpeedUnit + 1) % numberOfSpeedUnits;
 
-    await this.settingsSrv.setSpeedUnit(newSpeedUnit);
+    await this.settingsService.setSpeedUnit(newSpeedUnit);
   }
 
   private async updateSpeedText(speed: number | null) {
@@ -83,7 +83,7 @@ export class SpeedHeadingControl extends Control {
 
     this.speed = speed;
 
-    const convertedSpeed = await this.unitSrv.convertSpeed(
+    const convertedSpeed = await this.unitService.convertSpeed(
       this.speed,
       SpeedUnit.METERS_PER_SECOND,
     );

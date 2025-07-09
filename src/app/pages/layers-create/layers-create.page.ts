@@ -43,10 +43,12 @@ export class LayersCreatePage {
   protected url: string = '';
 
   constructor(
-    private readonly modalCtrl: ModalWrapper,
-    private readonly layers: LayersService,
-    private readonly alertCtrl: AlertWrapper,
-    private readonly translate: TranslateService,
+    // Controllers
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
+    // Services
+    private readonly layersService: LayersService,
+    private readonly translateService: TranslateService,
   ) {}
 
   protected async createLayer() {
@@ -66,13 +68,13 @@ export class LayersCreatePage {
       visible: true,
     };
 
-    await this.layers.create(newLayer);
+    await this.layersService.create(newLayer);
 
     await this.closeModal();
   }
 
   protected async closeModal() {
-    const modal = await this.modalCtrl.getTop();
+    const modal = await this.modalController.getTop();
 
     if (!modal) {
       return;
@@ -82,11 +84,13 @@ export class LayersCreatePage {
   }
 
   private async errorToast(textKey: string) {
-    const headerText = await this.translate.instant('layersCreate.errorHeader');
-    const messageText = await this.translate.instant(textKey);
-    const okText = await this.translate.instant('general.ok');
+    const headerText = await this.translateService.instant(
+      'layersCreate.errorHeader',
+    );
+    const messageText = await this.translateService.instant(textKey);
+    const okText = await this.translateService.instant('general.ok');
 
-    const alert = await this.alertCtrl.create({
+    const alert = await this.alertController.create({
       header: headerText,
       message: messageText,
       buttons: [

@@ -13,7 +13,7 @@ export class TracksService {
   private readonly eventEmitter: EventEmitter;
   private tracks?: Track[];
 
-  constructor(private readonly storage: StorageService) {
+  constructor(private readonly storageService: StorageService) {
     this.eventEmitter = new EventEmitter();
   }
 
@@ -98,7 +98,7 @@ export class TracksService {
       return;
     }
 
-    this.tracks = await this.storage.get(STORAGE_KEY);
+    this.tracks = await this.storageService.get(STORAGE_KEY);
 
     if (!this.tracks) {
       this.tracks = [];
@@ -107,6 +107,6 @@ export class TracksService {
   }
 
   private async save() {
-    await this.storage.set(STORAGE_KEY, this.tracks);
+    await this.storageService.set(STORAGE_KEY, this.tracks);
   }
 }

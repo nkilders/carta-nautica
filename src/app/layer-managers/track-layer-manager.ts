@@ -9,10 +9,11 @@ import { LineString } from 'ol/geom';
 import { MapService } from '../services/map.service';
 
 export function createTrackLayerManager(
-  mapSrv: MapService,
-  trackRecorder: TrackRecorderService,
+  // Services
+  mapService: MapService,
+  trackRecorderService: TrackRecorderService,
 ) {
-  return new TrackLayerManager(mapSrv, trackRecorder);
+  return new TrackLayerManager(mapService, trackRecorderService);
 }
 
 class TrackLayerManager {
@@ -20,16 +21,23 @@ class TrackLayerManager {
   private line?: LineString;
 
   constructor(
-    private readonly mapSrv: MapService,
-    private readonly trackRecorder: TrackRecorderService,
+    // Services
+    private readonly mapService: MapService,
+    private readonly trackRecorderService: TrackRecorderService,
   ) {
     this.registerListeners();
   }
 
   private registerListeners() {
-    this.trackRecorder.on('startRecording', () => this.onStartRecording());
-    this.trackRecorder.on('stopRecording', (track) => this.onStopRecording());
-    this.trackRecorder.on('newPoint', (track, point) => this.onNewPoint(point));
+    this.trackRecorderService.on('startRecording', () =>
+      this.onStartRecording(),
+    );
+    this.trackRecorderService.on('stopRecording', (track) =>
+      this.onStopRecording(),
+    );
+    this.trackRecorderService.on('newPoint', (track, point) =>
+      this.onNewPoint(point),
+    );
   }
 
   private onStartRecording() {
@@ -37,7 +45,7 @@ class TrackLayerManager {
   }
 
   private onStopRecording() {
-    this.mapSrv.getMap().removeLayer(this.layer!);
+    this.mapService.getMap().removeLayer(this.layer!);
     delete this.layer;
     delete this.line;
   }
@@ -70,6 +78,6 @@ class TrackLayerManager {
       zIndex: ZIndex.TRACK,
     });
 
-    this.mapSrv.getMap().addLayer(this.layer);
+    this.mapService.getMap().addLayer(this.layer);
   }
 }
