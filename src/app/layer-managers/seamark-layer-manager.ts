@@ -21,10 +21,10 @@ export function createSeamarkLayerManager(
 }
 
 class SeamarkLayerManager {
-  private layer?: VectorLayer;
-  private layerSource?: VectorSource;
-
+  private readonly layerSource: VectorSource;
+  private readonly layer: VectorLayer;
   private readonly objects: number[] = [];
+
   private lastLongitude = 0;
   private lastLatitude = 0;
 
@@ -34,7 +34,9 @@ class SeamarkLayerManager {
     // Services
     private readonly mapService: MapService,
   ) {
-    this.createLayer();
+    this.layerSource = new VectorSource();
+    this.layer = this.createLayer(this.layerSource);
+
     this.registerListeners();
   }
 
@@ -49,7 +51,7 @@ class SeamarkLayerManager {
       .filter((e) => !this.objects.includes(e.id))
       .forEach((e) => {
         this.objects.push(e.id);
-        this.layerSource?.addFeature(
+        this.layerSource.addFeature(
           new SeamarkFeature({
             id: e.id,
             longitude: e.lon,
@@ -60,15 +62,15 @@ class SeamarkLayerManager {
       });
   }
 
-  private createLayer() {
-    this.layerSource = new VectorSource();
-
-    this.layer = new VectorLayer({
-      source: this.layerSource,
+  private createLayer(source: VectorSource) {
+    const layer = new VectorLayer({
+      source,
       zIndex: ZIndex.SEAMARKS,
     });
 
-    this.mapService.getMap().addLayer(this.layer);
+    this.mapService.getMap().addLayer(layer);
+
+    return layer;
   }
 
   private registerListeners() {
@@ -100,7 +102,7 @@ class SeamarkLayerManager {
     const zoom = event.map.getView().getZoom() ?? 0;
     const tooFarAway = zoom < 12;
 
-    this.layer?.setVisible(!tooFarAway);
+    this.layer.setVisible(!tooFarAway);
 
     if (tooFarAway) {
       return;
