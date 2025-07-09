@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import {
   IonTitle,
   IonContent,
 } from '@ionic/angular/standalone';
+import { Seamark } from 'src/app/models/seamark';
 
 @Component({
   selector: 'app-seamark-view',
@@ -26,24 +27,57 @@ import {
   ],
 })
 export class SeamarkViewPage implements OnInit {
-  svgContent: SafeHtml;
+  @Input({ required: true })
+  seamark!: Seamark;
 
-  constructor(private readonly domSanitizer: DomSanitizer) {
-    this.svgContent = this.domSanitizer.bypassSecurityTrustHtml(this.svgStr());
-  }
+  svgContent: SafeHtml = '';
+
+  constructor(private readonly domSanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    console.log('ngOnInit called');
-
     const domParser = new DOMParser();
     const dom = domParser.parseFromString(this.rawSvgStr(), 'image/svg+xml');
 
-    this.addArc(194, 176, dom, '#f00');
-    this.addArc(176, 194, dom, '#0f0');
+    const element = this.seamark;
+    const keys = Object.keys(element.tags);
+    if (keys.includes('seamark:light:colour')) {
+      console.error('This should not happen at the moment');
+    } else {
+      const numberOfLights = keys.filter((k) => k.endsWith(':colour')).length;
+
+      for (let i = 1; i <= numberOfLights; i++) {
+        const sectorStart = Number.parseInt(
+          element.tags[`seamark:light:${i}:sector_start`],
+        );
+        const sectorEnd = Number.parseInt(
+          element.tags[`seamark:light:${i}:sector_end`],
+        );
+        const colour = element.tags[`seamark:light:${i}:colour`];
+
+        console.log('addArc', i);
+
+        this.addArc(sectorStart, sectorEnd, dom, this.color(colour));
+      }
+    }
 
     const newSvg = dom.documentElement.outerHTML;
     console.log('New SVG:', newSvg);
     this.svgContent = this.domSanitizer.bypassSecurityTrustHtml(newSvg);
+  }
+
+  private color(name: string) {
+    switch (name) {
+      case 'white':
+        return '#ff0';
+      case 'red':
+        return '#f00';
+      case 'green':
+        return '#0f0';
+      default:
+        console.log('Unknown color:', name);
+
+        return '#000';
+    }
   }
 
   private addArc(start: number, end: number, dom: Document, color: string) {
@@ -86,12 +120,6 @@ export class SeamarkViewPage implements OnInit {
     arcs?.appendChild(arc);
   }
 
-  private svgStr() {
-    return `<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg
-   version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 20 20"> <rect id="background" x="0.0" y="0.0" width="20.0" height="20.0" style="fill:#fff; fill-opacity:1;" /> <ellipse id="center" style="fill:#000; fill-opacity:1; stroke:#000; stroke-width:1.0; stroke-opacity:0.5" cx="10.0" cy="10.0" rx="1.0" ry="1.0" /> <g id="arcs"> <path id="arc0" d="M 10 5 A 5 5 0 0 1 10 15" stroke="#f00" stroke-width="1" fill="none" /> <path id="arc1" d="M 10 15 A 5 5 0 0 1 5 10" stroke="#0f0" stroke-width="1" fill="none" /> <path id="arc2" d="M 5 10 A 5 5 0 0 1 10 5" stroke="#00f" stroke-width="1" fill="none" /> </g>
-</svg>`;
-  }
-
   private rawSvgStr() {
     return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 20 20">
@@ -99,39 +127,5 @@ export class SeamarkViewPage implements OnInit {
    <ellipse id="center" style="fill:#000; fill-opacity:1; stroke:#000; stroke-width:1.0; stroke-opacity:0.5" cx="10.0" cy="10.0" rx="1.0" ry="1.0" />
    <g id="arcs"></g>
 </svg>`;
-  }
-
-  private overpassElement(): OverpassElement {
-    return {
-      type: 'node',
-      id: 928624712,
-      lon: 14.3021335,
-      lat: 44.766398,
-      tags: {
-        man_made: 'beacon',
-        'seamark:light:1:character': 'Fl',
-        'seamark:light:1:colour': 'white',
-        'seamark:light:1:group': '2',
-        'seamark:light:1:height': '13',
-        'seamark:light:1:period': '10',
-        'seamark:light:1:range': '8',
-        'seamark:light:1:sector_end': '176',
-        'seamark:light:1:sector_start': '194',
-        'seamark:light:1:sequence': '0.5+(2),0.5+(7)',
-        'seamark:light:2:character': 'Fl',
-        'seamark:light:2:colour': 'red',
-        'seamark:light:2:group': '2',
-        'seamark:light:2:height': '13',
-        'seamark:light:2:period': '10',
-        'seamark:light:2:range': '6',
-        'seamark:light:2:sector_end': '194',
-        'seamark:light:2:sector_start': '176',
-        'seamark:light:2:sequence': '0.5+(2),0.5+(7)',
-        'seamark:light:reference': 'E 2760',
-        'seamark:name': 'Otocic Zecevo',
-        'seamark:type': 'light_minor',
-        source: 'US NGA Pub. 113. 2010-10-22.',
-      },
-    };
   }
 }

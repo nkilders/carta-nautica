@@ -6,18 +6,19 @@ import { ZIndex } from '../utils/z-indices';
 import { MapService } from '../services/map.service';
 import { FeatureLike } from 'ol/Feature';
 import { geoDistance } from '../utils/coordinates';
-import { AlertWrapper } from '../wrappers/alert-wrapper';
 import { OverpassResponse } from '../models/overpass';
+import { ModalWrapper } from '../wrappers/modal-wrapper';
+import { SeamarkViewPage } from '../pages/seamark-view/seamark-view.page';
 
 const RELOAD_DISTANCE_KM = 5;
 
 export function createSeamarkLayerManager(
   // Controllers
-  alertController: AlertWrapper,
+  modalController: ModalWrapper,
   // Services
   mapService: MapService,
 ) {
-  return new SeamarkLayerManager(alertController, mapService);
+  return new SeamarkLayerManager(modalController, mapService);
 }
 
 class SeamarkLayerManager {
@@ -30,7 +31,7 @@ class SeamarkLayerManager {
 
   constructor(
     // Controllers
-    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
     // Services
     private readonly mapService: MapService,
   ) {
@@ -68,11 +69,14 @@ class SeamarkLayerManager {
       console.log('#### Zoom', zoom);
       console.log('#### Objects', this.objects.length);
 
-      const alert = await this.alertController.create({
-        header: 'Seamark Details',
-        message: JSON.stringify(feature.getSeamark()),
+      const modal = await this.modalController.create({
+        component: SeamarkViewPage,
+        componentProps: {
+          seamark: feature.getSeamark(),
+        },
       });
-      await alert.present();
+
+      await modal.present();
     }
   }
 
