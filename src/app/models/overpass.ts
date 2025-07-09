@@ -13,5 +13,7 @@ export type OverpassElement = {
   id: number;
   lat: number;
   lon: number;
-  tags: Record<string, string>[];
+  tags: {
+    [key: string]: string;
+  };
 };
