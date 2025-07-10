@@ -12,6 +12,8 @@ import {
   IonList,
   IonItem,
   IonLabel,
+  IonPopover,
+  IonChip,
 } from '@ionic/angular/standalone';
 import { Seamark } from 'src/app/models/seamark';
 
@@ -21,6 +23,7 @@ import { Seamark } from 'src/app/models/seamark';
   styleUrls: ['./seamark-view.page.scss'],
   standalone: true,
   imports: [
+    IonPopover,
     IonLabel,
     IonItem,
     IonList,
@@ -30,6 +33,7 @@ import { Seamark } from 'src/app/models/seamark';
     IonHeader,
     CommonModule,
     FormsModule,
+    IonChip,
   ],
 })
 export class SeamarkViewPage implements OnInit, AfterViewInit {
@@ -40,6 +44,7 @@ export class SeamarkViewPage implements OnInit, AfterViewInit {
   range: string = '';
   _color: string = '';
   sequence: string = '';
+  char: string = '';
 
   svgContent: SafeHtml = '';
 
@@ -109,6 +114,7 @@ export class SeamarkViewPage implements OnInit, AfterViewInit {
     this.range = this.seamark.tags[`seamark:light:${i}:range`];
     this._color = this.seamark.tags[`seamark:light:${i}:colour`];
     this.sequence = this.seamark.tags[`seamark:light:${i}:sequence`];
+    this.char = this.seamark.tags[`seamark:light:${i}:character`];
   }
 
   private color(name: string) {

@@ -27,5 +27,15 @@
       <ion-label slot="start">Sequenz</ion-label>
       <ion-label slot="end">{{ sequence }}</ion-label>
     </ion-item>
+    <ion-item>
+      <ion-label slot="start">Character</ion-label>
+      <ion-label slot="end">{{ char }}</ion-label>
+      <ion-chip id="char-info" color="primary">i</ion-chip>
+    </ion-item>
+    <ion-popover trigger="char-info" triggerAction="click">
+      <ng-template>
+        <ion-content class="ion-padding">Hier koennte Ihre Werbung stehen</ion-content>
+      </ng-template>
+    </ion-popover>
   </ion-list>
 </ion-content>
