@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -26,7 +26,7 @@ import { Seamark } from 'src/app/models/seamark';
     FormsModule,
   ],
 })
-export class SeamarkViewPage implements OnInit {
+export class SeamarkViewPage implements OnInit, AfterViewInit {
   @Input({ required: true })
   seamark!: Seamark;
 
@@ -47,7 +47,7 @@ export class SeamarkViewPage implements OnInit {
         Number.parseInt(element.tags[`seamark:light:sector_end`]) || 359.99;
       const colour = element.tags[`seamark:light:colour`];
 
-      this.addArc(sectorStart, sectorEnd, dom, this.color(colour));
+      this.addArc(sectorStart, sectorEnd, dom, this.color(colour), 0);
     } else {
       const numberOfLights = keys.filter(
         (k) => k.startsWith('seamark:light:') && k.endsWith(':colour'),
@@ -64,13 +64,29 @@ export class SeamarkViewPage implements OnInit {
 
         console.log('addArc', i);
 
-        this.addArc(sectorStart, sectorEnd, dom, this.color(colour));
+        this.addArc(sectorStart, sectorEnd, dom, this.color(colour), i);
       }
     }
 
     const newSvg = dom.documentElement.outerHTML;
     console.log('New SVG:', newSvg);
     this.svgContent = this.domSanitizer.bypassSecurityTrustHtml(newSvg);
+  }
+
+  ngAfterViewInit(): void {
+    this.registerArcListeners();
+  }
+
+  private registerArcListeners() {
+    const arcs = document.querySelectorAll('#arcs path');
+
+    arcs.forEach((arc) => {
+      arc.addEventListener('click', (e) => {
+        arcs.forEach((a) => a.setAttribute('stroke-width', '1.0'));
+        arc.setAttribute('stroke-width', '2.0');
+        console.log(arc.getAttribute('id'));
+      });
+    });
   }
 
   private color(name: string) {
@@ -84,12 +100,18 @@ export class SeamarkViewPage implements OnInit {
       case 'yellow':
         return '#ff0';
       default:
-        console.log('Unknown color:', name);
+        console.error('Unknown color:', name);
         return '#000';
     }
   }
 
-  private addArc(start: number, end: number, dom: Document, color: string) {
+  private addArc(
+    start: number,
+    end: number,
+    dom: Document,
+    color: string,
+    id: number,
+  ) {
     const cx = 10;
     const cy = 10;
     const rx = 5;
@@ -120,9 +142,10 @@ export class SeamarkViewPage implements OnInit {
     console.log(`Sector End: (${x2}, ${y2})`);
 
     const arc = dom.createElement('path');
+    arc.setAttribute('id', `arc-${id}`);
     arc.setAttribute('d', `M ${x1} ${y1} A 5 5 0 ${largeArc} 1 ${x2} ${y2}`);
     arc.setAttribute('stroke', color);
-    arc.setAttribute('stroke-width', '1');
+    arc.setAttribute('stroke-width', '1.0');
     arc.setAttribute('fill', 'none');
 
     const arcs = dom.querySelector('#arcs');
