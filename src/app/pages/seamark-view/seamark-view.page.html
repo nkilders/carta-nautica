@@ -6,4 +6,26 @@
 
 <ion-content [fullscreen]="true">
   <div style="width: 100%; height: 50%;" [innerHTML]="svgContent" ></div>
+
+  <ion-list>
+    <ion-item>
+      <ion-label slot="start">Animation</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label slot="start">Höhe</ion-label>
+      <ion-label slot="end">{{ height }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label slot="start">Reichweite</ion-label>
+      <ion-label slot="end">{{ range }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label slot="start">Farbe</ion-label>
+      <ion-label slot="end">{{ _color }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label slot="start">Sequenz</ion-label>
+      <ion-label slot="end">{{ sequence }}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

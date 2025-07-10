@@ -9,6 +9,9 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
 } from '@ionic/angular/standalone';
 import { Seamark } from 'src/app/models/seamark';
 
@@ -18,6 +21,9 @@ import { Seamark } from 'src/app/models/seamark';
   styleUrls: ['./seamark-view.page.scss'],
   standalone: true,
   imports: [
+    IonLabel,
+    IonItem,
+    IonList,
     IonContent,
     IonTitle,
     IonToolbar,
@@ -29,6 +35,11 @@ import { Seamark } from 'src/app/models/seamark';
 export class SeamarkViewPage implements OnInit, AfterViewInit {
   @Input({ required: true })
   seamark!: Seamark;
+
+  height: string = '';
+  range: string = '';
+  _color: string = '';
+  sequence: string = '';
 
   svgContent: SafeHtml = '';
 
@@ -80,13 +91,24 @@ export class SeamarkViewPage implements OnInit, AfterViewInit {
   private registerArcListeners() {
     const arcs = document.querySelectorAll('#arcs path');
 
-    arcs.forEach((arc) => {
+    arcs.forEach((arc, i) => {
       arc.addEventListener('click', (e) => {
         arcs.forEach((a) => a.setAttribute('stroke-width', '1.0'));
         arc.setAttribute('stroke-width', '2.0');
-        console.log(arc.getAttribute('id'));
+        this.showDetailsOfArc(i);
       });
     });
+  }
+
+  private showDetailsOfArc(index: number) {
+    const i = index + 1;
+
+    // https://de.wikipedia.org/wiki/Befeuerung_(Seefahrt)
+
+    this.height = this.seamark.tags[`seamark:light:${i}:height`];
+    this.range = this.seamark.tags[`seamark:light:${i}:range`];
+    this._color = this.seamark.tags[`seamark:light:${i}:colour`];
+    this.sequence = this.seamark.tags[`seamark:light:${i}:sequence`];
   }
 
   private color(name: string) {
@@ -143,7 +165,12 @@ export class SeamarkViewPage implements OnInit, AfterViewInit {
 
     const arc = dom.createElement('path');
     arc.setAttribute('id', `arc-${id}`);
-    arc.setAttribute('d', `M ${x1} ${y1} A 5 5 0 ${largeArc} 1 ${x2} ${y2}`);
+    const rotation = 0;
+    const sweep = 1;
+    arc.setAttribute(
+      'd',
+      `M ${x1} ${y1} A ${rx} ${ry} ${rotation} ${largeArc} ${sweep} ${x2} ${y2}`,
+    );
     arc.setAttribute('stroke', color);
     arc.setAttribute('stroke-width', '1.0');
     arc.setAttribute('fill', 'none');
@@ -154,10 +181,10 @@ export class SeamarkViewPage implements OnInit, AfterViewInit {
 
   private rawSvgStr() {
     return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 20 20">
-   <rect id="background" x="0.0" y="0.0" width="20.0" height="20.0" style="fill:#aad3df; fill-opacity:1;" />
-   <ellipse id="center" style="fill:#000; fill-opacity:1; stroke:#000; stroke-width:1.0; stroke-opacity:0.5" cx="10.0" cy="10.0" rx="1.0" ry="1.0" />
-   <g id="arcs"></g>
-</svg>`;
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 20 20">
+              <rect id="background" x="0.0" y="0.0" width="20.0" height="20.0" style="fill:#aad3df; fill-opacity:1;" />
+              <ellipse id="center" style="fill:#000; fill-opacity:1; stroke:#000; stroke-width:1.0; stroke-opacity:0.5" cx="10.0" cy="10.0" rx="1.0" ry="1.0" />
+              <g id="arcs"></g>
+            </svg>`;
   }
 }
