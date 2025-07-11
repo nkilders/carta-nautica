@@ -33,38 +33,74 @@
         [attr.stroke]="arc.colorCode"
         [attr.stroke-width]="arc === selectedArc ? 2 : 1"
         fill="none"
-        (click)="showDetailsOfArc(arc)"
+        (click)="setSelectedArc(arc)"
         onkeydown=""/>
     </g>
   </svg>
 
   <ion-list>
+
+    <ion-item *ngIf="false">
+      <ion-label slot="start">
+        Animation
+      </ion-label>
+    </ion-item>
+
     <ion-item>
-      <ion-label slot="start">Animation</ion-label>
+      <ion-label slot="start">
+        Farbe
+      </ion-label>
+      <ion-label slot="end">
+        {{ selectedArc?.colorName }}
+      </ion-label>
     </ion-item>
-    <ion-item *ngIf="isNotNan(selectedArc?.height)">
-      <ion-label slot="start">Höhe</ion-label>
-      <ion-label slot="end">{{ selectedArc?.height }}</ion-label>
-    </ion-item>
-    <ion-item *ngIf="isNotNan(selectedArc?.range)">
-      <ion-label slot="start">Reichweite</ion-label>
-      <ion-label slot="end">{{ selectedArc?.range }}</ion-label>
-    </ion-item>
+  
     <ion-item>
-      <ion-label slot="start">Farbe</ion-label>
-      <ion-label slot="end">{{ selectedArc?.colorName }}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label slot="start">Sequenz</ion-label>
-      <ion-label slot="end">{{ selectedArc?.sequence }}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label slot="start">Character</ion-label>
+      <ion-label slot="start">
+        Character
+      </ion-label>
       <ion-label slot="end">
         {{ selectedArc?.character }} ({{ selectedArc?.characterMeaning }})
         <br><br>
         {{ selectedArc?.characterDescription }}
       </ion-label>
     </ion-item>
+
+    <ion-item *ngIf="isDefined(selectedArc?.period)">
+      <ion-label slot="start">
+        Periode
+      </ion-label>
+      <ion-label slot="end">
+        {{ selectedArc?.period }} Sekunden
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="isDefined(selectedArc?.sequence)">
+      <ion-label slot="start">
+        Sequenz
+      </ion-label>
+      <ion-label slot="end">
+        {{ selectedArc?.sequence }}
+      </ion-label>
+    </ion-item>
+    
+    <ion-item *ngIf="isDefined(selectedArc?.height)">
+      <ion-label slot="start">
+        Höhe
+      </ion-label>
+      <ion-label slot="end">
+        {{ selectedArc?.height }} Meter
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="isDefined(selectedArc?.range)">
+      <ion-label slot="start">
+        Reichweite
+      </ion-label>
+      <ion-label slot="end">
+        {{ selectedArc?.range }} Seemeilen
+      </ion-label>
+    </ion-item>
+
   </ion-list>
 </ion-content>

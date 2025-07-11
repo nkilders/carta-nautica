@@ -61,13 +61,12 @@ export class SeamarkViewPage implements OnInit {
     this.generateArcs();
   }
 
-  showDetailsOfArc(arc: DisplayArc) {
-    // https://de.wikipedia.org/wiki/Befeuerung_(Seefahrt)
+  setSelectedArc(arc: DisplayArc) {
     this.selectedArc = arc;
   }
 
-  isNotNan(num: unknown) {
-    return !Number.isNaN(num);
+  isDefined(num: unknown) {
+    return !Number.isNaN(num) && num !== undefined;
   }
 
   private generateArcs() {
@@ -142,12 +141,12 @@ export class SeamarkViewPage implements OnInit {
       case 'F':
         return 'Festfeuer';
       case 'Oc':
-        return ' 	Unterbrochenes Feuer';
+        return 'Unterbrochenes Feuer';
       case 'Iso':
         return 'Gleichtaktfeuer';
       case 'LFl':
         return 'Blink';
-      case 'Fl:':
+      case 'Fl':
         return 'Blitz';
       case 'Q':
         return 'Funkellicht';
@@ -174,7 +173,7 @@ export class SeamarkViewPage implements OnInit {
         return 'Die Phasen von Licht und Dunkel sind gleich lang ';
       case 'LFl':
         return 'Die Phasen des Lichts sind kürzer als die der Verdunklungen. Ein Blink ist mindestens zwei Sekunden lang ';
-      case 'Fl:':
+      case 'Fl':
         return 'Die Phasen des Lichts sind kürzer als die der Verdunklungen. Ein Blitz ist weniger als zwei Sekunden lang. ';
       case 'Q':
         return 'Schnelles nacheinander erscheinendes Licht (50-60 Mal pro Minute) ';
