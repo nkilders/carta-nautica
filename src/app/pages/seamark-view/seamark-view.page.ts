@@ -1,8 +1,6 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { OverpassElement } from 'src/app/models/overpass';
 import { radians } from 'src/app/utils/coordinates';
 import {
   IonHeader,
@@ -16,6 +14,22 @@ import {
   IonChip,
 } from '@ionic/angular/standalone';
 import { Seamark } from 'src/app/models/seamark';
+
+type DisplayArc = {
+  character: string;
+  colorCode: string;
+  colorName: string;
+  d: string;
+  height: number;
+  period: number;
+  range: number;
+  sequence: string;
+};
+
+const cx = 10;
+const cy = 10;
+const rx = 5;
+const ry = 5;
 
 @Component({
   selector: 'app-seamark-view',
@@ -36,115 +50,122 @@ import { Seamark } from 'src/app/models/seamark';
     IonChip,
   ],
 })
-export class SeamarkViewPage implements OnInit, AfterViewInit {
+export class SeamarkViewPage implements OnInit {
   @Input({ required: true })
   seamark!: Seamark;
 
-  height: string = '';
-  range: string = '';
-  _color: string = '';
-  sequence: string = '';
-  char: string = '';
+  arcs: DisplayArc[] = [];
+  selectedArc?: DisplayArc;
 
-  svgContent: SafeHtml = '';
-
-  constructor(private readonly domSanitizer: DomSanitizer) {}
+  constructor() {}
 
   ngOnInit() {
-    const domParser = new DOMParser();
-    const dom = domParser.parseFromString(this.rawSvgStr(), 'image/svg+xml');
+    this.generateArcs();
+  }
 
-    const element = this.seamark;
-    const keys = Object.keys(element.tags);
+  showDetailsOfArc(arc: DisplayArc) {
+    // https://de.wikipedia.org/wiki/Befeuerung_(Seefahrt)
+    this.selectedArc = arc;
+  }
+
+  private generateArcs() {
+    const tags = this.seamark.tags;
+    const keys = Object.keys(tags);
+
     if (keys.includes('seamark:light:colour')) {
-      const sectorStart =
-        Number.parseInt(element.tags[`seamark:light:sector_start`]) || 0;
-      const sectorEnd =
-        Number.parseInt(element.tags[`seamark:light:sector_end`]) || 359.99;
-      const colour = element.tags[`seamark:light:colour`];
-
-      this.addArc(sectorStart, sectorEnd, dom, this.color(colour), 0);
+      this.generateArcWithoutNumber();
     } else {
       const numberOfLights = keys.filter(
         (k) => k.startsWith('seamark:light:') && k.endsWith(':colour'),
       ).length;
 
       for (let i = 1; i <= numberOfLights; i++) {
-        const sectorStart = Number.parseInt(
-          element.tags[`seamark:light:${i}:sector_start`],
-        );
-        const sectorEnd = Number.parseInt(
-          element.tags[`seamark:light:${i}:sector_end`],
-        );
-        const colour = element.tags[`seamark:light:${i}:colour`];
-
-        console.log('addArc', i);
-
-        this.addArc(sectorStart, sectorEnd, dom, this.color(colour), i);
+        this.generateArcWithNumber(i);
       }
     }
-
-    const newSvg = dom.documentElement.outerHTML;
-    console.log('New SVG:', newSvg);
-    this.svgContent = this.domSanitizer.bypassSecurityTrustHtml(newSvg);
   }
 
-  ngAfterViewInit(): void {
-    this.registerArcListeners();
-  }
+  private generateArcWithoutNumber() {
+    const { tags } = this.seamark;
 
-  private registerArcListeners() {
-    const arcs = document.querySelectorAll('#arcs path');
+    const character = tags[`seamark:light:character`];
+    const sectorStart =
+      Number.parseInt(tags[`seamark:light:sector_start`]) || 0;
+    const sectorEnd =
+      Number.parseInt(tags[`seamark:light:sector_end`]) || 359.99;
+    const height = Number.parseInt(tags[`seamark:light:height`]);
+    const range = Number.parseInt(tags[`seamark:light:range`]);
+    const period = Number.parseInt(tags[`seamark:light:period`]);
+    const sequence = tags[`seamark:light:sequence`];
+    const color = tags[`seamark:light:colour`];
+    const d = this.buildSvgPath(sectorStart, sectorEnd);
 
-    arcs.forEach((arc, i) => {
-      arc.addEventListener('click', (e) => {
-        arcs.forEach((a) => a.setAttribute('stroke-width', '1.0'));
-        arc.setAttribute('stroke-width', '2.0');
-        this.showDetailsOfArc(i);
-      });
+    this.arcs.push({
+      character,
+      colorName: color,
+      colorCode: this.colorCodeOf(color),
+      d,
+      height,
+      period,
+      range,
+      sequence,
     });
   }
 
-  private showDetailsOfArc(index: number) {
-    const i = index + 1;
+  private generateArcWithNumber(i: number) {
+    const { tags } = this.seamark;
 
-    // https://de.wikipedia.org/wiki/Befeuerung_(Seefahrt)
+    const sectorStart = Number.parseInt(
+      tags[`seamark:light:${i}:sector_start`],
+    );
+    const sectorEnd = Number.parseInt(tags[`seamark:light:${i}:sector_end`]);
+    const color = tags[`seamark:light:${i}:colour`];
+    const sequence = tags[`seamark:light:${i}:sequence`];
+    const character = tags[`seamark:light:${i}:character`];
+    const height = Number.parseInt(tags[`seamark:light:${i}:height`]);
+    const range = Number.parseInt(tags[`seamark:light:${i}:range`]);
+    const period = Number.parseInt(tags[`seamark:light:${i}:period`]);
+    const d = this.buildSvgPath(sectorStart, sectorEnd);
 
-    this.height = this.seamark.tags[`seamark:light:${i}:height`];
-    this.range = this.seamark.tags[`seamark:light:${i}:range`];
-    this._color = this.seamark.tags[`seamark:light:${i}:colour`];
-    this.sequence = this.seamark.tags[`seamark:light:${i}:sequence`];
-    this.char = this.seamark.tags[`seamark:light:${i}:character`];
+    console.log('addArc', i);
+
+    this.arcs.push({
+      colorName: color,
+      colorCode: this.colorCodeOf(color),
+      d,
+      character,
+      height,
+      range,
+      period,
+      sequence,
+    });
   }
 
-  private color(name: string) {
-    switch (name) {
+  private colorCodeOf(colorName: string) {
+    switch (colorName) {
       case 'white':
-        return '#fff';
+        return '#ffffff';
       case 'red':
-        return '#f00';
+        return '#ea2027';
       case 'green':
-        return '#0f0';
+        return '#009432';
       case 'yellow':
-        return '#ff0';
+        return '#ffc312';
       default:
-        console.error('Unknown color:', name);
-        return '#000';
+        console.error('Unknown color:', colorName);
+        return '#000000';
     }
   }
 
-  private addArc(
-    start: number,
-    end: number,
-    dom: Document,
-    color: string,
-    id: number,
-  ) {
-    const cx = 10;
-    const cy = 10;
-    const rx = 5;
-    const ry = 5;
+  private buildSvgPath(start: number, end: number) {
+    const { x1, y1, x2, y2, largeArc } = this.calculateArc(start, end);
+    const rotation = 0;
+    const sweep = 1;
 
+    return `M ${x1} ${y1} A ${rx} ${ry} ${rotation} ${largeArc} ${sweep} ${x2} ${y2}`;
+  }
+
+  private calculateArc(start: number, end: number) {
     const sectorStart = (start + 360) % 360;
     const sectorEnd = (end + 360) % 360;
 
@@ -169,28 +190,12 @@ export class SeamarkViewPage implements OnInit, AfterViewInit {
     console.log(`Sector Start: (${x1}, ${y1})`);
     console.log(`Sector End: (${x2}, ${y2})`);
 
-    const arc = dom.createElement('path');
-    arc.setAttribute('id', `arc-${id}`);
-    const rotation = 0;
-    const sweep = 1;
-    arc.setAttribute(
-      'd',
-      `M ${x1} ${y1} A ${rx} ${ry} ${rotation} ${largeArc} ${sweep} ${x2} ${y2}`,
-    );
-    arc.setAttribute('stroke', color);
-    arc.setAttribute('stroke-width', '1.0');
-    arc.setAttribute('fill', 'none');
-
-    const arcs = dom.querySelector('#arcs');
-    arcs?.appendChild(arc);
-  }
-
-  private rawSvgStr() {
-    return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 20 20">
-              <rect id="background" x="0.0" y="0.0" width="20.0" height="20.0" style="fill:#aad3df; fill-opacity:1;" />
-              <ellipse id="center" style="fill:#000; fill-opacity:1; stroke:#000; stroke-width:1.0; stroke-opacity:0.5" cx="10.0" cy="10.0" rx="1.0" ry="1.0" />
-              <g id="arcs"></g>
-            </svg>`;
+    return {
+      x1,
+      y1,
+      x2,
+      y2,
+      largeArc,
+    };
   }
 }
