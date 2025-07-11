@@ -10,13 +10,13 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonPopover,
-  IonChip,
 } from '@ionic/angular/standalone';
 import { Seamark } from 'src/app/models/seamark';
 
 type DisplayArc = {
   character: string;
+  characterMeaning: string;
+  characterDescription: string;
   colorCode: string;
   colorName: string;
   d: string;
@@ -37,7 +37,6 @@ const ry = 5;
   styleUrls: ['./seamark-view.page.scss'],
   standalone: true,
   imports: [
-    IonPopover,
     IonLabel,
     IonItem,
     IonList,
@@ -47,7 +46,6 @@ const ry = 5;
     IonHeader,
     CommonModule,
     FormsModule,
-    IonChip,
   ],
 })
 export class SeamarkViewPage implements OnInit {
@@ -68,72 +66,54 @@ export class SeamarkViewPage implements OnInit {
     this.selectedArc = arc;
   }
 
+  isNotNan(num: unknown) {
+    return !Number.isNaN(num);
+  }
+
   private generateArcs() {
     const tags = this.seamark.tags;
     const keys = Object.keys(tags);
 
     if (keys.includes('seamark:light:colour')) {
-      this.generateArcWithoutNumber();
+      this.generateArc();
     } else {
       const numberOfLights = keys.filter(
         (k) => k.startsWith('seamark:light:') && k.endsWith(':colour'),
       ).length;
 
       for (let i = 1; i <= numberOfLights; i++) {
-        this.generateArcWithNumber(i);
+        this.generateArc(i);
       }
     }
+
+    this.selectedArc = this.arcs[0];
   }
 
-  private generateArcWithoutNumber() {
+  private generateArc(index?: number) {
+    const i = index ? `:${index}:` : ':';
+
     const { tags } = this.seamark;
 
-    const character = tags[`seamark:light:character`];
-    const sectorStart =
-      Number.parseInt(tags[`seamark:light:sector_start`]) || 0;
-    const sectorEnd =
-      Number.parseInt(tags[`seamark:light:sector_end`]) || 359.99;
-    const height = Number.parseInt(tags[`seamark:light:height`]);
-    const range = Number.parseInt(tags[`seamark:light:range`]);
-    const period = Number.parseInt(tags[`seamark:light:period`]);
-    const sequence = tags[`seamark:light:sequence`];
-    const color = tags[`seamark:light:colour`];
+    const sectorStart = parseInt(tags[`seamark:light${i}sector_start`]) || 0.0;
+    const sectorEnd = parseInt(tags[`seamark:light${i}sector_end`]) || 359.99;
     const d = this.buildSvgPath(sectorStart, sectorEnd);
 
-    this.arcs.push({
-      character,
-      colorName: color,
-      colorCode: this.colorCodeOf(color),
-      d,
-      height,
-      period,
-      range,
-      sequence,
-    });
-  }
-
-  private generateArcWithNumber(i: number) {
-    const { tags } = this.seamark;
-
-    const sectorStart = Number.parseInt(
-      tags[`seamark:light:${i}:sector_start`],
-    );
-    const sectorEnd = Number.parseInt(tags[`seamark:light:${i}:sector_end`]);
-    const color = tags[`seamark:light:${i}:colour`];
-    const sequence = tags[`seamark:light:${i}:sequence`];
-    const character = tags[`seamark:light:${i}:character`];
-    const height = Number.parseInt(tags[`seamark:light:${i}:height`]);
-    const range = Number.parseInt(tags[`seamark:light:${i}:range`]);
-    const period = Number.parseInt(tags[`seamark:light:${i}:period`]);
-    const d = this.buildSvgPath(sectorStart, sectorEnd);
+    const character = tags[`seamark:light${i}character`];
+    const color = tags[`seamark:light${i}colour`];
+    const height = parseInt(tags[`seamark:light${i}height`]);
+    const period = parseInt(tags[`seamark:light${i}period`]);
+    const range = parseInt(tags[`seamark:light${i}range`]);
+    const sequence = tags[`seamark:light${i}sequence`];
 
     console.log('addArc', i);
 
     this.arcs.push({
+      character,
+      characterDescription: this.characterDescriptionOf(character),
+      characterMeaning: this.characterMeaningOf(character),
       colorName: color,
       colorCode: this.colorCodeOf(color),
       d,
-      character,
       height,
       range,
       period,
@@ -157,6 +137,60 @@ export class SeamarkViewPage implements OnInit {
     }
   }
 
+  private characterMeaningOf(character: string) {
+    switch (character) {
+      case 'F':
+        return 'Festfeuer';
+      case 'Oc':
+        return ' 	Unterbrochenes Feuer';
+      case 'Iso':
+        return 'Gleichtaktfeuer';
+      case 'LFl':
+        return 'Blink';
+      case 'Fl:':
+        return 'Blitz';
+      case 'Q':
+        return 'Funkellicht';
+      case 'VQ':
+        return 'Schnelles Funkellicht';
+      case 'UQ':
+        return 'Ultraschnelles Funkellicht';
+      case 'Mo':
+        return 'Morsebuchstabe';
+      case 'IQ':
+        return 'Unterbrochenes Funkelfeuer';
+      default:
+        return '';
+    }
+  }
+
+  private characterDescriptionOf(character: string) {
+    switch (character) {
+      case 'F':
+        return 'Dauerlicht';
+      case 'Oc':
+        return 'Die Phasen des Lichts sind länger als die der Verdunklungen ';
+      case 'Iso':
+        return 'Die Phasen von Licht und Dunkel sind gleich lang ';
+      case 'LFl':
+        return 'Die Phasen des Lichts sind kürzer als die der Verdunklungen. Ein Blink ist mindestens zwei Sekunden lang ';
+      case 'Fl:':
+        return 'Die Phasen des Lichts sind kürzer als die der Verdunklungen. Ein Blitz ist weniger als zwei Sekunden lang. ';
+      case 'Q':
+        return 'Schnelles nacheinander erscheinendes Licht (50-60 Mal pro Minute) ';
+      case 'VQ':
+        return 'Schnelles nacheinander erscheinendes Licht (100-120 Mal pro Minute) ';
+      case 'UQ':
+        return 'Sehr schnelles nacheinander erscheinendes Licht (200-240 Mal pro Minute) ';
+      case 'Mo':
+        return 'Lichtphasen entsprechen einem Buchstaben des Morsealphabets ';
+      case 'IQ':
+        return 'Blitze des Funkelfeuers durch Verdunklung unterbrochen ';
+      default:
+        return '';
+    }
+  }
+
   private buildSvgPath(start: number, end: number) {
     const { x1, y1, x2, y2, largeArc } = this.calculateArc(start, end);
     const rotation = 0;
@@ -173,7 +207,7 @@ export class SeamarkViewPage implements OnInit {
     // TODO: verstehen
     const largeArc = diff > 180 || (diff < 0 && diff > -180) ? 1 : 0;
 
-    console.log(sectorEnd - sectorStart);
+    console.log('diff', diff);
     console.log(`Sector Start: ${sectorStart}, Sector End: ${sectorEnd}`);
 
     // -90 da 0° in SVG nach rechts zeigt

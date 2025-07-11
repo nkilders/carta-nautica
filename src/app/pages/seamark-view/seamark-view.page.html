@@ -42,11 +42,11 @@
     <ion-item>
       <ion-label slot="start">Animation</ion-label>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="isNotNan(selectedArc?.height)">
       <ion-label slot="start">Höhe</ion-label>
       <ion-label slot="end">{{ selectedArc?.height }}</ion-label>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="isNotNan(selectedArc?.range)">
       <ion-label slot="start">Reichweite</ion-label>
       <ion-label slot="end">{{ selectedArc?.range }}</ion-label>
     </ion-item>
@@ -60,13 +60,11 @@
     </ion-item>
     <ion-item>
       <ion-label slot="start">Character</ion-label>
-      <ion-label slot="end">{{ selectedArc?.character }}</ion-label>
-      <ion-chip id="char-info" color="primary" slot="end">i</ion-chip>
+      <ion-label slot="end">
+        {{ selectedArc?.character }} ({{ selectedArc?.characterMeaning }})
+        <br><br>
+        {{ selectedArc?.characterDescription }}
+      </ion-label>
     </ion-item>
-    <ion-popover trigger="char-info" triggerAction="click">
-      <ng-template>
-        <ion-content class="ion-padding">Hier koennte Ihre Werbung stehen</ion-content>
-      </ng-template>
-    </ion-popover>
   </ion-list>
 </ion-content>
