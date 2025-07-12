@@ -12,6 +12,7 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { Seamark } from 'src/app/models/seamark';
+import { TranslateService } from '@ngx-translate/core';
 
 type DisplayArc = {
   character: string;
@@ -55,7 +56,7 @@ export class SeamarkViewPage implements OnInit {
   arcs: DisplayArc[] = [];
   selectedArc?: DisplayArc;
 
-  constructor() {}
+  constructor(private readonly translateService: TranslateService) {}
 
   ngOnInit() {
     this.generateArcs();
@@ -137,57 +138,17 @@ export class SeamarkViewPage implements OnInit {
   }
 
   private characterMeaningOf(character: string) {
-    switch (character) {
-      case 'F':
-        return 'Festfeuer';
-      case 'Oc':
-        return 'Unterbrochenes Feuer';
-      case 'Iso':
-        return 'Gleichtaktfeuer';
-      case 'LFl':
-        return 'Blink';
-      case 'Fl':
-        return 'Blitz';
-      case 'Q':
-        return 'Funkellicht';
-      case 'VQ':
-        return 'Schnelles Funkellicht';
-      case 'UQ':
-        return 'Ultraschnelles Funkellicht';
-      case 'Mo':
-        return 'Morsebuchstabe';
-      case 'IQ':
-        return 'Unterbrochenes Funkelfeuer';
-      default:
-        return '';
-    }
+    const c = character.toLocaleLowerCase();
+    return this.translateService.instant(
+      `seamark.light.character.meaning.${c}`,
+    );
   }
 
   private characterDescriptionOf(character: string) {
-    switch (character) {
-      case 'F':
-        return 'Dauerlicht';
-      case 'Oc':
-        return 'Die Phasen des Lichts sind länger als die der Verdunklungen ';
-      case 'Iso':
-        return 'Die Phasen von Licht und Dunkel sind gleich lang ';
-      case 'LFl':
-        return 'Die Phasen des Lichts sind kürzer als die der Verdunklungen. Ein Blink ist mindestens zwei Sekunden lang ';
-      case 'Fl':
-        return 'Die Phasen des Lichts sind kürzer als die der Verdunklungen. Ein Blitz ist weniger als zwei Sekunden lang. ';
-      case 'Q':
-        return 'Schnelles nacheinander erscheinendes Licht (50-60 Mal pro Minute) ';
-      case 'VQ':
-        return 'Schnelles nacheinander erscheinendes Licht (100-120 Mal pro Minute) ';
-      case 'UQ':
-        return 'Sehr schnelles nacheinander erscheinendes Licht (200-240 Mal pro Minute) ';
-      case 'Mo':
-        return 'Lichtphasen entsprechen einem Buchstaben des Morsealphabets ';
-      case 'IQ':
-        return 'Blitze des Funkelfeuers durch Verdunklung unterbrochen ';
-      default:
-        return '';
-    }
+    const c = character.toLocaleLowerCase();
+    return this.translateService.instant(
+      `seamark.light.character.description.${c}`,
+    );
   }
 
   private buildSvgPath(start: number, end: number) {
