@@ -12,7 +12,7 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { Seamark } from 'src/app/models/seamark';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 type DisplayArc = {
   character: string;
@@ -47,6 +47,7 @@ const ry = 5;
     IonHeader,
     CommonModule,
     FormsModule,
+    TranslateModule,
   ],
 })
 export class SeamarkViewPage implements OnInit {
@@ -111,7 +112,7 @@ export class SeamarkViewPage implements OnInit {
       character,
       characterDescription: this.characterDescriptionOf(character),
       characterMeaning: this.characterMeaningOf(character),
-      colorName: color,
+      colorName: this.colorTextOf(color),
       colorCode: this.colorCodeOf(color),
       d,
       height,
@@ -119,6 +120,11 @@ export class SeamarkViewPage implements OnInit {
       period,
       sequence,
     });
+  }
+
+  private colorTextOf(colorName: string) {
+    const c = colorName.toLowerCase();
+    return this.translateService.instant(`color.${c}`);
   }
 
   private colorCodeOf(colorName: string) {
@@ -138,7 +144,7 @@ export class SeamarkViewPage implements OnInit {
   }
 
   private characterMeaningOf(character: string) {
-    const c = character.toLocaleLowerCase();
+    const c = character.toLowerCase();
     return this.translateService.instant(
       `seamark.light.character.meaning.${c}`,
     );

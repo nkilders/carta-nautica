@@ -1,4 +1,10 @@
 {
+  "color": {
+    "green": "Green",
+    "red": "Red",
+    "white": "White",
+    "yellow": "Yellow"
+  },
   "general": {
     "cancel": "Cancel",
     "delete": "Delete",
@@ -100,6 +106,9 @@
         }
       }
     }
+  },
+  "seamarkView": {
+    "title": "Seamark"
   },
   "tracks": {
     "duration": "Duration: {{duration}}",

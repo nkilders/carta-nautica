@@ -1,4 +1,10 @@
 {
+  "color": {
+    "green": "Grün",
+    "red": "Rot",
+    "white": "Weiß",
+    "yellow": "Gelb"
+  },
   "general": {
     "cancel": "Abbrechen",
     "delete": "Löschen",
@@ -100,6 +106,9 @@
         }
       }
     }
+  },
+  "seamarkView": {
+    "title": "Seezeichen"
   },
   "tracks": {
     "duration": "Dauer: {{duration}}",
