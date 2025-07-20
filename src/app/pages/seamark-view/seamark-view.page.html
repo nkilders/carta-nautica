@@ -65,7 +65,7 @@
 
     <ion-item>
       <ion-label slot="start">
-        Farbe
+        {{ 'seamarkView.colorLabel' | translate }}
       </ion-label>
       <ion-label slot="end">
         {{ selectedArc?.colorName }}
@@ -74,7 +74,7 @@
   
     <ion-item>
       <ion-label slot="start">
-        Character
+        {{ 'seamarkView.characterLabel' | translate }}
       </ion-label>
       <ion-label slot="end">
         {{ selectedArc?.character }} ({{ selectedArc?.characterMeaning }})
@@ -85,16 +85,16 @@
 
     <ion-item *ngIf="isDefined(selectedArc?.period)">
       <ion-label slot="start">
-        Periode
+        {{ 'seamarkView.periodLabel' | translate }}
       </ion-label>
       <ion-label slot="end">
-        {{ selectedArc?.period }} Sekunden
+        {{ 'seamarkView.periodValue' | translate: { period: selectedArc?.period } }}
       </ion-label>
     </ion-item>
 
     <ion-item *ngIf="isDefined(selectedArc?.sequence)">
       <ion-label slot="start">
-        Sequenz
+        {{ 'seamarkView.sequenceLabel' | translate }}
       </ion-label>
       <ion-label slot="end">
         {{ selectedArc?.sequence }}
@@ -103,19 +103,19 @@
     
     <ion-item *ngIf="isDefined(selectedArc?.height)">
       <ion-label slot="start">
-        Höhe
+        {{ 'seamarkView.heightLabel' | translate }}
       </ion-label>
       <ion-label slot="end">
-        {{ selectedArc?.height }} Meter
+        {{ 'seamarkView.heightValue' | translate: { height: selectedArc?.height } }}
       </ion-label>
     </ion-item>
 
     <ion-item *ngIf="isDefined(selectedArc?.range)">
       <ion-label slot="start">
-        Reichweite
+        {{ 'seamarkView.rangeLabel' | translate }}
       </ion-label>
       <ion-label slot="end">
-        {{ selectedArc?.range }} Seemeilen
+        {{ 'seamarkView.rangeValue' | translate: { range: selectedArc?.range } }}
       </ion-label>
     </ion-item>
 

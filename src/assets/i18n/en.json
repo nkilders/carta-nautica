@@ -108,7 +108,16 @@
     }
   },
   "seamarkView": {
-    "title": "Seamark"
+    "title": "Seamark",
+    "colorLabel": "Color",
+    "characterLabel": "Character",
+    "periodLabel": "Period",
+    "periodValue": "{{period}} seconds",
+    "sequenceLabel": "Sequence",
+    "heightLabel": "Height",
+    "heightValue": "{{height}} meters",
+    "rangeLabel": "Range",
+    "rangeValue": "{{range}} sea miles"
   },
   "tracks": {
     "duration": "Duration: {{duration}}",

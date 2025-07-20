@@ -108,7 +108,16 @@
     }
   },
   "seamarkView": {
-    "title": "Seezeichen"
+    "title": "Seezeichen",
+    "colorLabel": "Farbe",
+    "characterLabel": "Kennung",
+    "periodLabel": "Periode",
+    "periodValue": "{{period}} Sekunden",
+    "sequenceLabel": "Sequenz",
+    "heightLabel": "Höhe",
+    "heightValue": "{{height}} Meter",
+    "rangeLabel": "Reichweite",
+    "rangeValue": "{{range}} Seemeilen"
   },
   "tracks": {
     "duration": "Dauer: {{duration}}",
