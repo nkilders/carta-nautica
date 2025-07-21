@@ -44,6 +44,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'seamark-view',
+    loadComponent: () =>
+      import('./pages/seamark-view/seamark-view.page').then(
+        (m) => m.SeamarkViewPage,
+      ),
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./pages/settings/settings.page').then((m) => m.SettingsPage),

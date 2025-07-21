@@ -1,4 +1,10 @@
 {
+  "color": {
+    "green": "Green",
+    "red": "Red",
+    "white": "White",
+    "yellow": "Yellow"
+  },
   "general": {
     "cancel": "Cancel",
     "delete": "Delete",
@@ -70,6 +76,48 @@
     "setDestination": "Set Destination",
     "addStop": "Add Stop",
     "weather": "Weather"
+  },
+  "seamark": {
+    "light": {
+      "character": {
+        "meaning": {
+          "f": "Fixed",
+          "oc": "Occulting",
+          "iso": "Isophase",
+          "lfl": "Long Flash",
+          "fl": "Flash",
+          "q": "Quick",
+          "vq": "Very Quick",
+          "uq": "Ultra Quick",
+          "mo": "Morse Code",
+          "iq": "Interrupted Quick"
+        },
+        "description": {
+          "f": "Continuous light",
+          "oc": "The light phases are longer than the darkening phases",
+          "iso": "The light and dark phases are equal in length",
+          "lfl": "The light phases are shorter than the darkening phases. A blink lasts at least two seconds.",
+          "fl": "The light phases are shorter than the darkening phases. A flash lasts less than two seconds.",
+          "q": "Rapid successive light flashes (50-60 times per minute)",
+          "vq": "Rapid successive light flashes (100-120 times per minute)",
+          "uq": "Very rapid successive light flashes (200-240 times per minute)",
+          "mo": "Light phases correspond to a letter of the Morse code",
+          "iq": "Flashes of the twinkling fire interrupted by darkening"
+        }
+      }
+    }
+  },
+  "seamarkView": {
+    "title": "Seamark",
+    "colorLabel": "Color",
+    "characterLabel": "Character",
+    "periodLabel": "Period",
+    "periodValue": "{{period}} seconds",
+    "sequenceLabel": "Sequence",
+    "heightLabel": "Height",
+    "heightValue": "{{height}} meters",
+    "rangeLabel": "Range",
+    "rangeValue": "{{range}} sea miles"
   },
   "tracks": {
     "duration": "Duration: {{duration}}",

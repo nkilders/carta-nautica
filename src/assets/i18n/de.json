@@ -1,4 +1,10 @@
 {
+  "color": {
+    "green": "Grün",
+    "red": "Rot",
+    "white": "Weiß",
+    "yellow": "Gelb"
+  },
   "general": {
     "cancel": "Abbrechen",
     "delete": "Löschen",
@@ -70,6 +76,48 @@
     "setDestination": "Ziel setzen",
     "addStop": "Zwischenstopp hinzufügen",
     "weather": "Wetter"
+  },
+  "seamark": {
+    "light": {
+      "character": {
+        "meaning": {
+          "f": "Festfeuer",
+          "oc": "Unterbrochenes Feuer",
+          "iso": "Gleichtaktfeuer",
+          "lfl": "Blink",
+          "fl": "Blitz",
+          "q": "Funkellicht",
+          "vq": "Schnelles Funkellicht",
+          "uq": "Ultraschnelles Funkellicht",
+          "mo": "Morsebuchstabe",
+          "iq": "Unterbrochenes Funkelfeuer"
+        },
+        "description": {
+          "f": "Dauerlicht",
+          "oc": "Die Phasen des Lichts sind länger als die der Verdunklungen",
+          "iso": "Die Phasen von Licht und Dunkel sind gleich lang",
+          "lfl": "Die Phasen des Lichts sind kürzer als die der Verdunklungen. Ein Blink ist mindestens zwei Sekunden lang.",
+          "fl": "Die Phasen des Lichts sind kürzer als die der Verdunklungen. Ein Blitz ist weniger als zwei Sekunden lang.",
+          "q": "Schnelles nacheinander erscheinendes Licht (50-60 Mal pro Minute)",
+          "vq": "Schnelles nacheinander erscheinendes Licht (100-120 Mal pro Minute)",
+          "uq": "Sehr schnelles nacheinander erscheinendes Licht (200-240 Mal pro Minute)",
+          "mo": "Lichtphasen entsprechen einem Buchstaben des Morsealphabets",
+          "iq": "Blitze des Funkelfeuers durch Verdunklung unterbrochen"
+        }
+      }
+    }
+  },
+  "seamarkView": {
+    "title": "Seezeichen",
+    "colorLabel": "Farbe",
+    "characterLabel": "Kennung",
+    "periodLabel": "Periode",
+    "periodValue": "{{period}} Sekunden",
+    "sequenceLabel": "Sequenz",
+    "heightLabel": "Höhe",
+    "heightValue": "{{height}} Meter",
+    "rangeLabel": "Reichweite",
+    "rangeValue": "{{range}} Seemeilen"
   },
   "tracks": {
     "duration": "Dauer: {{duration}}",

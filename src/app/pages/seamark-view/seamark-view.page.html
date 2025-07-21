@@ -1,0 +1,123 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>{{ 'seamarkView.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<style id="animation-style">
+  @keyframes light-animation {
+    0.0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .animated {
+    animation-name: light-animation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: step-start;
+  }
+</style>
+
+<ion-content [fullscreen]="true">
+  <svg 
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    width="100%" 
+    height="50%"
+    viewBox="0 0 20 20">
+    <rect 
+      id="background"
+      x="0.0"
+      y="0.0"
+      width="20.0"
+      height="20.0"
+      style="fill:#aad3df; fill-opacity:1;" />
+    <ellipse 
+      id="center"
+      style="fill:#000; fill-opacity:1; stroke:#000; stroke-width:1.0; stroke-opacity:0.5" 
+      cx="10.0"
+      cy="10.0"
+      rx="1.0"
+      ry="1.0" />
+    <g id="arcs">
+      <path 
+        *ngFor="let arc of arcs"
+        [attr.d]="arc.d"
+        [attr.stroke]="arc.colorCode"
+        [attr.stroke-width]="arc === selectedArc ? 2 : 1"
+        fill="none"
+        (click)="setSelectedArc(arc)"
+        onkeydown=""/>
+    </g>
+  </svg>
+
+  <ion-list>
+
+    <ion-item *ngIf="false">
+      <ion-label slot="start">
+        Animation
+      </ion-label>
+      <ion-label slot="end" class="animated">####</ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label slot="start">
+        {{ 'seamarkView.colorLabel' | translate }}
+      </ion-label>
+      <ion-label slot="end">
+        {{ selectedArc?.colorName }}
+      </ion-label>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label slot="start">
+        {{ 'seamarkView.characterLabel' | translate }}
+      </ion-label>
+      <ion-label slot="end">
+        {{ selectedArc?.character }} ({{ selectedArc?.characterMeaning }})
+        <br><br>
+        {{ selectedArc?.characterDescription }}
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="isDefined(selectedArc?.period)">
+      <ion-label slot="start">
+        {{ 'seamarkView.periodLabel' | translate }}
+      </ion-label>
+      <ion-label slot="end">
+        {{ 'seamarkView.periodValue' | translate: { period: selectedArc?.period } }}
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="isDefined(selectedArc?.sequence)">
+      <ion-label slot="start">
+        {{ 'seamarkView.sequenceLabel' | translate }}
+      </ion-label>
+      <ion-label slot="end">
+        {{ selectedArc?.sequence }}
+      </ion-label>
+    </ion-item>
+    
+    <ion-item *ngIf="isDefined(selectedArc?.height)">
+      <ion-label slot="start">
+        {{ 'seamarkView.heightLabel' | translate }}
+      </ion-label>
+      <ion-label slot="end">
+        {{ 'seamarkView.heightValue' | translate: { height: selectedArc?.height } }}
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="isDefined(selectedArc?.range)">
+      <ion-label slot="start">
+        {{ 'seamarkView.rangeLabel' | translate }}
+      </ion-label>
+      <ion-label slot="end">
+        {{ 'seamarkView.rangeValue' | translate: { range: selectedArc?.range } }}
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+</ion-content>
