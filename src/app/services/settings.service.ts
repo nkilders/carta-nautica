@@ -203,7 +203,7 @@ export class SettingsService {
       distanceUnit: DistanceUnit.KILOMETERS,
       temperatureUnit: TemperatureUnit.CELSIUS,
       language: Language.GERMAN,
-      mapPreloading: 1,
+      mapPreloading: 0,
       keepAwake: true,
       animations: true,
       positionAccuracy: false,

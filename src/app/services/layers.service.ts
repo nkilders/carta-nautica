@@ -153,6 +153,18 @@ export class LayersService {
       },
       {
         id: uuidv4(),
+        name: 'Hiking Routes',
+        source: 'https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png',
+        visible: false,
+      },
+      {
+        id: uuidv4(),
+        name: 'OpenTopoMap',
+        source: 'https://a.tile.opentopomap.org/{z}/{x}/{y}.png',
+        visible: false,
+      },
+      {
+        id: uuidv4(),
         name: 'OpenStreetMap DE',
         source: 'https://a.tile.openstreetmap.de/{z}/{x}/{y}.png',
         visible: true,
