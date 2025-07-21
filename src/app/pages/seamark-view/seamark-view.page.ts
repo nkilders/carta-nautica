@@ -95,8 +95,9 @@ export class SeamarkViewPage implements OnInit {
 
     const { tags } = this.seamark;
 
-    const sectorStart = parseInt(tags[`seamark:light${i}sector_start`]) || 0.0;
-    const sectorEnd = parseInt(tags[`seamark:light${i}sector_end`]) || 359.99;
+    const sectorStart =
+      parseFloat(tags[`seamark:light${i}sector_start`]) || 0.0;
+    const sectorEnd = parseFloat(tags[`seamark:light${i}sector_end`]) || 359.99;
     const d = this.buildSvgPath(sectorStart, sectorEnd);
 
     const character = tags[`seamark:light${i}character`];
@@ -169,9 +170,8 @@ export class SeamarkViewPage implements OnInit {
     const sectorStart = (start + 360) % 360;
     const sectorEnd = (end + 360) % 360;
 
-    const diff = sectorEnd - sectorStart;
-    // TODO: verstehen
-    const largeArc = diff > 180 || (diff < 0 && diff > -180) ? 1 : 0;
+    const diff = (sectorEnd - sectorStart + 360) % 360;
+    const largeArc = diff > 180 ? 1 : 0;
 
     console.log('diff', diff);
     console.log(`Sector Start: ${sectorStart}, Sector End: ${sectorEnd}`);
