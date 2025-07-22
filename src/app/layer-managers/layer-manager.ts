@@ -1,6 +1,6 @@
 import { LayersService } from '../services/layers.service';
 import { Layer } from '../models/layers';
-import { XYZ } from 'ol/source';
+import { ImageTile, XYZ } from 'ol/source';
 import TileLayer from 'ol/layer/Tile';
 import { SettingsService } from '../services/settings.service';
 import { MapService } from '../services/map.service';
@@ -87,8 +87,17 @@ class LayerManager {
   private async addLayer(layer: Layer, zIndex: number) {
     const preload = await this.settingsService.getMapPreloading();
     const tileLayer = new TileLayer({
-      source: new XYZ({
-        url: layer.source,
+      // source: new XYZ({
+      //   url: layer.source,
+      // }),
+      source: new ImageTile({
+        loader: (z, x, y) => {
+          console.log(`Loading tile at z=${z}, x=${x}, y=${y}`);
+
+          const img = new Image();
+          img.src = 'https://a.tile.opentopomap.org/13/4236/2731.png';
+          return img;
+        },
       }),
       zIndex: -zIndex,
       visible: layer.visible,
