@@ -5,6 +5,7 @@ import TileLayer from 'ol/layer/Tile';
 import { SettingsService } from '../services/settings.service';
 import { MapService } from '../services/map.service';
 import { Map as OLMap } from 'ol';
+import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 
 export function createLayerManager(
   // Services
@@ -33,6 +34,36 @@ class LayerManager {
 
     this.registerListeners();
     this.reloadAllLayers();
+
+    this.fileStuff();
+  }
+
+  private async fileStuff() {
+    console.log('#### checkPermissions()');
+
+    const permissionResult = await Filesystem.checkPermissions();
+    console.log('#### Permissions:', JSON.stringify(permissionResult));
+
+    const readResult1 = await Filesystem.readdir({
+      directory: Directory.Cache,
+      path: '',
+    });
+    console.log('#### Read 1:', JSON.stringify(readResult1));
+
+    const writeResult = await Filesystem.writeFile({
+      directory: Directory.Cache,
+      path: 'a/b/c.txt',
+      recursive: true,
+      data: 'Hello, world!',
+      encoding: Encoding.UTF8,
+    });
+    console.log('#### Write:', JSON.stringify(writeResult));
+
+    const readResult2 = await Filesystem.readdir({
+      directory: Directory.Cache,
+      path: '',
+    });
+    console.log('#### Read 2:', JSON.stringify(readResult2));
   }
 
   private registerListeners() {
