@@ -85,6 +85,6 @@ export class LayersEditPage implements OnInit {
   }
 
   private async errorToast(textKey: string) {
-    await this.alertController.show('layersEdit.errorHeader', textKey);
+    await this.alertController.info('layersEdit.errorHeader', textKey);
   }
 }

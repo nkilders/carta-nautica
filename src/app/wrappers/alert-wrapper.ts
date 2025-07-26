@@ -30,7 +30,7 @@ export class AlertWrapper {
     return this.alertController.getTop();
   }
 
-  public async show(headerTextKey: string, messageTextKey: string) {
+  public async info(headerTextKey: string, messageTextKey: string) {
     const headerText = await this.translateService.instant(headerTextKey);
     const messageText = await this.translateService.instant(messageTextKey);
     const okText = await this.translateService.instant('general.ok');

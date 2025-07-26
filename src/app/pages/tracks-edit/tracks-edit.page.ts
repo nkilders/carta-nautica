@@ -77,6 +77,6 @@ export class TracksEditPage implements OnInit {
   }
 
   private async errorToast(textKey: string) {
-    await this.alertController.show('tracksEdit.errorHeader', textKey);
+    await this.alertController.info('tracksEdit.errorHeader', textKey);
   }
 }

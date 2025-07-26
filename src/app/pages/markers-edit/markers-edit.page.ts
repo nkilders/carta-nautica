@@ -77,6 +77,6 @@ export class MarkersEditPage implements OnInit {
   }
 
   private async errorToast(textKey: string) {
-    await this.alertController.show('markersEdit.errorHeader', textKey);
+    await this.alertController.info('markersEdit.errorHeader', textKey);
   }
 }
