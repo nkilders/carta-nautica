@@ -130,28 +130,17 @@ export class MarkersPage implements OnInit {
     const deleteTitleText = this.translateService.instant(
       'markers.deleteConfirmHeader',
     );
-    const cancelText = this.translateService.instant('general.cancel');
     const deleteText = this.translateService.instant('general.delete');
 
-    const alert = await this.alertController.create({
-      header: deleteTitleText,
-      subHeader: marker.name,
-      buttons: [
-        {
-          text: cancelText,
-          role: 'cancel',
-        },
-        {
-          text: deleteText,
-          handler: async () => {
-            await this.markersService.delete(marker.id);
-            await alert.dismiss();
-            await this.loadMarkers();
-          },
-        },
-      ],
-    });
-
-    await alert.present();
+    await this.alertController.confirm(
+      deleteTitleText,
+      marker.name,
+      deleteText,
+      async (alert) => {
+        await this.markersService.delete(marker.id);
+        await alert.dismiss();
+        await this.loadMarkers();
+      },
+    );
   }
 }
