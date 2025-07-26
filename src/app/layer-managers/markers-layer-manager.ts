@@ -5,14 +5,17 @@ import VectorSource from 'ol/source/Vector';
 import { ZIndex } from '../utils/z-indices';
 import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
 import { addIcons } from 'ionicons';
-import { closeCircle, locate } from 'ionicons/icons';
+import { closeCircle, locate, pencil } from 'ionicons/icons';
 import { MapService } from '../services/map.service';
 import { FeatureLike } from 'ol/Feature';
 import { TranslateService } from '@ngx-translate/core';
+import { MarkersEditPage } from '../pages/markers-edit/markers-edit.page';
+import { ModalWrapper } from '../wrappers/modal-wrapper';
 
 export function createMarkersLayerManager(
   // Controllers
   actionSheetController: ActionSheetWrapper,
+  modalController: ModalWrapper,
   // Services
   mapService: MapService,
   markersService: MarkersService,
@@ -20,6 +23,7 @@ export function createMarkersLayerManager(
 ) {
   return new MarkersLayerManager(
     actionSheetController,
+    modalController,
     mapService,
     markersService,
     translateService,
@@ -33,6 +37,7 @@ class MarkersLayerManager {
   constructor(
     // Controllers
     private readonly actionSheetController: ActionSheetWrapper,
+    private readonly modalController: ModalWrapper,
     // Services
     private readonly mapService: MapService,
     private readonly markersService: MarkersService,
@@ -44,6 +49,7 @@ class MarkersLayerManager {
     addIcons({
       closeCircle,
       locate,
+      pencil,
     });
 
     this.createLayer(this.layerSource);
@@ -109,6 +115,7 @@ class MarkersLayerManager {
 
   private async showMarkerActionSheet(marker: Marker) {
     const flyToText = this.translateService.instant('markerClick.flyTo');
+    const editText = this.translateService.instant('general.edit');
     const cancelText = this.translateService.instant('general.cancel');
 
     const actionSheet = await this.actionSheetController.create({
@@ -120,6 +127,13 @@ class MarkersLayerManager {
           handler: async () => {
             const { longitude, latitude } = marker;
             this.mapService.flyTo(longitude, latitude, 15, 1000);
+          },
+        },
+        {
+          text: editText,
+          icon: 'pencil',
+          handler: async () => {
+            this.editMarker(marker);
           },
         },
         {
@@ -156,5 +170,20 @@ class MarkersLayerManager {
     });
 
     this.markers.clear();
+  }
+
+  private async editMarker(marker: Marker) {
+    const modal = await this.modalController.create({
+      component: MarkersEditPage,
+      componentProps: {
+        marker,
+      },
+    });
+
+    modal.onWillDismiss().then(async () => {
+      await this.reloadAllMarkers();
+    });
+
+    await modal.present();
   }
 }

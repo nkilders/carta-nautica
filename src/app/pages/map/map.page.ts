@@ -173,6 +173,7 @@ export class MapPage implements OnInit {
     createBoatLayerManager(this.geolocation, this.mapService);
     createMarkersLayerManager(
       this.actionSheetController,
+      this.modalController,
       this.mapService,
       this.markersService,
       this.translateService,
