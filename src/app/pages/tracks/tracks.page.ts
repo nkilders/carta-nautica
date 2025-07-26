@@ -135,29 +135,18 @@ export class TracksPage implements OnInit {
     const deleteTitleText = this.translateService.instant(
       'tracks.deleteConfirmHeader',
     );
-    const cancelText = this.translateService.instant('general.cancel');
     const deleteText = this.translateService.instant('general.delete');
 
-    const alert = await this.alertController.create({
-      header: deleteTitleText,
-      subHeader: track.name,
-      buttons: [
-        {
-          text: cancelText,
-          role: 'cancel',
-        },
-        {
-          text: deleteText,
-          handler: async () => {
-            await this.tracksService.delete(track.id);
-            await alert.dismiss();
-            await this.loadTracks();
-          },
-        },
-      ],
-    });
-
-    await alert.present();
+    await this.alertController.confirm(
+      deleteTitleText,
+      track.name,
+      deleteText,
+      async (alert) => {
+        await this.tracksService.delete(track.id);
+        await alert.dismiss();
+        await this.loadTracks();
+      },
+    );
   }
 
   private async loadTracks() {

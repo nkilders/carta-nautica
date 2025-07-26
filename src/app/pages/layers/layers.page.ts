@@ -150,28 +150,17 @@ export class LayersPage implements OnInit {
     const deleteTitleText = this.translateService.instant(
       'layers.deleteConfirmHeader',
     );
-    const cancelText = this.translateService.instant('general.cancel');
     const deleteText = this.translateService.instant('general.delete');
 
-    const alert = await this.alertController.create({
-      header: deleteTitleText,
-      subHeader: layer.name,
-      buttons: [
-        {
-          text: cancelText,
-          role: 'cancel',
-        },
-        {
-          text: deleteText,
-          handler: async () => {
-            await this.layerService.delete(layer.id);
-            await alert.dismiss();
-            await this.loadLayers();
-          },
-        },
-      ],
-    });
-
-    await alert.present();
+    await this.alertController.confirm(
+      deleteTitleText,
+      layer.name,
+      deleteText,
+      async (alert) => {
+        await this.layerService.delete(layer.id);
+        await alert.dismiss();
+        await this.loadLayers();
+      },
+    );
   }
 }

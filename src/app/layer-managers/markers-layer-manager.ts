@@ -5,14 +5,19 @@ import VectorSource from 'ol/source/Vector';
 import { ZIndex } from '../utils/z-indices';
 import { ActionSheetWrapper } from '../wrappers/action-sheet-wrapper';
 import { addIcons } from 'ionicons';
-import { closeCircle, locate } from 'ionicons/icons';
+import { closeCircle, locate, pencil, trash } from 'ionicons/icons';
 import { MapService } from '../services/map.service';
 import { FeatureLike } from 'ol/Feature';
 import { TranslateService } from '@ngx-translate/core';
+import { MarkersEditPage } from '../pages/markers-edit/markers-edit.page';
+import { ModalWrapper } from '../wrappers/modal-wrapper';
+import { AlertWrapper } from '../wrappers/alert-wrapper';
 
 export function createMarkersLayerManager(
   // Controllers
   actionSheetController: ActionSheetWrapper,
+  alertController: AlertWrapper,
+  modalController: ModalWrapper,
   // Services
   mapService: MapService,
   markersService: MarkersService,
@@ -20,6 +25,8 @@ export function createMarkersLayerManager(
 ) {
   return new MarkersLayerManager(
     actionSheetController,
+    alertController,
+    modalController,
     mapService,
     markersService,
     translateService,
@@ -33,6 +40,8 @@ class MarkersLayerManager {
   constructor(
     // Controllers
     private readonly actionSheetController: ActionSheetWrapper,
+    private readonly alertController: AlertWrapper,
+    private readonly modalController: ModalWrapper,
     // Services
     private readonly mapService: MapService,
     private readonly markersService: MarkersService,
@@ -44,6 +53,8 @@ class MarkersLayerManager {
     addIcons({
       closeCircle,
       locate,
+      pencil,
+      trash,
     });
 
     this.createLayer(this.layerSource);
@@ -109,6 +120,8 @@ class MarkersLayerManager {
 
   private async showMarkerActionSheet(marker: Marker) {
     const flyToText = this.translateService.instant('markerClick.flyTo');
+    const editText = this.translateService.instant('general.edit');
+    const deleteText = this.translateService.instant('general.delete');
     const cancelText = this.translateService.instant('general.cancel');
 
     const actionSheet = await this.actionSheetController.create({
@@ -121,6 +134,16 @@ class MarkersLayerManager {
             const { longitude, latitude } = marker;
             this.mapService.flyTo(longitude, latitude, 15, 1000);
           },
+        },
+        {
+          text: editText,
+          icon: 'pencil',
+          handler: async () => this.editMarker(marker),
+        },
+        {
+          text: deleteText,
+          icon: 'trash',
+          handler: async () => this.confirmDeleteMarker(marker),
         },
         {
           text: cancelText,
@@ -156,5 +179,38 @@ class MarkersLayerManager {
     });
 
     this.markers.clear();
+  }
+
+  private async editMarker(marker: Marker) {
+    const modal = await this.modalController.create({
+      component: MarkersEditPage,
+      componentProps: {
+        marker,
+      },
+    });
+
+    modal.onWillDismiss().then(async () => {
+      await this.reloadAllMarkers();
+    });
+
+    await modal.present();
+  }
+
+  private async confirmDeleteMarker(marker: Marker) {
+    const deleteTitleText = this.translateService.instant(
+      'markers.deleteConfirmHeader',
+    );
+    const deleteText = this.translateService.instant('general.delete');
+
+    await this.alertController.confirm(
+      deleteTitleText,
+      marker.name,
+      deleteText,
+      async (alert) => {
+        await this.markersService.delete(marker.id);
+        await alert.dismiss();
+        await this.reloadAllMarkers();
+      },
+    );
   }
 }

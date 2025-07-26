@@ -47,4 +47,30 @@ export class AlertWrapper {
 
     await toast.present();
   }
+
+  public async confirm(
+    headerText: string,
+    subheaderText: string,
+    confirmButtonText: string,
+    callback: (alert: HTMLIonAlertElement) => Promise<void>,
+  ) {
+    const cancelText = this.translateService.instant('general.cancel');
+
+    const alert = await this.alertController.create({
+      header: headerText,
+      subHeader: subheaderText,
+      buttons: [
+        {
+          text: cancelText,
+          role: 'cancel',
+        },
+        {
+          text: confirmButtonText,
+          handler: callback,
+        },
+      ],
+    });
+
+    await alert.present();
+  }
 }
