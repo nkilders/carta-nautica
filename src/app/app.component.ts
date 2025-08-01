@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import {
   IonApp,
   IonSplitPane,
@@ -44,6 +44,7 @@ import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { LineChart } from 'echarts/charts';
 import { GridComponent } from 'echarts/components';
+import { ShepherdService } from 'angular-shepherd';
 
 echarts.use([
   // Renderers
@@ -77,7 +78,7 @@ echarts.use([
   ],
   providers: [ModalWrapper, ModalController, provideEchartsCore({ echarts })],
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   public appPages = [
     { title: 'sidebar.layers', icon: 'layers', page: LayersPage },
     { title: 'sidebar.tracks', icon: 'analytics', page: TracksPage },
@@ -94,6 +95,7 @@ export class AppComponent {
     // Services
     private readonly settingsService: SettingsService,
     private readonly translateService: TranslateService,
+    private readonly shepherdService: ShepherdService,
   ) {
     this.settingsService.getLanguage().then((language) => {
       this.translateService.setDefaultLang(language);
@@ -113,6 +115,36 @@ export class AppComponent {
       trailSignOutline,
       trailSignSharp,
     });
+  }
+
+  ngAfterViewInit() {
+    this.shepherdService.modal = false;
+    this.shepherdService.confirmCancel = false;
+    this.shepherdService.defaultStepOptions = {};
+    this.shepherdService.addSteps([
+      {
+        title: 'Welcome to Carta Nautica',
+        text: 'This is a test step',
+        attachTo: {
+          element: 'ion-toolbar',
+        },
+        buttons: [
+          {
+            classes: 'shepherd-button-secondary',
+            text: 'Exit',
+          },
+          {
+            classes: 'shepherd-button-primary',
+            text: 'Back',
+          },
+          {
+            classes: 'shepherd-button-primary',
+            text: 'Next',
+          },
+        ],
+      },
+    ]);
+    this.shepherdService.start();
   }
 
   public async openModal(page: any) {
