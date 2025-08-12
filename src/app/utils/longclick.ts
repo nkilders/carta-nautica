@@ -28,7 +28,11 @@ export class LongClick {
 
       const { clientX, clientY } = event.touches[0];
 
-      this.startClick(clientX, clientY);
+      const mapRect = targetElement.getBoundingClientRect();
+      const x = clientX - mapRect.x;
+      const y = clientY - mapRect.y;
+
+      this.startClick(x, y);
     });
 
     targetElement.addEventListener('mousedown', (event) => {
