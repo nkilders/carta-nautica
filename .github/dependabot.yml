@@ -31,6 +31,6 @@ updates:
       interval: monthly
 
   - package-ecosystem: gradle
-    directory: /android
+    directory: android
     schedule:
       interval: monthly
