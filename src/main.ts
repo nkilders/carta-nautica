@@ -33,7 +33,8 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(
       TranslateModule.forRoot({
-        defaultLanguage: 'de',
+        fallbackLang: 'en',
+        lang: 'de',
         loader: {
           provide: TranslateLoader,
           useFactory: createTranslateLoader,

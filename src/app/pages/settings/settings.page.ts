@@ -104,7 +104,7 @@ export class SettingsPage implements OnInit {
   protected async updateLanguage() {
     const value = this.language;
     await this.settingsService.setLanguage(value);
-    this.translateService.setDefaultLang(value);
+    this.translateService.use(value);
   }
 
   protected async updateMapPreloading() {

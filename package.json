@@ -36,7 +36,7 @@
     "@capacitor/status-bar": "7.0.2",
     "@ionic/angular": "^8.6.1",
     "@ionic/storage-angular": "^4.0.0",
-    "@ngx-translate/core": "^16.0.4",
+    "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^16.0.1",
     "cordova-plugin-nativegeocoder": "^3.5.1",
     "country-code-emoji": "^2.3.0",
