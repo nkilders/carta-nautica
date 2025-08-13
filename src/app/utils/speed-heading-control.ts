@@ -23,7 +23,6 @@ export class SpeedHeadingControl extends Control {
 
     this.button = this.initButton();
 
-    this.updateText(null, null);
     this.initListeners();
   }
 
@@ -36,6 +35,8 @@ export class SpeedHeadingControl extends Control {
     );
     button.addEventListener('click', () => this.cycleSpeedUnit());
     this.element.appendChild(button);
+
+    this.updateText(null, null);
 
     return button;
   }
