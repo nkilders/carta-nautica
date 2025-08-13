@@ -96,7 +96,7 @@ export class AppComponent {
     private readonly translateService: TranslateService,
   ) {
     this.settingsService.getLanguage().then((language) => {
-      this.translateService.setDefaultLang(language);
+      this.translateService.setFallbackLang(language);
     });
 
     this.initKeepAwake();
