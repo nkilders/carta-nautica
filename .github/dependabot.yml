@@ -5,29 +5,31 @@
 
 version: 2
 updates:
-  - package-ecosystem: 'npm'
-    directory: '/'
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: 'monthly'
+      interval: monthly
     groups:
       angular-packages:
         patterns:
-          - "@angular/*"
-          - "@angular-devkit/*"
+          - '@angular/*'
+          - '@angular-devkit/*'
       angular-eslint-packages:
         patterns:
-          - "@angular-eslint/*"
+          - '@angular-eslint/*'
       typescript-eslint-packages:
         patterns:
-          - "@typescript-eslint/*"
+          - '@typescript-eslint/*'
       capacitor-packages:
         patterns:
-          - "@capacitor/*"
-          - "@capacitor-community/*"
-  - package-ecosystem: 'github-actions'
-    directory: '/'
+          - '@capacitor/*'
+          - '@capacitor-community/*'
+
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: 'monthly'
+      interval: monthly
+
   - package-ecosystem: gradle
     directory: /android
     schedule:
