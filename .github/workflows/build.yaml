@@ -2,6 +2,10 @@ name: Build Project
 
 on: push
 
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
