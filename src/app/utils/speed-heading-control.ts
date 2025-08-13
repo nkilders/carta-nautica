@@ -5,10 +5,10 @@ import { UnitService } from '../services/unit.service';
 import { SpeedUnit } from '../models/settings';
 
 export class SpeedHeadingControl extends Control {
-  private readonly speedElement: HTMLButtonElement;
-  private readonly headingElement: HTMLButtonElement;
+  private readonly button: HTMLButtonElement;
 
   private speed: number = 0;
+  private heading: number = 0;
 
   constructor(
     private readonly geolocationService: GeolocationService,
@@ -21,55 +21,37 @@ export class SpeedHeadingControl extends Control {
 
     super({ element });
 
-    this.speedElement = this.initSpeedElement();
-    this.headingElement = this.initHeadingElement();
+    this.button = this.initButton();
 
-    this.updateSpeedText(null);
-    this.updateHeadingText(null);
-    this.initPositionWatch();
-    this.initSettingsListeners();
+    this.initListeners();
   }
 
-  private initSpeedElement() {
-    const speedElement = document.createElement('button');
+  private initButton() {
+    const button = document.createElement('button');
 
-    speedElement.setAttribute(
+    button.setAttribute(
       'style',
-      'height: 2.75em; width: auto; float: left; margin-right: 0.25em; padding: 0 10px;',
+      'height: 2.75em; width: auto; float: left; padding: 0 10px; line-height: 1; text-align: start;',
     );
-    speedElement.addEventListener('click', () => this.handleSpeedClick());
-    this.element.appendChild(speedElement);
+    button.addEventListener('click', () => this.cycleSpeedUnit());
+    this.element.appendChild(button);
 
-    return speedElement;
+    this.updateText(null, null);
+
+    return button;
   }
 
-  private initHeadingElement() {
-    const headingElement = document.createElement('button');
-
-    headingElement.setAttribute(
-      'style',
-      'height: 2.75em; width: auto; float: left; padding: 0 10px;',
-    );
-    this.element.appendChild(headingElement);
-
-    return headingElement;
-  }
-
-  private initPositionWatch() {
+  private initListeners() {
     this.geolocationService.watchPosition((position) => {
-      this.updateSpeedText(position.coords.speed);
-      this.updateHeadingText(position.coords.heading);
-      this.changed();
+      this.updateText(position.coords.speed, position.coords.heading);
     });
-  }
 
-  private initSettingsListeners() {
     this.settingsService.on('speedUnit', () => {
-      this.updateSpeedText(this.speed);
+      this.updateText(this.speed, this.heading);
     });
   }
 
-  private async handleSpeedClick() {
+  private async cycleSpeedUnit() {
     const oldSpeedUnit = await this.settingsService.getSpeedUnit();
     const numberOfSpeedUnits = Object.keys(SpeedUnit).length / 2;
 
@@ -78,10 +60,12 @@ export class SpeedHeadingControl extends Control {
     await this.settingsService.setSpeedUnit(newSpeedUnit);
   }
 
-  private async updateSpeedText(speed: number | null) {
+  private async updateText(speed: number | null, heading: number | null) {
     speed ??= 0;
+    heading ??= 0;
 
     this.speed = speed;
+    this.heading = heading;
 
     const convertedSpeed = await this.unitService.convertSpeed(
       this.speed,
@@ -91,12 +75,8 @@ export class SpeedHeadingControl extends Control {
     const value = convertedSpeed.value.toFixed(1);
     const unit = convertedSpeed.unitText;
 
-    this.speedElement.innerHTML = `${value} ${unit}`;
-  }
+    this.button.innerHTML = `${value} ${unit}<br>${this.heading.toFixed(0)}°`;
 
-  private updateHeadingText(heading: number | null) {
-    heading ??= 0;
-
-    this.headingElement.innerHTML = `${heading.toFixed(0)}°`;
+    this.changed();
   }
 }
