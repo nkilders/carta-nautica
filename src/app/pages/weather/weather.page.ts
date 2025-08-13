@@ -246,7 +246,7 @@ export class WeatherPage implements OnInit {
       lon: this.longitude.toString(),
       appid: apiKey,
       units: 'metric',
-      lang: this.translateService.getFallbackLang() || 'de',
+      lang: this.translateService.getCurrentLang(),
     }).toString();
 
     const res = await fetch(`${FORECAST_API_URL}?${params}`, {
