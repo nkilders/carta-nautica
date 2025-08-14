@@ -16,7 +16,7 @@ export function createBoatLayerManager(
   return new BoatLayerManager(geolocationService, mapService);
 }
 
-const ICON_URL = '/assets/boat-marker.png';
+const ICON_URL = '/assets/boat.svg';
 
 class BoatLayerManager {
   private readonly boatFeature: Feature<Point>;
@@ -64,7 +64,7 @@ class BoatLayerManager {
     return new Icon({
       anchor: [0.5, 0.5],
       src: ICON_URL,
-      scale: 0.04,
+      scale: 0.06,
       rotateWithView: true,
     });
   }
