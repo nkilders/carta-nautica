@@ -39,9 +39,9 @@ export class GeolocationService {
     this.positionWatchCallbacks.set(watchId, callback);
 
     Geolocation.watchPosition(this.options, (position) => {
-      if (position == null) return;
+      if (!position) return;
       this.updatePosition(position);
-      this.positionWatchCallbacks.forEach((cb) => cb(position));
+      this.sendCurrentPositionToWatchListeners();
     });
 
     return watchId;
@@ -63,8 +63,9 @@ export class GeolocationService {
   public async loadLastKnownPosition() {
     const position = await this.storageService.get(STORAGE_KEY);
 
-    if (position) {
+    if (position && position.timestamp > this.position.timestamp) {
       this.position = position;
+      this.sendCurrentPositionToWatchListeners();
     }
 
     return this.position;
@@ -77,6 +78,10 @@ export class GeolocationService {
       STORAGE_KEY,
       JSON.parse(JSON.stringify(this.position)),
     );
+  }
+
+  private sendCurrentPositionToWatchListeners() {
+    this.positionWatchCallbacks.forEach((cb) => cb(this.position));
   }
 
   private defaultPosition(): Position {
