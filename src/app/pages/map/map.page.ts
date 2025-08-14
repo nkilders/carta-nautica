@@ -338,17 +338,15 @@ export class MapPage implements OnInit {
   }
 
   private async initPositionWatch() {
-    await this.focusLastKnownPosition();
+    const { timestamp, coords } =
+      await this.geolocation.loadLastKnownPosition();
+    if (timestamp !== -1) {
+      this.mapService.focus(coords.longitude, coords.latitude, 15);
+    }
+
     await this.geolocation.watchPosition((pos) => {
       this.onPositionChanged(pos);
     });
-  }
-
-  private async focusLastKnownPosition() {
-    const pos = await this.geolocation.loadLastKnownPosition();
-    if (pos.timestamp !== -1) {
-      this.mapService.focus(pos.coords.longitude, pos.coords.latitude, 15);
-    }
   }
 
   private initSettingsListeners() {
