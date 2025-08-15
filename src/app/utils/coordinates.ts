@@ -1,13 +1,14 @@
 import { getUserProjection } from 'ol/proj';
 
+const { PI, sin, cos, atan2, asin, sqrt } = Math;
+const EARTH_RADIUS_METERS = 6_371_000;
+
 export function geoDistance(
   lat1: number,
   lon1: number,
   lat2: number,
   lon2: number,
 ) {
-  const earthRadiusKm = 6371;
-
   const dLat = radians(lat2 - lat1);
   const dLon = radians(lon2 - lon1);
 
@@ -15,20 +16,20 @@ export function geoDistance(
   lat2 = radians(lat2);
 
   const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    sin(dLat / 2) * sin(dLat / 2) +
+    sin(dLon / 2) * sin(dLon / 2) * cos(lat1) * cos(lat2);
+  const c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
-  return earthRadiusKm * c;
+  return (EARTH_RADIUS_METERS / 1000) * c;
 }
 
 // https://stackoverflow.com/a/67582451/19471211
 export function toProjectedDistance(distanceMeters: number, latitude: number) {
   const latitudeRadians = radians(latitude);
-  const factor = Math.cos(latitudeRadians);
-  const metersPeterUnit = getUserProjection()!.getMetersPerUnit()!;
+  const factor = cos(latitudeRadians);
+  const metersPerUnit = getUserProjection()!.getMetersPerUnit()!;
 
-  return (distanceMeters / metersPeterUnit) * factor;
+  return (distanceMeters / metersPerUnit) * factor;
 }
 
 /**
@@ -52,21 +53,46 @@ export function calculateBearing(
   const diffLong = radians(lon2 - lon1);
 
   // Calculate bearing
-  const x = Math.sin(diffLong) * Math.cos(lat2);
-  const y =
-    Math.cos(lat1) * Math.sin(lat2) -
-    Math.sin(lat1) * Math.cos(lat2) * Math.cos(diffLong);
-  let initialBearing = Math.atan2(x, y);
+  const x = sin(diffLong) * cos(lat2);
+  const y = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(diffLong);
+  let initialBearing = atan2(x, y);
 
   // Convert to degrees and normalize to 0-360
   initialBearing = degrees(initialBearing);
   return (initialBearing + 360) % 360;
 }
 
+/**
+ * @param latitude latitude in degrees
+ * @param longitude longitude in degrees
+ * @param distance distance in meters
+ * @param bearing bearing in degrees
+ *
+ * @returns target coordinates in degrees
+ */
+export function offsetCoordinate(
+  latitude: number,
+  longitude: number,
+  distance: number,
+  bearing: number,
+): { latitude: number; longitude: number } {
+  const d = distance / EARTH_RADIUS_METERS;
+
+  const rad = radians(bearing);
+  const lat1 = radians(latitude);
+  const lon1 = radians(longitude);
+
+  const lat2 = asin(sin(lat1) * cos(d) + cos(lat1) * sin(d) * cos(rad));
+  const lon2 =
+    lon1 + atan2(sin(rad) * sin(d) * cos(lat1), cos(d) - sin(lat1) * sin(lat2));
+
+  return { latitude: degrees(lat2), longitude: degrees(lon2) };
+}
+
 export function radians(degrees: number) {
-  return degrees * (Math.PI / 180);
+  return degrees * (PI / 180);
 }
 
 export function degrees(radians: number) {
-  return radians * (180 / Math.PI);
+  return radians * (180 / PI);
 }
