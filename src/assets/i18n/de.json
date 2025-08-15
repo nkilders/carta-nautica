@@ -29,6 +29,7 @@
     "keepScreenAwake": "Bildschirm immer aktiv",
     "animations": "Animationen",
     "positionAccuracy": "Positionsgenauigkeit anzeigen",
+    "courseLine": "Kurslinie",
     "openWeatherMapApiKey": "OpenWeatherMap API-Schlüssel"
   },
   "layers": {

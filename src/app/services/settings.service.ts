@@ -148,6 +148,21 @@ export class SettingsService {
     await this.save();
   }
 
+  public async getCourseLine() {
+    await this.init();
+
+    return this.settings!.courseLine;
+  }
+
+  public async setCourseLine(courseLine: boolean) {
+    await this.init();
+
+    this.settings!.courseLine = courseLine;
+    this.eventEmitter.emit('courseLine', courseLine);
+
+    await this.save();
+  }
+
   public async getOpenWeatherMapApiKey() {
     await this.init();
 
@@ -174,6 +189,7 @@ export class SettingsService {
   on(event: 'keepAwake', listener: (newValue: boolean) => void): void;
   on(event: 'animations', listener: (newValue: boolean) => void): void;
   on(event: 'positionAccuracy', listener: (newValue: boolean) => void): void;
+  on(event: 'courseLine', listener: (newValue: boolean) => void): void;
   on(event: 'openWeatherMapApiKey', listener: (newValue: string) => void): void;
 
   public on(event: string, listener: (...args: any) => void) {
@@ -207,6 +223,7 @@ export class SettingsService {
       keepAwake: true,
       animations: true,
       positionAccuracy: false,
+      courseLine: false,
       openWeatherMapApiKey: '',
     };
   }

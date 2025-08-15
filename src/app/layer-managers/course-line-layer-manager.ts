@@ -1,9 +1,7 @@
 import { Position } from '@capacitor/geolocation';
 import { Feature } from 'ol';
-import { Point } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import { ZIndex } from '../utils/z-indices';
 import { MapService } from '../services/map.service';
@@ -11,25 +9,33 @@ import { GeolocationService } from '../services/geolocation.service';
 import { LineString } from 'ol/geom';
 import Stroke from 'ol/style/Stroke';
 import { radians } from '../utils/coordinates';
+import { SettingsService } from '../services/settings.service';
 
 export function createCourseLineLayerManager(
   geolocationService: GeolocationService,
   mapService: MapService,
+  settingsService: SettingsService,
 ) {
-  return new CourseLineLayerManager(geolocationService, mapService);
+  return new CourseLineLayerManager(
+    geolocationService,
+    mapService,
+    settingsService,
+  );
 }
 
 const ICON_URL = '/assets/boat-marker.png';
 
 class CourseLineLayerManager {
   private readonly headingFeature: Feature<LineString>;
+  private readonly layer: VectorLayer;
 
   constructor(
     private readonly geolocationService: GeolocationService,
     private readonly mapService: MapService,
+    private readonly settingsService: SettingsService,
   ) {
     this.headingFeature = this.createHeadingFeature();
-    this.createLayer([this.headingFeature]);
+    this.layer = this.createLayer([this.headingFeature]);
 
     this.setInitialPosition();
     this.registerListeners();
@@ -45,6 +51,10 @@ class CourseLineLayerManager {
   private registerListeners() {
     this.geolocationService.watchPosition((position) => {
       this.updatePosition(position);
+    });
+
+    this.settingsService.on('courseLine', (visible) => {
+      this.layer.setVisible(visible);
     });
   }
 
@@ -91,6 +101,12 @@ class CourseLineLayerManager {
       zIndex: ZIndex.COURSE_LINE,
     });
 
+    this.settingsService.getCourseLine().then((visible) => {
+      layer.setVisible(visible);
+    });
+
     this.mapService.getMap().addLayer(layer);
+
+    return layer;
   }
 }
