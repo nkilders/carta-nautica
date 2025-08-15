@@ -8,7 +8,7 @@ import { MapService } from '../services/map.service';
 import { GeolocationService } from '../services/geolocation.service';
 import { LineString } from 'ol/geom';
 import Stroke from 'ol/style/Stroke';
-import { radians } from '../utils/coordinates';
+import { degrees, radians } from '../utils/coordinates';
 import { SettingsService } from '../services/settings.service';
 
 export function createCourseLineLayerManager(
@@ -59,10 +59,27 @@ class CourseLineLayerManager {
   private updatePosition(position: Position) {
     const { longitude, latitude } = position.coords;
     const heading = position.coords.heading ?? 0;
+
+    const R = 6_371_000; // Earth radius in meters
+    const length = 10_000; // Length of the line in meters
+
     const rad = radians(heading);
-    const length = 0.09;
-    const targetLon = longitude + Math.sin(rad) * length;
-    const targetLat = latitude + Math.cos(rad) * length;
+    const lat1 = radians(latitude);
+    const lon1 = radians(longitude);
+
+    const lat2 = Math.asin(
+      Math.sin(lat1) * Math.cos(length / R) +
+        Math.cos(lat1) * Math.sin(length / R) * Math.cos(rad),
+    );
+    const lon2 =
+      lon1 +
+      Math.atan2(
+        Math.sin(rad) * Math.sin(length / R) * Math.cos(lat1),
+        Math.cos(length / R) - Math.sin(lat1) * Math.sin(lat2),
+      );
+
+    const targetLat = degrees(lat2);
+    const targetLon = degrees(lon2);
 
     this.headingFeature.setGeometry(
       new LineString([
