@@ -23,8 +23,6 @@ export function createCourseLineLayerManager(
   );
 }
 
-const ICON_URL = '/assets/boat-marker.png';
-
 class CourseLineLayerManager {
   private readonly headingFeature: Feature<LineString>;
   private readonly layer: VectorLayer;
