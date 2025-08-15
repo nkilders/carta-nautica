@@ -60,7 +60,7 @@ class CourseLineLayerManager {
     const { longitude, latitude } = position.coords;
     const heading = position.coords.heading ?? 0;
     const rad = radians(heading);
-    const length = 0.09045;
+    const length = 0.09;
     const targetLon = longitude + Math.sin(rad) * length;
     const targetLat = latitude + Math.cos(rad) * length;
 
