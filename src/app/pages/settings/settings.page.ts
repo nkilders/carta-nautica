@@ -51,6 +51,7 @@ export class SettingsPage implements OnInit {
   public keepAwake = false;
   public animations = false;
   public positionAccuracy = false;
+  public courseLine = false;
   public openWeatherMapApiKey = '';
 
   constructor(
@@ -121,6 +122,10 @@ export class SettingsPage implements OnInit {
 
   protected async updatePositionAccuracy() {
     await this.settingsService.setPositionAccuracy(this.positionAccuracy);
+  }
+
+  protected async updateCourseLine() {
+    await this.settingsService.setCourseLine(this.courseLine);
   }
 
   protected async updateOpenWeatherMapApiKey() {

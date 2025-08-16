@@ -7,6 +7,7 @@ export interface Settings {
   keepAwake: boolean;
   animations: boolean;
   positionAccuracy: boolean;
+  courseLine: boolean;
   openWeatherMapApiKey: string;
 }
 

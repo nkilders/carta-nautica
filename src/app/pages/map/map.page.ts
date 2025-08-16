@@ -53,6 +53,7 @@ import { createRoutePlanningLayerManager } from 'src/app/layer-managers/route-pl
 import { RoutePlanningService } from 'src/app/services/route-planning.service';
 import { createSeamarkLayerManager } from 'src/app/layer-managers/seamark-layer-manager';
 import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
+import { createCourseLineLayerManager } from 'src/app/layer-managers/course-line-layer-manager';
 
 @Component({
   selector: 'app-map',
@@ -173,6 +174,11 @@ export class MapPage implements OnInit {
       this.settingsService,
     );
     createBoatLayerManager(this.geolocation, this.mapService);
+    createCourseLineLayerManager(
+      this.geolocation,
+      this.mapService,
+      this.settingsService,
+    );
     createMarkersLayerManager(
       this.actionSheetController,
       this.alertController,
