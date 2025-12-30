@@ -16,6 +16,7 @@ updates:
           - '@angular/*'
           - '@angular-devkit/*'
           - '@angular-eslint/*'
+          - 'ngx-echarts'
       typescript-eslint-packages:
         patterns:
           - '@typescript-eslint/*'
