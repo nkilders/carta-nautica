@@ -54,6 +54,7 @@ import { RoutePlanningService } from 'src/app/services/route-planning.service';
 import { createSeamarkLayerManager } from 'src/app/layer-managers/seamark-layer-manager';
 import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
 import { createCourseLineLayerManager } from 'src/app/layer-managers/course-line-layer-manager';
+import { RoutePlanningControl } from 'src/app/utils/route-planning-control';
 
 @Component({
   selector: 'app-map',
@@ -155,6 +156,17 @@ export class MapPage implements OnInit {
       .addControl(
         new SpeedHeadingControl(
           this.geolocation,
+          this.settingsService,
+          this.unitService,
+        ),
+      );
+
+    this.mapService
+      .getMap()
+      .addControl(
+        new RoutePlanningControl(
+          this.geolocation,
+          this.routePlanningService,
           this.settingsService,
           this.unitService,
         ),
