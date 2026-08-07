@@ -49,7 +49,7 @@ jobs:
         run: mv ./android/app/build/outputs/apk/debug/app-debug.apk ./carta-nautica-${{ env.RELEASE_VERSION }}.apk
 
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           body_path: ./changelogs/${{ env.RELEASE_VERSION }}.md
           files: ./carta-nautica-${{ env.RELEASE_VERSION }}.apk
