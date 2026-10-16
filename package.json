@@ -82,7 +82,7 @@
   },
   "description": "An Ionic project",
   "engines": {
-    "node": "22"
+    "node": "24"
   },
   "browserslist": [
     "Chrome >=107",
