@@ -73,6 +73,7 @@ export class SettingsPage implements OnInit {
       keepAwake,
       animations,
       positionAccuracy,
+      courseLine,
       openWeatherMapApiKey,
     } = await this.settingsService.getAllSettings();
 
@@ -84,6 +85,7 @@ export class SettingsPage implements OnInit {
     this.keepAwake = keepAwake;
     this.animations = animations;
     this.positionAccuracy = positionAccuracy;
+    this.courseLine = courseLine;
     this.openWeatherMapApiKey = openWeatherMapApiKey;
   }
 
