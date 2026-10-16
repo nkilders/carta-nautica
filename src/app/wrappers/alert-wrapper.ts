@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlertController, AlertOptions } from '@ionic/angular';
+import { AlertController, AlertOptions } from '@ionic/angular/lazy';
 import { SettingsService } from '../services/settings.service';
 import { TranslateService } from '@ngx-translate/core';
 

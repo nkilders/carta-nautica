@@ -19,7 +19,7 @@ import {
   IonCol,
   IonLabel,
   IonChip,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SettingsService } from 'src/app/services/settings.service';
 import { WeatherResponse } from 'src/app/models/weather';

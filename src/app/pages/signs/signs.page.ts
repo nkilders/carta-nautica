@@ -11,7 +11,7 @@ import {
   IonCol,
   IonListHeader,
   IonNote,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { SignGroup } from 'src/app/models/signs';
 
