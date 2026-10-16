@@ -11,7 +11,7 @@ import {
   IonItem,
   IonLabel,
   IonButton,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { Track } from 'src/app/models/tracks';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';

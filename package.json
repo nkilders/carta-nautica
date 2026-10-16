@@ -34,7 +34,7 @@
     "@capacitor/haptics": "8.0.0",
     "@capacitor/keyboard": "8.0.0",
     "@capacitor/status-bar": "8.0.0",
-    "@ionic/angular": "8.7.17",
+    "@ionic/angular": "^9.0.0",
     "@ionic/storage-angular": "4.0.0",
     "@ngx-translate/core": "17.0.0",
     "@ngx-translate/http-loader": "17.0.0",
@@ -85,11 +85,11 @@
     "node": "22"
   },
   "browserslist": [
-    "Chrome >=79",
-    "ChromeAndroid >=79",
-    "Firefox >=70",
-    "Edge >=79",
-    "Safari >=14",
-    "iOS >=14"
+    "Chrome >=89",
+    "ChromeAndroid >=89",
+    "Firefox >=75",
+    "Edge >=89",
+    "Safari >=16",
+    "iOS >=16"
   ]
 }

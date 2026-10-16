@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ModalController, ModalOptions } from '@ionic/angular';
+import { ModalController, ModalOptions } from '@ionic/angular/lazy';
 import { SettingsService } from '../services/settings.service';
 
 @Injectable({

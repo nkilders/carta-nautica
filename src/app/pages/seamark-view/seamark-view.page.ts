@@ -10,7 +10,7 @@ import {
   IonList,
   IonItem,
   IonLabel,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { Seamark } from 'src/app/models/seamark';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 

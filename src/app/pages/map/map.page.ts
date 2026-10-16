@@ -11,7 +11,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { ScaleLine } from 'ol/control';
 import { GeolocationService } from '../../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';

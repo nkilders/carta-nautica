@@ -11,7 +11,7 @@ import {
   IonLabel,
   IonList,
   IonInput,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { MarkersService } from 'src/app/services/markers.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MarkerWithoutId } from 'src/app/models/markers';

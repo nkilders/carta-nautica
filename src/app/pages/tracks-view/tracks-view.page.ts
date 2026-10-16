@@ -9,7 +9,7 @@ import {
   IonList,
   IonLabel,
   IonItem,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { Track } from 'src/app/models/tracks';
 import { Map as OLMap } from 'ol';
 import { createLayerManager } from 'src/app/layer-managers/layer-manager';

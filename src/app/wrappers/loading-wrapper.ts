@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoadingController, LoadingOptions } from '@ionic/angular';
+import { LoadingController, LoadingOptions } from '@ionic/angular/lazy';
 import { SettingsService } from '../services/settings.service';
 
 @Injectable({
