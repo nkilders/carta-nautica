@@ -91,5 +91,11 @@
     "Edge >=89",
     "Safari >=16",
     "iOS >=16"
-  ]
+  ],
+  "allowScripts": {
+    "@parcel/watcher@2.5.1": true,
+    "esbuild@0.25.9": true,
+    "lmdb@3.4.2": true,
+    "msgpackr-extract@3.0.3": true
+  }
 }
