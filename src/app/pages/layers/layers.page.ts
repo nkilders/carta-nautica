@@ -16,7 +16,7 @@ import {
   IonIcon,
   IonFab,
   IonFabButton,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Layer } from 'src/app/models/layers';
 import { add, ellipsisVertical, pencil, trash } from 'ionicons/icons';

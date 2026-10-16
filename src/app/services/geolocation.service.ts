@@ -95,6 +95,10 @@ export class GeolocationService {
         altitudeAccuracy: null,
         heading: null,
         speed: null,
+        trueHeading: null,
+        magneticHeading: null,
+        headingAccuracy: null,
+        course: null,
       },
     };
   }

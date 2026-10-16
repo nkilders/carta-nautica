@@ -12,7 +12,7 @@ import {
   IonButtons,
   IonIcon,
   IonButton,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Marker } from 'src/app/models/markers';
 import { addIcons } from 'ionicons';
