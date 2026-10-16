@@ -13,7 +13,7 @@ import {
   IonIcon,
   IonLabel,
   IonRouterOutlet,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
@@ -28,7 +28,7 @@ import {
   locationSharp,
   locationOutline,
 } from 'ionicons/icons';
-import { ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular/lazy';
 import { LayersPage } from './pages/layers/layers.page';
 import { TracksPage } from './pages/tracks/tracks.page';
 import { SettingsPage } from './pages/settings/settings.page';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActionSheetController, ActionSheetOptions } from '@ionic/angular';
+import { ActionSheetController, ActionSheetOptions } from '@ionic/angular/lazy';
 import { SettingsService } from '../services/settings.service';
 
 @Injectable({

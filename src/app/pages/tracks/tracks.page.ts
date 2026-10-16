@@ -14,7 +14,7 @@ import {
   IonButton,
   IonNote,
   IonCol,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Track, TrackWithoutId } from 'src/app/models/tracks';
 import { addIcons } from 'ionicons';

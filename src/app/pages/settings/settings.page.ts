@@ -14,7 +14,7 @@ import {
   IonToggle,
   IonInput,
   IonRange,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SettingsService } from 'src/app/services/settings.service';
 import { Language } from 'src/app/models/settings';
@@ -73,6 +73,7 @@ export class SettingsPage implements OnInit {
       keepAwake,
       animations,
       positionAccuracy,
+      courseLine,
       openWeatherMapApiKey,
     } = await this.settingsService.getAllSettings();
 
@@ -84,6 +85,7 @@ export class SettingsPage implements OnInit {
     this.keepAwake = keepAwake;
     this.animations = animations;
     this.positionAccuracy = positionAccuracy;
+    this.courseLine = courseLine;
     this.openWeatherMapApiKey = openWeatherMapApiKey;
   }
 

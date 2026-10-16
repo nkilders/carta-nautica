@@ -11,7 +11,7 @@ import {
   IonInput,
   IonButton,
   IonList,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LayersService } from 'src/app/services/layers.service';
 import { LayerWithoutId } from 'src/app/models/layers';
