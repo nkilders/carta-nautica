@@ -85,12 +85,12 @@
     "node": "24"
   },
   "browserslist": [
-    "Chrome >=107",
-    "ChromeAndroid >=107",
-    "Firefox >=104",
-    "Edge >=107",
-    "Safari >=16",
-    "iOS >=16"
+    "Chrome >=119",
+    "ChromeAndroid >=119",
+    "Firefox >=119",
+    "Edge >=119",
+    "Safari >=16.7",
+    "iOS >=16.7"
   ],
   "allowScripts": {
     "@parcel/watcher@2.6.0": true,
