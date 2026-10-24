@@ -12,11 +12,11 @@ import {
   IonItem,
   IonButton,
 } from '@ionic/angular';
-import { Layer } from 'src/app/models/layers';
-import { LayersService } from 'src/app/services/layers.service';
+import { Layer } from '../../models/layers';
+import { LayersService } from '../../services/layers.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-layers-edit',

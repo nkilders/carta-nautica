@@ -12,11 +12,11 @@ import {
   IonLabel,
   IonButton,
 } from '@ionic/angular';
-import { Track } from 'src/app/models/tracks';
+import { Track } from '../../models/tracks';
 import { TranslateModule } from '@ngx-translate/core';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { TracksService } from 'src/app/services/tracks.service';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { TracksService } from '../../services/tracks.service';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-tracks-edit',

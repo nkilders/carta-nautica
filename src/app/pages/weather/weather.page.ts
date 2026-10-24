@@ -21,17 +21,17 @@ import {
   IonChip,
 } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { SettingsService } from 'src/app/services/settings.service';
-import { WeatherResponse } from 'src/app/models/weather';
+import { SettingsService } from '../../services/settings.service';
+import { WeatherResponse } from '../../models/weather';
 import { addIcons } from 'ionicons';
 import { paperPlane, rainy, thermometer, water } from 'ionicons/icons';
 import { HttpStatusCode } from '@angular/common/http';
 import { SettingsPage } from '../settings/settings.page';
-import { UnitService } from 'src/app/services/unit.service';
-import { SpeedUnit, TemperatureUnit } from 'src/app/models/settings';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
-import { LoadingWrapper } from 'src/app/wrappers/loading-wrapper';
+import { UnitService } from '../../services/unit.service';
+import { SpeedUnit, TemperatureUnit } from '../../models/settings';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
+import { LoadingWrapper } from '../../wrappers/loading-wrapper';
 
 const FORECAST_API_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 

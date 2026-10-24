@@ -16,16 +16,16 @@ import {
   IonCol,
 } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Track, TrackWithoutId } from 'src/app/models/tracks';
+import { Track, TrackWithoutId } from '../../models/tracks';
 import { addIcons } from 'ionicons';
 import { ellipsisVertical, pencil, trash } from 'ionicons/icons';
-import { TracksService } from 'src/app/services/tracks.service';
-import { geoDistance } from 'src/app/utils/coordinates';
-import { UnitService } from 'src/app/services/unit.service';
-import { DistanceUnit, SpeedUnit } from 'src/app/models/settings';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
-import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
+import { TracksService } from '../../services/tracks.service';
+import { geoDistance } from '../../utils/coordinates';
+import { UnitService } from '../../services/unit.service';
+import { DistanceUnit, SpeedUnit } from '../../models/settings';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
+import { ActionSheetWrapper } from '../../wrappers/action-sheet-wrapper';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
 import { TracksViewPage } from '../tracks-view/tracks-view.page';
 import { TracksEditPage } from '../tracks-edit/tracks-edit.page';
 
