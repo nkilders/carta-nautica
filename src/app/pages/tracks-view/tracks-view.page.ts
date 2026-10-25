@@ -10,16 +10,16 @@ import {
   IonLabel,
   IonItem,
 } from '@ionic/angular';
-import { Track } from 'src/app/models/tracks';
+import { Track } from '../../models/tracks';
 import { Map as OLMap } from 'ol';
-import { createLayerManager } from 'src/app/layer-managers/layer-manager';
-import { LayersService } from 'src/app/services/layers.service';
-import { SettingsService } from 'src/app/services/settings.service';
+import { createLayerManager } from '../../layer-managers/layer-manager';
+import { LayersService } from '../../services/layers.service';
+import { SettingsService } from '../../services/settings.service';
 import { useGeographic } from 'ol/proj';
-import { createTrackViewLayerManager } from 'src/app/layer-managers/track-view-layer-manager';
-import { geoDistance } from 'src/app/utils/coordinates';
-import { DistanceUnit, SpeedUnit } from 'src/app/models/settings';
-import { UnitService } from 'src/app/services/unit.service';
+import { createTrackViewLayerManager } from '../../layer-managers/track-view-layer-manager';
+import { geoDistance } from '../../utils/coordinates';
+import { DistanceUnit, SpeedUnit } from '../../models/settings';
+import { UnitService } from '../../services/unit.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EChartsCoreOption } from 'echarts/core';
 import { NgxEchartsDirective } from 'ngx-echarts';

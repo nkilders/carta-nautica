@@ -14,15 +14,15 @@ import {
   IonButton,
 } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Marker } from 'src/app/models/markers';
+import { Marker } from '../../models/markers';
 import { addIcons } from 'ionicons';
 import { add, ellipsisVertical, locate, pencil, trash } from 'ionicons/icons';
-import { MarkersService } from 'src/app/services/markers.service';
+import { MarkersService } from '../../services/markers.service';
 import { MarkersEditPage } from '../markers-edit/markers-edit.page';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
-import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
-import { MapService } from 'src/app/services/map.service';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
+import { ActionSheetWrapper } from '../../wrappers/action-sheet-wrapper';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-markers',

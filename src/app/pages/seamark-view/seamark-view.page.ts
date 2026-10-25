@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { radians } from 'src/app/utils/coordinates';
+import { radians } from '../../utils/coordinates';
 import {
   IonHeader,
   IonToolbar,
@@ -11,7 +11,7 @@ import {
   IonItem,
   IonLabel,
 } from '@ionic/angular';
-import { Seamark } from 'src/app/models/seamark';
+import { Seamark } from '../../models/seamark';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 type DisplayArc = {

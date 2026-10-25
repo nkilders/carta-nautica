@@ -18,15 +18,15 @@ import {
   IonFabButton,
 } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Layer } from 'src/app/models/layers';
+import { Layer } from '../../models/layers';
 import { add, ellipsisVertical, pencil, trash } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
-import { LayersService } from 'src/app/services/layers.service';
+import { LayersService } from '../../services/layers.service';
 import { LayersEditPage } from '../layers-edit/layers-edit.page';
 import { LayersCreatePage } from '../layers-create/layers-create.page';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
-import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
+import { ActionSheetWrapper } from '../../wrappers/action-sheet-wrapper';
 
 @Component({
   selector: 'app-layers',

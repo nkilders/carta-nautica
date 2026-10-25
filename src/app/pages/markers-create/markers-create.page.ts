@@ -12,11 +12,11 @@ import {
   IonList,
   IonInput,
 } from '@ionic/angular';
-import { MarkersService } from 'src/app/services/markers.service';
+import { MarkersService } from '../../services/markers.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MarkerWithoutId } from 'src/app/models/markers';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
+import { MarkerWithoutId } from '../../models/markers';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-markers-create',

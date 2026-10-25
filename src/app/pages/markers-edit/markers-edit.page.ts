@@ -13,10 +13,10 @@ import {
   IonInput,
 } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { Marker } from 'src/app/models/markers';
-import { MarkersService } from 'src/app/services/markers.service';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
+import { Marker } from '../../models/markers';
+import { MarkersService } from '../../services/markers.service';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-markers-edit',

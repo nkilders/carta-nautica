@@ -13,7 +13,7 @@ import {
   IonNote,
 } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { SignGroup } from 'src/app/models/signs';
+import { SignGroup } from '../../models/signs';
 
 @Component({
   selector: 'app-signs',

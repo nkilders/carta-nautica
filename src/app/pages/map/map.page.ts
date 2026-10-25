@@ -18,13 +18,13 @@ import { Position } from '@capacitor/geolocation';
 import { createBoatLayerManager } from '../../layer-managers/boat-layer-manager';
 import { countryCodeEmoji } from 'country-code-emoji';
 import { NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder';
-import { SettingsService } from 'src/app/services/settings.service';
+import { SettingsService } from '../../services/settings.service';
 import BaseTileLayer from 'ol/layer/BaseTile';
-import { UnitService } from 'src/app/services/unit.service';
-import { DistanceUnit } from 'src/app/models/settings';
-import { LayersService } from 'src/app/services/layers.service';
-import { createLayerManager } from 'src/app/layer-managers/layer-manager';
-import { FabToggler } from 'src/app/utils/fab-toggler';
+import { UnitService } from '../../services/unit.service';
+import { DistanceUnit } from '../../models/settings';
+import { LayersService } from '../../services/layers.service';
+import { createLayerManager } from '../../layer-managers/layer-manager';
+import { FabToggler } from '../../utils/fab-toggler';
 import { addIcons } from 'ionicons';
 import {
   closeCircle,
@@ -36,24 +36,24 @@ import {
   sunny,
 } from 'ionicons/icons';
 import { TranslateService } from '@ngx-translate/core';
-import { geoDistance } from 'src/app/utils/coordinates';
+import { geoDistance } from '../../utils/coordinates';
 import { MarkersCreatePage } from '../markers-create/markers-create.page';
-import { createMarkersLayerManager } from 'src/app/layer-managers/markers-layer-manager';
-import { MarkersService } from 'src/app/services/markers.service';
-import { SpeedHeadingControl } from 'src/app/utils/speed-heading-control';
-import { APP_NAME } from 'src/app/app';
-import { TrackRecorderService } from 'src/app/services/track-recorder.service';
-import { createTrackLayerManager } from 'src/app/layer-managers/track-layer-manager';
+import { createMarkersLayerManager } from '../../layer-managers/markers-layer-manager';
+import { MarkersService } from '../../services/markers.service';
+import { SpeedHeadingControl } from '../../utils/speed-heading-control';
+import { APP_NAME } from '../../app';
+import { TrackRecorderService } from '../../services/track-recorder.service';
+import { createTrackLayerManager } from '../../layer-managers/track-layer-manager';
 import { WeatherPage } from '../weather/weather.page';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { ActionSheetWrapper } from 'src/app/wrappers/action-sheet-wrapper';
-import { MapService } from 'src/app/services/map.service';
-import { createPositionAccuracyLayerManager } from 'src/app/layer-managers/position-accuracy-layer-manager';
-import { createRoutePlanningLayerManager } from 'src/app/layer-managers/route-planning-layer-manager';
-import { RoutePlanningService } from 'src/app/services/route-planning.service';
-import { createSeamarkLayerManager } from 'src/app/layer-managers/seamark-layer-manager';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
-import { createCourseLineLayerManager } from 'src/app/layer-managers/course-line-layer-manager';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { ActionSheetWrapper } from '../../wrappers/action-sheet-wrapper';
+import { MapService } from '../../services/map.service';
+import { createPositionAccuracyLayerManager } from '../../layer-managers/position-accuracy-layer-manager';
+import { createRoutePlanningLayerManager } from '../../layer-managers/route-planning-layer-manager';
+import { RoutePlanningService } from '../../services/route-planning.service';
+import { createSeamarkLayerManager } from '../../layer-managers/seamark-layer-manager';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
+import { createCourseLineLayerManager } from '../../layer-managers/course-line-layer-manager';
 
 @Component({
   selector: 'app-map',

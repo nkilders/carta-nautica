@@ -13,10 +13,10 @@ import {
   IonList,
 } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { LayersService } from 'src/app/services/layers.service';
-import { LayerWithoutId } from 'src/app/models/layers';
-import { ModalWrapper } from 'src/app/wrappers/modal-wrapper';
-import { AlertWrapper } from 'src/app/wrappers/alert-wrapper';
+import { LayersService } from '../../services/layers.service';
+import { LayerWithoutId } from '../../models/layers';
+import { ModalWrapper } from '../../wrappers/modal-wrapper';
+import { AlertWrapper } from '../../wrappers/alert-wrapper';
 
 @Component({
   selector: 'app-layers-create',
